@@ -54,6 +54,19 @@ const Register = () => {
           <div className="hero-head">
             <Navbar></Navbar>
           </div>
+          <div className="container"></div>
+          <div className="container is-black is-dark pt-6 mb-0">
+            <article class="message is-warning">
+              <div className="message-header">
+                <p className="has-text-black">Figyelem!</p>
+              </div>
+              <div className="message-body has-background-dark has-text-light">
+                Amennyiben még nem regisztráltál, hozz létre egy új fiókot email
+                címmelel és jelszóval, vagy használd
+                <strong>Google fókodat</strong>
+              </div>
+            </article>
+          </div>
 
           <div className="hero-body">
             <div className="container">
@@ -138,6 +151,8 @@ const Register = () => {
               </div>
             </div>
           </div>
+          <div className="container"></div>
+          <div className="container"></div>
         </section>
       </main>
     </div>

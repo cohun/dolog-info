@@ -49,6 +49,18 @@ const Login = () => {
           <div className="hero-head">
             <Navbar></Navbar>
           </div>
+          <div className="container"></div>
+          <div className="container is-black is-dark pt-6 mb-0">
+            <article class="message is-success">
+              <div className="message-header">
+                <p className="has-text-black">Figyelem!</p>
+              </div>
+              <div className="message-body has-background-dark has-text-light">
+                Ha már van fiókod, jelentkezz be email címmelel és jelszóval,
+                vagy használd <strong>Google fókodat</strong>
+              </div>
+            </article>
+          </div>
 
           <div className="hero-body">
             <div className="container">
@@ -132,6 +144,8 @@ const Login = () => {
               </div>
             </div>
           </div>
+          <div className="container"></div>
+          <div className="container"></div>
         </section>
       </main>
     </div>

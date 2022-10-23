@@ -43,8 +43,11 @@ const Navbar = () => {
                 <strong>Regisztráció</strong>
               </a>
             </Link>
-
-            <a className="button has-background-primary-dark">Bejelentkezés</a>
+            <Link href="/login">
+              <a className="button has-background-primary-dark">
+                Bejelentkezés
+              </a>
+            </Link>
           </div>
         </div>
       </div>

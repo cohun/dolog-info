@@ -87,7 +87,7 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="tile is-parent">
-                  <article className="tile is-child notification is-danger">
+                  <article className="tile is-child notification has-background-danger-dark">
                     <p className="title">...hibaüzenetek</p>
                     <p className="subtitle">...akkor és ahol keletkeznek</p>
                     <div className="content"></div>
@@ -128,6 +128,7 @@ export default function Home() {
               </div>
             </div>
           </div>
+          <div className="container"></div>
         </section>
       </main>
     </div>
