@@ -40,11 +40,11 @@ const Navbar = () => {
           <div className="buttons">
             <Link href="/register">
               <a className="button has-background-warning">
-                <strong>Sign up</strong>
+                <strong>Regisztráció</strong>
               </a>
             </Link>
 
-            <a className="button has-background-primary-dark">Log in</a>
+            <a className="button has-background-primary-dark">Bejelentkezés</a>
           </div>
         </div>
       </div>

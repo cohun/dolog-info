@@ -5,6 +5,7 @@ import { app } from '../firebaseConfig';
 import { useState } from 'react';
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 import Router from 'next/router';
+import Navbar from '../components/Navbar';
 
 const Register = () => {
   const auth = getAuth();
@@ -44,21 +45,31 @@ const Register = () => {
 
       <main className="panel">
         <section className="panel-block hero is-black is-fullheight">
+          <Image
+            src="/dolog_background.jpg"
+            className="is-fullwidth"
+            alt="background"
+            layout="fill"
+          ></Image>
+          <div className="hero-head">
+            <Navbar></Navbar>
+          </div>
+
           <div className="hero-body">
             <div className="container">
               <div className="columns is-justify-content-center">
                 <div className="column is-6-tablet is-5-desktop is-4-widescreen is-3-fullh">
                   <div className="panel-heading has-background-black mb-3">
-                    <h1 className={styles.title}>Register</h1>
+                    <h1 className="title has-text-warning">Fiók létrehozása</h1>
                   </div>
                   <form
                     method="POST"
-                    action="https://herotofu.com/start"
+                    action=""
                     className="box p-5 has-background-dark has-text-grey-light"
                     encType="multipart/form-data"
                   >
                     <label className="is-block mb-4">
-                      <span className="is-block mb-2">Email address</span>
+                      <span className="is-block mb-2">Email cím</span>
                       <input
                         required
                         name="email"
@@ -71,7 +82,7 @@ const Register = () => {
                     </label>
 
                     <label className="is-block mb-4">
-                      <span className="is-block mb-2">Password</span>
+                      <span className="is-block mb-2">Jelszó</span>
                       <input
                         autoComplete="current-password webauthn"
                         name="password"
@@ -101,11 +112,11 @@ const Register = () => {
                     <div className="mb-4">
                       <button
                         type="submit"
-                        className="button is-link px-4"
+                        className="button is-warning px-4"
                         onClick={signUp}
                         disabled={isDisabled}
                       >
-                        Sign Up
+                        Regisztrálj
                       </button>
                     </div>
 
