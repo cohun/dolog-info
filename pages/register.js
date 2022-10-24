@@ -1,16 +1,16 @@
-import styles from '../styles/Home.module.css';
-import Head from 'next/head';
-import Image from 'next/image';
-import { app } from '../firebaseConfig';
-import { useState } from 'react';
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
-import Router from 'next/router';
-import Navbar from '../components/Navbar';
+import styles from "../styles/Home.module.css";
+import Head from "next/head";
+import Image from "next/image";
+import { app } from "../firebaseConfig";
+import { useState } from "react";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import Router from "next/router";
+import Navbar from "../components/Navbar";
 
 const Register = () => {
   const auth = getAuth();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [isDisabled, setIsDisabled] = useState(true);
   const [checked, setChecked] = useState(false);
 
@@ -27,7 +27,7 @@ const Register = () => {
     createUserWithEmailAndPassword(auth, email, password)
       .then(() => {
         // Signed in
-        Router.push('/home');
+        Router.push("/home");
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -56,7 +56,7 @@ const Register = () => {
           </div>
           <div className="container"></div>
           <div className="container is-black is-dark pt-6 mb-0">
-            <article class="message is-warning">
+            <article className="message is-warning">
               <div className="message-header">
                 <p className="has-text-black">Figyelem!</p>
               </div>
@@ -140,7 +140,6 @@ const Register = () => {
                         <a
                           href="https://h-itb.hu"
                           className="has-text-grey-light"
-                          target="_blank"
                         >
                           H-ITB
                         </a>

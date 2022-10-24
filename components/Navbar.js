@@ -1,6 +1,6 @@
-import React from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
+import React from "react";
+import Image from "next/image";
+import Link from "next/link";
 
 const Navbar = () => {
   return (
@@ -9,7 +9,7 @@ const Navbar = () => {
       role="navigation"
       aria-label="main navigation"
     >
-      <div class="navbar-brand">
+      <div className="navbar-brand">
         <Image
           className=""
           src="/DologInfo.png"
