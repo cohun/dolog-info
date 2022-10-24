@@ -63,7 +63,7 @@ const Register = () => {
               <div className="message-body has-background-dark has-text-light">
                 Amennyiben még nem regisztráltál, hozz létre egy új fiókot email
                 címmelel és jelszóval, vagy használd
-                <strong>Google fókodat</strong>
+                <strong> Google fiókodat</strong>
               </div>
             </article>
           </div>
