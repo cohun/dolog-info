@@ -1,16 +1,16 @@
-import styles from "../styles/Home.module.css";
-import Head from "next/head";
-import Image from "next/image";
-import { app } from "../firebaseConfig";
-import { useState } from "react";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import Router from "next/router";
-import Navbar from "../components/Navbar";
+import styles from '../styles/Home.module.css';
+import Head from 'next/head';
+import Image from 'next/image';
+import { app } from '../firebaseConfig';
+import { useState } from 'react';
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+import Router from 'next/router';
+import Navbar from '../components/Navbar';
 
 const Login = () => {
   const auth = getAuth();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [checked, setChecked] = useState(false);
 
   const onCheckboxClick = () => {
@@ -21,7 +21,7 @@ const Login = () => {
     createUserWithEmailAndPassword(auth, email, password)
       .then(() => {
         // Signed in
-        Router.push("/home");
+        Router.push('/home');
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -66,7 +66,7 @@ const Login = () => {
             <div className="container">
               <div className="columns is-justify-content-center is-gapless">
                 <div className="column mt-6">
-                  <button class="button is-success is-outlined is-large mt-6">
+                  <button className="button is-success is-outlined is-large mt-6">
                     <span className="mt-2">
                       <Image
                         src="/Google_Logo.svg"
@@ -76,6 +76,17 @@ const Login = () => {
                       />
                     </span>
                     <span> Google fiókkal</span>
+                  </button>
+                  <button className="button is-warning is-outlined is-large mt-6">
+                    <span className="mt-2 mx-5">
+                      <Image
+                        src="/anonymous.png"
+                        alt="logo"
+                        width="60"
+                        height="44"
+                      />
+                    </span>
+                    <span> Anoním módon</span>
                   </button>
                 </div>
                 <div className="column is-6-tablet is-5-desktop is-4-widescreen is-4-fullhd">
