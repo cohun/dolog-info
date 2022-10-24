@@ -9,7 +9,7 @@ const Navbar = () => {
       role="navigation"
       aria-label="main navigation"
     >
-      <div className="navbar-brand">
+      <Link className="navbar-brand" href="/">
         <Image
           className=""
           src="/DologInfo.png"
@@ -17,7 +17,7 @@ const Navbar = () => {
           width="78"
           height="40"
         />
-      </div>
+      </Link>
 
       <div id="navbarBasicExample" className="navbar-menu">
         <div className="navbar-start">

@@ -64,8 +64,21 @@ const Login = () => {
 
           <div className="hero-body">
             <div className="container">
-              <div className="columns is-justify-content-center">
-                <div className="column is-6-tablet is-5-desktop is-4-widescreen is-3-fullh">
+              <div className="columns is-justify-content-center is-gapless">
+                <div className="column mt-6">
+                  <button class="button is-success is-outlined is-large mt-6">
+                    <span className="mt-2">
+                      <Image
+                        src="/Google_Logo.svg"
+                        alt="logo"
+                        width="110"
+                        height="44"
+                      />
+                    </span>
+                    <span> Google fiókkal</span>
+                  </button>
+                </div>
+                <div className="column is-6-tablet is-5-desktop is-4-widescreen is-4-fullhd">
                   <div className="panel-heading has-background-black mb-3">
                     <h1 className="title has-text-success">Bejelentkezés</h1>
                   </div>
@@ -140,6 +153,7 @@ const Login = () => {
                     </div>
                   </form>
                 </div>
+                <div className="column"></div>
               </div>
             </div>
           </div>
