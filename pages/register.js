@@ -1,7 +1,7 @@
 import styles from "../styles/Home.module.css";
 import Head from "next/head";
 import Image from "next/image";
-import { app } from "../firebaseConfig";
+import { app } from "../lib/firebaseConfig";
 import { useState } from "react";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import Router from "next/router";
