@@ -1,23 +1,24 @@
-import styles from "../styles/Home.module.css";
-import Head from "next/head";
-import Image from "next/image";
-import { auth, provider } from "../lib/firebaseConfig";
-import { useState } from "react";
+import styles from '../styles/Home.module.css';
+import Head from 'next/head';
+import Image from 'next/image';
+import { auth, provider } from '../lib/firebaseConfig';
+import { useState, useEffect } from 'react';
 import {
   createUserWithEmailAndPassword,
   signInWithPopup,
   signOut,
-} from "firebase/auth";
-import { useRouter } from "next/router";
-import Navbar from "../components/Navbar";
+} from 'firebase/auth';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { useRouter } from 'next/router';
+import Navbar from '../components/Navbar';
 
 function SignOutButton(params) {}
 
 function UsernameForm(params) {}
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [checked, setChecked] = useState(false);
   const router = useRouter();
 
@@ -25,29 +26,19 @@ const Login = () => {
     setChecked(!checked);
   };
 
-  const SignInButton = () =>
-    signInWithPopup(auth, provider)
-      .then((result) => {
-        // This gives you a Google Access Token. You can use it to access the Google API.
+  const [user, setUser] = useAuthState(auth);
+  useEffect(() => {
+    console.log(user);
+  }, [user]);
 
-        // The signed-in user info.
-        const user = result.user;
-        console.log(user.uid);
-        console.log(user.displayName);
-        router.push("/home");
-        // ...
-      })
-      .catch((error) => {
-        // Handle Errors here.
-        const errorCode = error.code;
-        // ...
-        console.log(errorCode);
-      });
+  const SignInButton = async () => {
+    const result = await signInWithPopup(auth, provider);
+  };
 
   const SignOutButton = () =>
     signOut(auth)
       .then(() => {
-        console.log("Signed out");
+        console.log('Signed out');
         // Sign-out successful.
       })
       .catch((error) => {
@@ -59,7 +50,7 @@ const Login = () => {
     createUserWithEmailAndPassword(auth, email, password)
       .then(() => {
         // Signed in
-        router.push("/home");
+        router.push('/home');
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -127,6 +118,9 @@ const Login = () => {
                     </span>
                     <span>Google fiókkal</span>
                   </button>
+                  <div onClick={() => signOut(auth)}>
+                    {user ? 'Welcome ,' + user.displayName : ''}
+                  </div>
                   <button className="button is-warning is-outlined is-large mt-6">
                     <span className="mt-2 mx-5">
                       <Image
