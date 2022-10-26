@@ -1,18 +1,46 @@
-import React from "react";
-import Image from "next/image";
-import Link from "next/link";
-import { UserContext } from "../lib/context";
-import { useContext } from "react";
+import React, { useEffect, useState } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { UserContext } from '../lib/context';
+import { useContext } from 'react';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from '../lib/firebaseConfig';
+import { signOut } from 'firebase/auth';
+import { useRouter } from 'next/router';
 
 const Navbar = () => {
-  const { user, username } = useContext(UserContext);
+  const router = useRouter();
+  const [name, setName] = useState(null);
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      setName(user);
+    } else {
+      setName(null);
+    }
+  });
+  const SignOutButton = () =>
+    signOut(auth)
+      .then(() => {
+        console.log('Signed out');
+        setName(null);
+        router.push('/');
+        // Sign-out successful.
+      })
+      .catch((error) => {
+        // An error happened.
+      });
   return (
     <nav
-      className={"navbar is-spaced"}
+      className={
+        name ? 'navbar is-spaced is-black has-shadow' : 'navbar is-spaced '
+      }
       role="navigation"
       aria-label="main navigation"
     >
-      <button className="button is-success is-outlined is-large">
+      <button
+        className="button is-large is-success is-outlined"
+        style={{ background: 'black' }}
+      >
         <Link className="navbar-brand" href="/">
           <Image
             className=""
@@ -43,16 +71,28 @@ const Navbar = () => {
       <div className="navbar-end">
         <div className="navbar-item">
           <div className="buttons">
-            <Link href="/register">
-              <a className="button has-background-warning">
-                <strong>Regisztráció</strong>
-              </a>
-            </Link>
-            <Link href="/login">
-              <a className="button has-background-primary-dark">
-                Bejelentkezés
-              </a>
-            </Link>
+            {!name && (
+              <Link href="/register">
+                <a className="button has-background-warning">
+                  <strong>Regisztráció</strong>
+                </a>
+              </Link>
+            )}
+
+            {name && (
+              <div onClick={SignOutButton}>
+                <a className="button has-background-danger-dark is-hovered">
+                  Kijelentkezés
+                </a>
+              </div>
+            )}
+            {!name && (
+              <Link href="/login">
+                <a className="button has-background-primary-dark">
+                  Bejelentkezés
+                </a>
+              </Link>
+            )}
           </div>
         </div>
       </div>

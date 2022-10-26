@@ -33,6 +33,7 @@ const Login = () => {
 
   const SignInButton = async () => {
     const result = await signInWithPopup(auth, provider);
+    router.push('/home');
   };
 
   const SignOutButton = () =>

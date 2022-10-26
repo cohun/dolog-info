@@ -1,9 +1,9 @@
-import Head from "next/head";
-import Image from "next/image";
-import styles from "../styles/Home.module.css";
-import Link from "next/link";
-import Loader from "../components/Loader";
-import Navbar from "../components/Navbar";
+import Head from 'next/head';
+import Image from 'next/image';
+import styles from '../styles/Home.module.css';
+import Link from 'next/link';
+import Loader from '../components/Loader';
+import Navbar from '../components/Navbar';
 
 export default function Home() {
   return (
@@ -49,7 +49,7 @@ export default function Home() {
                       </p>
                       <p className="subtitle">Használati szabályok</p>
                       <div className="content has-text-black-dark">
-                        Az egyedi dolgok felelőse az{" "}
+                        Az egyedi dolgok felelőse az{' '}
                         <strong>adminisztrátor</strong> (rendelkező személy),
                         aki a használatot illetően intézkedési joggal bír és
                         hozzáférést biztosít mások számára arról, hogy:
