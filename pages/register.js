@@ -1,9 +1,8 @@
-import styles from "../styles/Home.module.css";
-import Head from "next/head";
-import Image from "next/image";
-import Router from "next/router";
-import Navbar from "../components/Navbar";
-import SignUpForm from "../components/SignUpForm";
+import styles from '../styles/Home.module.css';
+import Head from 'next/head';
+import Image from 'next/image';
+import Navbar from '../components/Navbar';
+import SignUpForm from '../components/SignUpForm';
 
 const Register = () => {
   return (

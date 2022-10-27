@@ -1,30 +1,20 @@
-import styles from "../styles/Home.module.css";
-import Head from "next/head";
-import Image from "next/image";
-import { auth, provider } from "../lib/firebaseConfig";
-import { useState, useEffect } from "react";
-import {
-  createUserWithEmailAndPassword,
-  signInWithPopup,
-  signOut,
-} from "firebase/auth";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { useRouter } from "next/router";
-import Navbar from "../components/Navbar";
+import styles from '../styles/Home.module.css';
+import Head from 'next/head';
+import Image from 'next/image';
+import { auth, provider } from '../lib/firebaseConfig';
+import { useState, useEffect } from 'react';
+import { signInWithPopup, signOut } from 'firebase/auth';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { useRouter } from 'next/router';
+import Navbar from '../components/Navbar';
+import LogInForm from '../components/LogInForm';
 
 function SignOutButton(params) {}
 
 function UsernameForm(params) {}
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [checked, setChecked] = useState(false);
   const router = useRouter();
-
-  const onCheckboxClick = () => {
-    setChecked(!checked);
-  };
 
   const [user, setUser] = useAuthState(auth);
   useEffect(() => {
@@ -33,31 +23,7 @@ const Login = () => {
 
   const SignInButton = async () => {
     const result = await signInWithPopup(auth, provider);
-    router.push("/home");
-  };
-
-  const SignOutButton = () =>
-    signOut(auth)
-      .then(() => {
-        console.log("Signed out");
-        // Sign-out successful.
-      })
-      .catch((error) => {
-        // An error happened.
-      });
-
-  // TODO: Change this to sugnIn !!!
-  const signUp = () => {
-    createUserWithEmailAndPassword(auth, email, password)
-      .then(() => {
-        // Signed in
-        router.push("/home");
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // ..
-      });
+    router.push('/home');
   };
 
   return (
@@ -111,7 +77,7 @@ const Login = () => {
                     <span>Google fiókkal</span>
                   </button>
                   <div onClick={() => signOut(auth)}>
-                    {user ? "Welcome ," + user.displayName : ""}
+                    {user ? 'Welcome ,' + user.displayName : ''}
                   </div>
                   <button className="button is-warning is-outlined is-large mt-6">
                     <span className="mt-2 mx-5">
@@ -129,76 +95,7 @@ const Login = () => {
                   <div className="panel-heading has-background-black mb-3">
                     <h1 className="title has-text-success">Bejelentkezés</h1>
                   </div>
-                  <form
-                    method="POST"
-                    action=""
-                    className="box p-5 has-background-dark has-text-grey-light"
-                    encType="multipart/form-data"
-                  >
-                    <label className="is-block mb-4">
-                      <span className="is-block mb-2">Email cím</span>
-                      <input
-                        required
-                        name="email"
-                        type="email"
-                        className="input has-background-dark has-text-light"
-                        placeholder="joe.bloggs@example.com"
-                        onChange={(event) => setEmail(event.target.value)}
-                        value={email}
-                      />
-                    </label>
-
-                    <label className="is-block mb-4">
-                      <span className="is-block mb-2">Jelszó</span>
-                      <input
-                        autoComplete="current-password webauthn"
-                        name="password"
-                        type="password"
-                        className="input has-background-dark has-text-light"
-                        minLength="6"
-                        placeholder="(must be 6+ chars)"
-                        required
-                        onChange={(event) => setPassword(event.target.value)}
-                        value={password}
-                      />
-                    </label>
-
-                    <div className="mb-4">
-                      <label>
-                        <input
-                          name="tos"
-                          value="yes"
-                          type="checkbox"
-                          required
-                          onClick={onCheckboxClick}
-                        />
-                        <span> Emlékezz rám!</span>
-                      </label>
-                    </div>
-
-                    <div className="mb-4">
-                      <button
-                        type="submit"
-                        className="button is-success has-text-black px-4"
-                        onClick={signUp}
-                      >
-                        Bejelentkezés
-                      </button>
-                    </div>
-
-                    <div>
-                      <div className="is-size-7 has-text-right">
-                        by
-                        <span> </span>
-                        <a
-                          href="https://h-itb.hu"
-                          className="has-text-grey-light"
-                        >
-                          H-ITB
-                        </a>
-                      </div>
-                    </div>
-                  </form>
+                  <LogInForm></LogInForm>
                 </div>
                 <div className="column"></div>
               </div>
