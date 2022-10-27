@@ -1,40 +1,11 @@
 import styles from "../styles/Home.module.css";
 import Head from "next/head";
 import Image from "next/image";
-import { app } from "../lib/firebaseConfig";
-import { useState } from "react";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import Router from "next/router";
 import Navbar from "../components/Navbar";
+import SignUpForm from "../components/SignUpForm";
 
 const Register = () => {
-  const auth = getAuth();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isDisabled, setIsDisabled] = useState(true);
-  const [checked, setChecked] = useState(false);
-
-  const dataSubmit = () => {
-    return checked ? setIsDisabled(true) : setIsDisabled(false);
-  };
-
-  const onCheckboxClick = () => {
-    setChecked(!checked);
-    return dataSubmit();
-  };
-
-  const signUp = () => {
-    createUserWithEmailAndPassword(auth, email, password)
-      .then(() => {
-        // Signed in
-        Router.push("/home");
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // ..
-      });
-  };
   return (
     <div className={styles.container}>
       <Head>
@@ -75,77 +46,7 @@ const Register = () => {
                   <div className="panel-heading has-background-black mb-3">
                     <h1 className="title has-text-warning">Fiók létrehozása</h1>
                   </div>
-                  <form
-                    method="POST"
-                    action=""
-                    className="box p-5 has-background-dark has-text-grey-light"
-                    encType="multipart/form-data"
-                  >
-                    <label className="is-block mb-4">
-                      <span className="is-block mb-2">Email cím</span>
-                      <input
-                        required
-                        name="email"
-                        type="email"
-                        className="input has-background-dark has-text-light"
-                        placeholder="joe.bloggs@example.com"
-                        onChange={(event) => setEmail(event.target.value)}
-                        value={email}
-                      />
-                    </label>
-
-                    <label className="is-block mb-4">
-                      <span className="is-block mb-2">Jelszó</span>
-                      <input
-                        autoComplete="current-password webauthn"
-                        name="password"
-                        type="password"
-                        className="input has-background-dark has-text-light"
-                        minLength="6"
-                        placeholder="(must be 6+ chars)"
-                        required
-                        onChange={(event) => setPassword(event.target.value)}
-                        value={password}
-                      />
-                    </label>
-
-                    <div className="mb-4">
-                      <label>
-                        <input
-                          name="tos"
-                          value="yes"
-                          type="checkbox"
-                          required
-                          onClick={onCheckboxClick}
-                        />
-                        <span> Használati Feltételeket elfogadom.</span>
-                      </label>
-                    </div>
-
-                    <div className="mb-4">
-                      <button
-                        type="submit"
-                        className="button is-warning px-4"
-                        onClick={signUp}
-                        disabled={isDisabled}
-                      >
-                        Regisztrálj
-                      </button>
-                    </div>
-
-                    <div>
-                      <div className="is-size-7 has-text-right">
-                        by
-                        <span> </span>
-                        <a
-                          href="https://h-itb.hu"
-                          className="has-text-grey-light"
-                        >
-                          H-ITB
-                        </a>
-                      </div>
-                    </div>
-                  </form>
+                  <SignUpForm></SignUpForm>
                 </div>
               </div>
             </div>
