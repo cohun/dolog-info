@@ -79,7 +79,7 @@ const UserProfilePage = () => {
               <div className="media-content">
                 <div className="content">
                   <p className="has-text-white">
-                    <strong className="has-text-warning">
+                    <strong className="has-text-primary">
                       Barbara Middleton
                     </strong>
                     <br />
