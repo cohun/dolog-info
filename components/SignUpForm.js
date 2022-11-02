@@ -2,6 +2,7 @@ import { useState } from "react";
 import Router from "next/router";
 import { auth } from "../lib/firebaseConfig";
 import { createUserWithEmailAndPassword } from "firebase/auth";
+import toast from "react-hot-toast";
 
 const SignUpForm = () => {
   const [email, setEmail] = useState("");
@@ -28,6 +29,22 @@ const SignUpForm = () => {
         const errorCode = error.code;
         const errorMessage = error.message;
         // ..
+        switch (errorCode) {
+          case "auth/weak-password":
+            toast.error(
+              "Gyenge jelszó. Legalább 6 karakter hosszúságú legyen!"
+            );
+            break;
+          case "auth/email-already-in-use":
+            toast.error("Ilyen email címen már regisztráltak.");
+            break;
+          case "auth/invalid-email":
+            toast.error("Érvénytelen email cím.");
+            break;
+
+          default:
+            break;
+        }
       });
   };
 

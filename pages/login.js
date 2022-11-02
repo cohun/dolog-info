@@ -1,13 +1,13 @@
-import styles from '../styles/Home.module.css';
-import Head from 'next/head';
-import Image from 'next/image';
-import { auth, provider } from '../lib/firebaseConfig';
-import { useState, useEffect } from 'react';
-import { signInWithPopup, signOut } from 'firebase/auth';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { useRouter } from 'next/router';
-import Navbar from '../components/Navbar';
-import LogInForm from '../components/LogInForm';
+import styles from "../styles/Home.module.css";
+import Head from "next/head";
+import Image from "next/image";
+import { auth, provider } from "../lib/firebaseConfig";
+import { useState, useEffect } from "react";
+import { signInWithPopup, signOut } from "firebase/auth";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { useRouter } from "next/router";
+import Navbar from "../components/Navbar";
+import LogInForm from "../components/LogInForm";
 
 function SignOutButton(params) {}
 
@@ -23,7 +23,8 @@ const Login = () => {
 
   const SignInButton = async () => {
     const result = await signInWithPopup(auth, provider);
-    router.push('/home');
+    console.log(result);
+    router.push("/home");
   };
 
   return (
@@ -77,7 +78,7 @@ const Login = () => {
                     <span>Google fiókkal</span>
                   </button>
                   <div onClick={() => signOut(auth)}>
-                    {user ? 'Welcome ,' + user.displayName : ''}
+                    {user ? "Welcome ," + user.displayName : ""}
                   </div>
                   <button className="button is-warning is-outlined is-large mt-6">
                     <span className="mt-2 mx-5">

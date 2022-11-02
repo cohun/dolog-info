@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { UserContext } from '../lib/context';
-import { useContext } from 'react';
-import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from '../lib/firebaseConfig';
-import { signOut } from 'firebase/auth';
-import { useRouter } from 'next/router';
+import React, { useEffect, useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { UserContext } from "../lib/context";
+import { useContext } from "react";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "../lib/firebaseConfig";
+import { signOut } from "firebase/auth";
+import { useRouter } from "next/router";
 
 const Navbar = () => {
   const router = useRouter();
   const [name, setName] = useState(null);
-  const blogName = 'Attila';
+  const blogName = null;
 
   onAuthStateChanged(auth, (user) => {
     if (user) {
@@ -23,9 +23,9 @@ const Navbar = () => {
   const SignOutButton = () =>
     signOut(auth)
       .then(() => {
-        console.log('Signed out');
+        console.log("Signed out");
         setName(null);
-        router.push('/');
+        router.push("/");
         // Sign-out successful.
       })
       .catch((error) => {
@@ -35,15 +35,15 @@ const Navbar = () => {
     <nav
       className={
         name
-          ? 'navbar is-spaced has-background-black-ter has-shadow'
-          : 'navbar is-spaced '
+          ? "navbar is-spaced has-background-black-ter has-shadow"
+          : "navbar is-spaced "
       }
       role="navigation"
       aria-label="main navigation"
     >
       <button
         className="button is-large is-success is-outlined"
-        style={{ background: 'black' }}
+        style={{ background: "black" }}
       >
         <Link className="navbar-brand" href="/">
           <Image

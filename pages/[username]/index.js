@@ -1,15 +1,19 @@
-import Head from 'next/head';
-import Image from 'next/image';
-import { auth } from '../../lib/firebaseConfig';
-import { useState } from 'react';
-import { onAuthStateChanged } from 'firebase/auth';
-import Navbar from '../../components/Navbar';
+import Head from "next/head";
+import Image from "next/image";
+import { auth } from "../../lib/firebaseConfig";
+import { useState } from "react";
+import { onAuthStateChanged } from "firebase/auth";
+import Navbar from "../../components/Navbar";
 
 const UserProfilePage = () => {
+  const [imageURL, setImageURL] = useState(
+    "https://bulma.io/images/placeholders/128x128.png"
+  );
   const [name, setName] = useState(null);
   onAuthStateChanged(auth, (user) => {
     if (user) {
       setName(user.email);
+      setImageURL(user.photoURL);
       console.log(user);
     } else {
       setName(null);
@@ -150,7 +154,7 @@ const UserProfilePage = () => {
                     <div className="content">
                       <p>
                         <strong className="has-text-warning">
-                          Kayli Eunice{' '}
+                          Kayli Eunice{" "}
                         </strong>
                         <br />
                         Sed convallis scelerisque mauris, non pulvinar nunc
@@ -173,12 +177,7 @@ const UserProfilePage = () => {
             <article className="media">
               <figure className="media-left">
                 <p className="image is-64x64">
-                  <Image
-                    src="https://bulma.io/images/placeholders/128x128.png"
-                    alt="4"
-                    width={48}
-                    height={48}
-                  />
+                  <Image src={imageURL} alt="4" width={48} height={48} />
                 </p>
               </figure>
               <div className="media-content">
