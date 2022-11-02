@@ -1,13 +1,13 @@
-import styles from "../styles/Home.module.css";
-import Head from "next/head";
-import Image from "next/image";
-import { auth, provider } from "../lib/firebaseConfig";
-import { useState, useEffect } from "react";
-import { signInWithPopup, signOut } from "firebase/auth";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { useRouter } from "next/router";
-import Navbar from "../components/Navbar";
-import LogInForm from "../components/LogInForm";
+import styles from '../styles/Home.module.css';
+import Head from 'next/head';
+import Image from 'next/image';
+import { auth, provider } from '../lib/firebaseConfig';
+import { useState, useEffect } from 'react';
+import { signInWithPopup, signOut } from 'firebase/auth';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { useRouter } from 'next/router';
+import Navbar from '../components/Navbar';
+import LogInForm from '../components/LogInForm';
 
 function SignOutButton(params) {}
 
@@ -24,8 +24,11 @@ const Login = () => {
   const SignInButton = async () => {
     const result = await signInWithPopup(auth, provider);
     console.log(result);
-    router.push("/home");
+    router.push('/home');
   };
+
+  const [isActive, setIsActive] = useState(true);
+  const show = () => setIsActive(!isActive);
 
   return (
     <div className={styles.container}>
@@ -49,8 +52,8 @@ const Login = () => {
           <div className="container"></div>
           <div className="container is-black is-dark pt-6 mb-0">
             <article className="message is-success">
-              <div className="message-header">
-                <p className="has-text-black">Figyelem!</p>
+              <div className="message-header is-justify-content-center">
+                <p className="title has-text-black">Figyelem!</p>
               </div>
               <div className="message-body has-background-dark has-text-light">
                 Ha már van fiókod, jelentkezz be email címmelel és jelszóval,
@@ -62,9 +65,9 @@ const Login = () => {
           <div className="hero-body">
             <div className="container">
               <div className="columns is-justify-content-center">
-                <div className="column mt-6">
+                <div className="column ">
                   <button
-                    className="button is-success is-outlined is-large mt-6"
+                    className="button is-success is-outlined is-large mt-4"
                     onClick={SignInButton}
                   >
                     <span className="mt-2">
@@ -77,10 +80,19 @@ const Login = () => {
                     </span>
                     <span>Google fiókkal</span>
                   </button>
-                  <div onClick={() => signOut(auth)}>
-                    {user ? "Welcome ," + user.displayName : ""}
+                  <div className="section mt-2">
+                    <figure className="">
+                      <p className="image is-48x48">
+                        <Image
+                          src="/plus.png"
+                          alt="plus"
+                          width={48}
+                          height={48}
+                        />
+                      </p>
+                    </figure>
                   </div>
-                  <button className="button is-warning is-outlined is-large mt-6">
+                  <button className="button is-warning is-outlined is-large mt-3">
                     <span className="mt-2 mx-5">
                       <Image
                         src="/anonymous.png"
@@ -89,14 +101,28 @@ const Login = () => {
                         height="44"
                       />
                     </span>
-                    <span> Anoním módon</span>
+                    <span> Felhasználó név</span>
                   </button>
                 </div>
                 <div className="column is-6-tablet is-5-desktop is-4-widescreen is-4-fullhd">
-                  <div className="panel-heading has-background-black mb-3">
-                    <h1 className="title has-text-success">Bejelentkezés</h1>
-                  </div>
-                  <LogInForm></LogInForm>
+                  <button className="button is-success is-outlined is-large mt-4">
+                    <span className="mt-2">
+                      <Image
+                        src="/email1.png"
+                        alt="logo"
+                        width="80"
+                        height="80"
+                      />
+                    </span>
+                    <span className="ml-6"> Email és jelszó használatával</span>
+                  </button>
+
+                  {/* <div className="panel-heading has-background-black mb-3">
+                    <h1 className="is-size-3 has-text-success">
+                      Email és jelszóval
+                    </h1>
+                  </div> */}
+                  {isActive ? <LogInForm></LogInForm> : null}
                 </div>
                 <div className="column"></div>
               </div>

@@ -1,12 +1,12 @@
-import { useState } from "react";
-import Router from "next/router";
-import { auth } from "../lib/firebaseConfig";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import toast from "react-hot-toast";
+import { useState } from 'react';
+import Router from 'next/router';
+import { auth } from '../lib/firebaseConfig';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import toast from 'react-hot-toast';
 
 const LogInForm = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [checked, setChecked] = useState(false);
 
   const dataSubmit = () => {};
@@ -20,20 +20,20 @@ const LogInForm = () => {
     signInWithEmailAndPassword(auth, email, password)
       .then(() => {
         // Signed in
-        Router.push("/home");
+        Router.push('/home');
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
         switch (errorCode) {
-          case "auth/wrong-password":
-            toast.error("Hibás jelszó");
+          case 'auth/wrong-password':
+            toast.error('Hibás jelszó');
             break;
-          case "auth/user-not-found":
-            toast.error("Ilyen email címen nincs regisztrált felhasználó.");
+          case 'auth/user-not-found':
+            toast.error('Ilyen email címen nincs regisztrált felhasználó.');
             break;
-          case "auth/invalid-email":
-            toast.error("Érvénytelen email cím.");
+          case 'auth/invalid-email':
+            toast.error('Érvénytelen email cím.');
             break;
 
           default:
