@@ -13,7 +13,7 @@ const UserProfilePage = () => {
   onAuthStateChanged(auth, (user) => {
     if (user) {
       setName(user.email);
-      setImageURL(user.photoURL);
+      user.photoURL ? setImageURL(user.photoURL) : null;
       console.log(user);
     } else {
       setName(null);

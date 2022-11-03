@@ -1,13 +1,14 @@
-import styles from '../styles/Home.module.css';
-import Head from 'next/head';
-import Image from 'next/image';
-import { auth, provider } from '../lib/firebaseConfig';
-import { useState, useEffect } from 'react';
-import { signInWithPopup, signOut } from 'firebase/auth';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { useRouter } from 'next/router';
-import Navbar from '../components/Navbar';
-import LogInForm from '../components/LogInForm';
+import styles from "../styles/Home.module.css";
+import Head from "next/head";
+import Image from "next/image";
+import Link from "next/link";
+import { auth, provider } from "../lib/firebaseConfig";
+import { useState, useEffect } from "react";
+import { signInWithPopup, signOut } from "firebase/auth";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { useRouter } from "next/router";
+import Navbar from "../components/Navbar";
+import LogInForm from "../components/LogInForm";
 
 function SignOutButton(params) {}
 
@@ -24,10 +25,10 @@ const Login = () => {
   const SignInButton = async () => {
     const result = await signInWithPopup(auth, provider);
     console.log(result);
-    router.push('/home');
+    router.push("/home");
   };
 
-  const [isActive, setIsActive] = useState(true);
+  const [isActive, setIsActive] = useState(false);
   const show = () => setIsActive(!isActive);
 
   return (
@@ -47,7 +48,40 @@ const Login = () => {
             layout="fill"
           ></Image>
           <div className="hero-head">
-            <Navbar></Navbar>
+            {!isActive ? (
+              <Navbar></Navbar>
+            ) : (
+              <button
+                className="button is-large is-success is-outlined"
+                style={{ background: "black" }}
+              >
+                <Link className="navbar-brand" href="/">
+                  <Image
+                    className=""
+                    src="/DologInfo.png"
+                    alt="logo"
+                    width="50"
+                    height="44"
+                  />
+                </Link>
+
+                <div id="navbarBasicExample" className="navbar-menu">
+                  <div className="navbar-start">
+                    <Link className="navbar-item" href="/">
+                      <a className="">
+                        <Image
+                          className="mt-2"
+                          src="/dolog.png"
+                          alt="Dolog"
+                          width="180"
+                          height="51"
+                        />
+                      </a>
+                    </Link>
+                  </div>
+                </div>
+              </button>
+            )}
           </div>
           <div className="container"></div>
           <div className="container is-black is-dark pt-6 mb-0">
@@ -104,17 +138,25 @@ const Login = () => {
                     <span> Felhasználó név</span>
                   </button>
                 </div>
-                <div className="column is-6-tablet is-5-desktop is-4-widescreen is-4-fullhd">
-                  <button className="button is-success is-outlined is-large mt-4">
+                <div className="column mt-5 is-narrow">
+                  <span className="">
+                    <Image src="/or.png" alt="logo" width="60" height="44" />
+                  </span>
+                </div>
+                <div className="column is-6-tablet is-5-desktop is-5-widescreen is-5-fullhd">
+                  <button
+                    className="button is-success is-outlined is-large mt-4 ml-3"
+                    onClick={show}
+                  >
                     <span className="mt-2">
                       <Image
                         src="/email1.png"
                         alt="logo"
-                        width="80"
-                        height="80"
+                        width="50"
+                        height="50"
                       />
                     </span>
-                    <span className="ml-6"> Email és jelszó használatával</span>
+                    <span className="ml-5"> Email- és jelszóval</span>
                   </button>
 
                   {/* <div className="panel-heading has-background-black mb-3">
