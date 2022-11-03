@@ -1,10 +1,16 @@
 import styles from '../styles/Home.module.css';
 import Head from 'next/head';
 import Image from 'next/image';
+import Link from 'next/link';
 import Navbar from '../components/Navbar';
 import SignUpForm from '../components/SignUpForm';
+import CreateUsername from '../components/CreateUsername';
+
+import { useState } from 'react';
 
 const Register = () => {
+  const [isName, setName] = useState(false);
+  const onSetName = () => setName(!isName);
   return (
     <div className={styles.container}>
       <Head>
@@ -22,18 +28,55 @@ const Register = () => {
             layout="fill"
           ></Image>
           <div className="hero-head">
-            <Navbar></Navbar>
+            {!isName ? (
+              <Navbar></Navbar>
+            ) : (
+              <button
+                className="button is-large is-success is-outlined m-5"
+                style={{ background: 'black' }}
+              >
+                <Link className="navbar-brand" href="/">
+                  <Image
+                    className=""
+                    src="/DologInfo.png"
+                    alt="logo"
+                    width="50"
+                    height="44"
+                  />
+                </Link>
+
+                <div id="navbarBasicExample" className="navbar-menu">
+                  <div className="navbar-start">
+                    <Link className="navbar-item" href="/">
+                      <a className="">
+                        <Image
+                          className="mt-2"
+                          src="/dolog.png"
+                          alt="Dolog"
+                          width="180"
+                          height="51"
+                        />
+                      </a>
+                    </Link>
+                  </div>
+                </div>
+              </button>
+            )}
           </div>
           <div className="container"></div>
           <div className="container is-black is-dark pt-6 mb-0">
             <article className="message is-warning">
-              <div className="message-header">
-                <p className="has-text-black">Figyelem!</p>
+              <div className="message-header is-justify-content-center">
+                <p className="has-text-black title">Figyelem!</p>
               </div>
               <div className="message-body has-background-dark has-text-light">
                 Amennyiben még nem regisztráltál, hozz létre egy új fiókot email
-                címmelel és jelszóval, vagy használd
-                <strong> Google fiókodat</strong>
+                címmelel és jelszóval, majd adj meg egy
+                <strong className="has-text-warning">
+                  {' '}
+                  felhasználó nevet{' '}
+                </strong>
+                , amellyel azonosítod a bejegyzéseidet.
               </div>
             </article>
           </div>
@@ -46,6 +89,36 @@ const Register = () => {
                     <h1 className="title has-text-warning">Fiók létrehozása</h1>
                   </div>
                   <SignUpForm></SignUpForm>
+                  {isName ? (
+                    <CreateUsername></CreateUsername>
+                  ) : (
+                    <div className="section mt-2">
+                      <figure className="">
+                        <p className="image is-48x48">
+                          <Image
+                            src="/plus.png"
+                            alt="plus"
+                            width={48}
+                            height={48}
+                          />
+                        </p>
+                      </figure>
+                    </div>
+                  )}
+                  <button
+                    className="button is-warning is-outlined is-large mt-3"
+                    onClick={onSetName}
+                  >
+                    <span className="mt-2 mx-5">
+                      <Image
+                        src="/anonymous.png"
+                        alt="logo"
+                        width="60"
+                        height="44"
+                      />
+                    </span>
+                    <span> Felhasználó név</span>
+                  </button>
                 </div>
               </div>
             </div>

@@ -1,14 +1,14 @@
-import styles from "../styles/Home.module.css";
-import Head from "next/head";
-import Image from "next/image";
-import Link from "next/link";
-import { auth, provider } from "../lib/firebaseConfig";
-import { useState, useEffect } from "react";
-import { signInWithPopup, signOut } from "firebase/auth";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { useRouter } from "next/router";
-import Navbar from "../components/Navbar";
-import LogInForm from "../components/LogInForm";
+import styles from '../styles/Home.module.css';
+import Head from 'next/head';
+import Image from 'next/image';
+import Link from 'next/link';
+import { auth, provider } from '../lib/firebaseConfig';
+import { useState, useEffect } from 'react';
+import { signInWithPopup, signOut } from 'firebase/auth';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { useRouter } from 'next/router';
+import Navbar from '../components/Navbar';
+import LogInForm from '../components/LogInForm';
 
 function SignOutButton(params) {}
 
@@ -25,7 +25,7 @@ const Login = () => {
   const SignInButton = async () => {
     const result = await signInWithPopup(auth, provider);
     console.log(result);
-    router.push("/home");
+    router.push('/home');
   };
 
   const [isActive, setIsActive] = useState(false);
@@ -52,8 +52,8 @@ const Login = () => {
               <Navbar></Navbar>
             ) : (
               <button
-                className="button is-large is-success is-outlined"
-                style={{ background: "black" }}
+                className="button is-large is-success is-outlined m-5"
+                style={{ background: 'black' }}
               >
                 <Link className="navbar-brand" href="/">
                   <Image
@@ -90,8 +90,14 @@ const Login = () => {
                 <p className="title has-text-black">Figyelem!</p>
               </div>
               <div className="message-body has-background-dark has-text-light">
-                Ha már van fiókod, jelentkezz be email címmelel és jelszóval,
-                vagy használd <strong>Google fókodat</strong>
+                Ha már van fiókod, jelentkezz be email címmel és jelszóval, vagy
+                egyszerűen használd <strong>Google fókodat</strong> és adj meg
+                egy
+                <strong className="has-text-warning">
+                  {' '}
+                  felhasználó nevet{' '}
+                </strong>
+                , amellyel azonosítod a bejegyzéseidet.
               </div>
             </article>
           </div>
