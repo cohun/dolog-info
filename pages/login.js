@@ -11,6 +11,8 @@ import Navbar from "../components/Navbar";
 import LogInForm from "../components/LogInForm";
 import toast from "react-hot-toast";
 import CreateUsername from "../components/CreateUsername";
+import { useContext } from "react";
+import { UserContext } from "../lib/context";
 
 function SignOutButton(params) {}
 
@@ -21,6 +23,8 @@ const blogNameButton = () => {
 };
 
 const Login = () => {
+  const { name1, blogName1 } = useContext(UserContext);
+
   const router = useRouter();
   const [blogName, setBlogName] = useState("Attila");
   const [user, setUser] = useAuthState(auth);
