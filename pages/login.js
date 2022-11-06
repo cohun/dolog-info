@@ -1,42 +1,44 @@
-import styles from "../styles/Home.module.css";
-import Head from "next/head";
-import Image from "next/image";
-import Link from "next/link";
-import { auth, provider } from "../lib/firebaseConfig";
-import { useState, useEffect } from "react";
-import { signInWithPopup, signOut } from "firebase/auth";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { useRouter } from "next/router";
-import Navbar from "../components/Navbar";
-import LogInForm from "../components/LogInForm";
-import toast from "react-hot-toast";
-import CreateUsername from "../components/CreateUsername";
-import { useContext } from "react";
-import { UserContext } from "../lib/context";
+import styles from '../styles/Home.module.css';
+import Head from 'next/head';
+import Image from 'next/image';
+import Link from 'next/link';
+import { auth, provider } from '../lib/firebaseConfig';
+import { useState, useEffect } from 'react';
+import { signInWithPopup, signOut } from 'firebase/auth';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { useRouter } from 'next/router';
+import Navbar from '../components/Navbar';
+import LogInForm from '../components/LogInForm';
+import toast from 'react-hot-toast';
+import CreateUsername from '../components/CreateUsername';
+import { useContext } from 'react';
+import { UserContext } from '../lib/context';
 
 function SignOutButton(params) {}
 
 function UsernameForm(params) {}
 
 const blogNameButton = () => {
-  toast.error("Jelentkezz be először a Google fiókodba!");
+  toast.error('Jelentkezz be először a Google fiókodba!');
 };
 
 const Login = () => {
-  const { name1, blogName1 } = useContext(UserContext);
+  const { user, blogName } = useContext(UserContext);
 
   const router = useRouter();
-  const [blogName, setBlogName] = useState("Attila");
-  const [user, setUser] = useAuthState(auth);
+  // const [blogName, setBlogName] = useState(null);
+  /*   const [user, setUser] = useAuthState(auth);
   useEffect(() => {
     console.log(user);
-  }, [user]);
+  }, [user]); */
 
   const SignInButton = async () => {
+    console.log(user);
+    console.log(blogName);
     const result = await signInWithPopup(auth, provider)
       .then((result) => {
         // The signed-in user info.
-        const user = result.user;
+        // const user = result.user;
         // ...
       })
       .catch((error) => {
@@ -47,9 +49,9 @@ const Login = () => {
         toast.error(errorCode);
         // ...
       });
-    console.log(result);
+
     if (blogName) {
-      router.push("/home");
+      router.push('/home');
     }
   };
 
@@ -78,7 +80,7 @@ const Login = () => {
             ) : (
               <button
                 className="button is-large is-success is-outlined m-5"
-                style={{ background: "black" }}
+                style={{ background: 'black' }}
               >
                 <Link className="navbar-brand" href="/">
                   <Image
@@ -119,8 +121,8 @@ const Login = () => {
                 egyszerűen használd <strong>Google fókodat</strong> és adj meg
                 egy
                 <strong className="has-text-warning">
-                  {" "}
-                  felhasználó nevet{" "}
+                  {' '}
+                  felhasználó nevet{' '}
                 </strong>
                 , amellyel azonosítod a bejegyzéseidet.
               </div>
