@@ -1,25 +1,25 @@
-import styles from "../styles/Home.module.css";
-import Head from "next/head";
-import Image from "next/image";
-import Link from "next/link";
-import { auth, provider } from "../lib/firebaseConfig";
-import { useState, useEffect, useCallback } from "react";
-import { signInWithPopup, signOut } from "firebase/auth";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { useRouter } from "next/router";
-import Navbar from "../components/Navbar";
-import LogInForm from "../components/LogInForm";
-import toast from "react-hot-toast";
-import CreateUsername from "../components/CreateUsername";
-import { useContext } from "react";
-import { UserContext } from "../lib/context";
+import styles from '../styles/Home.module.css';
+import Head from 'next/head';
+import Image from 'next/image';
+import Link from 'next/link';
+import { auth, provider } from '../lib/firebaseConfig';
+import { useState, useEffect, useCallback } from 'react';
+import { signInWithPopup, signOut } from 'firebase/auth';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { useRouter } from 'next/router';
+import Navbar from '../components/Navbar';
+import LogInForm from '../components/LogInForm';
+import toast from 'react-hot-toast';
+import CreateUsername from '../components/CreateUsername';
+import { useContext } from 'react';
+import { UserContext } from '../lib/context';
 
 function SignOutButton(params) {}
 
 function UsernameForm(params) {}
 
 const blogNameButton = () => {
-  toast.error("Jelentkezz be először a Google fiókodba!");
+  toast.error('Jelentkezz be először a fiókodba!');
 };
 
 const Login = (props) => {
@@ -37,8 +37,8 @@ const Login = (props) => {
   };
 
   // Sign out button
-  function SignOutButton() {
-    router.push("/home");
+  function HomeForm() {
+    router.push('/home');
   }
   function UsernameForm() {
     return <CreateUsername></CreateUsername>;
@@ -59,7 +59,7 @@ const Login = (props) => {
         !username ? (
           <UsernameForm />
         ) : (
-          <SignOutButton />
+          <HomeForm />
         )
       ) : (
         <main className="panel">
@@ -76,7 +76,7 @@ const Login = (props) => {
               ) : (
                 <button
                   className="button is-large is-success is-outlined m-5"
-                  style={{ background: "black" }}
+                  style={{ background: 'black' }}
                 >
                   <Link className="navbar-brand" href="/">
                     <Image
@@ -117,8 +117,8 @@ const Login = (props) => {
                   vagy egyszerűen használd <strong>Google fókodat</strong> és
                   adj meg egy
                   <strong className="has-text-warning">
-                    {" "}
-                    felhasználó nevet{" "}
+                    {' '}
+                    felhasználó nevet{' '}
                   </strong>
                   , amellyel azonosítod a bejegyzéseidet.
                 </div>
