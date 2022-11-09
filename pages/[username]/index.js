@@ -4,12 +4,16 @@ import { auth } from "../../lib/firebaseConfig";
 import { useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import Navbar from "../../components/Navbar";
+import { useContext } from "react";
+import { UserContext } from "../../lib/context";
 
 const UserProfilePage = () => {
   const [imageURL, setImageURL] = useState(
     "https://bulma.io/images/placeholders/128x128.png"
   );
-  const [name, setName] = useState(null);
+
+  const { user, username } = useContext(UserContext);
+  /* const [name, setName] = useState(null);
   onAuthStateChanged(auth, (user) => {
     if (user) {
       setName(user.email);
@@ -18,7 +22,7 @@ const UserProfilePage = () => {
     } else {
       setName(null);
     }
-  });
+  }); */
 
   return (
     <div>
@@ -183,7 +187,7 @@ const UserProfilePage = () => {
               <div className="media-content">
                 <div className="content">
                   <p>
-                    <strong className="has-text-primary">{name} </strong>
+                    <strong className="has-text-primary">{username} </strong>
                   </p>
                 </div>
 
