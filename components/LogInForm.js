@@ -5,6 +5,7 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import toast from 'react-hot-toast';
 import { useContext } from 'react';
 import { UserContext } from '../lib/context';
+import CreateUsername from '../components/CreateUsername';
 
 const LogInForm = () => {
   const [email, setEmail] = useState('');
