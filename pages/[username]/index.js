@@ -2,27 +2,18 @@ import Head from "next/head";
 import Image from "next/image";
 import { auth } from "../../lib/firebaseConfig";
 import { useState } from "react";
-import { onAuthStateChanged } from "firebase/auth";
 import Navbar from "../../components/Navbar";
 import { useContext } from "react";
 import { UserContext } from "../../lib/context";
+import UserProfile from "../../components/UserProfile";
+import PostFeed from "../../components/PostFeed";
 
-const UserProfilePage = () => {
+const UserProfilePage = ({ user, posts }) => {
   const [imageURL, setImageURL] = useState(
     "https://bulma.io/images/placeholders/128x128.png"
   );
 
-  const { user, username } = useContext(UserContext);
-  /* const [name, setName] = useState(null);
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      setName(user.email);
-      user.photoURL ? setImageURL(user.photoURL) : null;
-      console.log(user);
-    } else {
-      setName(null);
-    }
-  }); */
+  const { name, username } = useContext(UserContext);
 
   return (
     <div>
@@ -30,6 +21,8 @@ const UserProfilePage = () => {
       <div className="">
         <div className="hero is-fullheight has-background-grey-darker ">
           <div className="section">
+            <UserProfile user={user}></UserProfile>
+            <PostFeed posts={posts}></PostFeed>
             <div className="notification is-warning is-light">
               <nav className="level">
                 <div className="level-left">
@@ -73,6 +66,7 @@ const UserProfilePage = () => {
                 </div>
               </nav>
             </div>
+
             <article className="media">
               <figure className="media-left">
                 <p className="image is-64x64">
