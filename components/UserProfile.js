@@ -1,8 +1,8 @@
-const UserProfile = ({ user }) => {
+const UserProfile = ({ uid, username }) => {
   return (
     <div>
-      <div>UserProfile</div>
-      <div className="box">I am in a box. </div>
+      <div>UserProfile {uid}</div>
+      <div className="box">I am in a box. {username}</div>
     </div>
   );
 };

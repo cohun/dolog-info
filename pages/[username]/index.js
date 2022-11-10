@@ -1,19 +1,32 @@
-import Head from "next/head";
-import Image from "next/image";
-import { auth } from "../../lib/firebaseConfig";
-import { useState } from "react";
-import Navbar from "../../components/Navbar";
-import { useContext } from "react";
-import { UserContext } from "../../lib/context";
-import UserProfile from "../../components/UserProfile";
-import PostFeed from "../../components/PostFeed";
+import Head from 'next/head';
+import Image from 'next/image';
+import { auth, getUserWithUsername } from '../../lib/firebaseConfig';
+import { useState } from 'react';
+import Navbar from '../../components/Navbar';
+import { useContext } from 'react';
+import { UserContext } from '../../lib/context';
+import UserProfile from '../../components/UserProfile';
+import PostFeed from '../../components/PostFeed';
 
-const UserProfilePage = ({ user, posts }) => {
+export async function getServerSideProps({ query }) {
+  const { username } = query;
+  const userDoc = await getUserWithUsername(username);
+
+  let user = null;
+  let posts = null;
+  if (userDoc) {
+  }
+  return {
+    props: { user, posts }, // will be passed to the page component as props
+  };
+}
+
+const UserProfilePage = ({ posts }) => {
   const [imageURL, setImageURL] = useState(
-    "https://bulma.io/images/placeholders/128x128.png"
+    'https://bulma.io/images/placeholders/128x128.png'
   );
 
-  const { name, username } = useContext(UserContext);
+  const { user, username } = useContext(UserContext);
 
   return (
     <div>
@@ -21,8 +34,10 @@ const UserProfilePage = ({ user, posts }) => {
       <div className="">
         <div className="hero is-fullheight has-background-grey-darker ">
           <div className="section">
-            <UserProfile user={user}></UserProfile>
-            <PostFeed posts={posts}></PostFeed>
+            {user ? (
+              <UserProfile uid={user.uid} username={username}></UserProfile>
+            ) : null}
+            <PostFeed posts={posts}>Hello</PostFeed>
             <div className="notification is-warning is-light">
               <nav className="level">
                 <div className="level-left">
@@ -152,7 +167,7 @@ const UserProfilePage = ({ user, posts }) => {
                     <div className="content">
                       <p>
                         <strong className="has-text-warning">
-                          Kayli Eunice{" "}
+                          Kayli Eunice{' '}
                         </strong>
                         <br />
                         Sed convallis scelerisque mauris, non pulvinar nunc
