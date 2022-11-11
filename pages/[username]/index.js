@@ -1,32 +1,45 @@
-import Head from 'next/head';
-import Image from 'next/image';
-import { auth, getUserWithUsername } from '../../lib/firebaseConfig';
-import { useState } from 'react';
-import Navbar from '../../components/Navbar';
-import { useContext } from 'react';
-import { UserContext } from '../../lib/context';
-import UserProfile from '../../components/UserProfile';
-import PostFeed from '../../components/PostFeed';
+import Head from "next/head";
+import Image from "next/image";
+import { auth, getUserWithUsername } from "../../lib/firebaseConfig";
+import { useState } from "react";
+import Navbar from "../../components/Navbar";
+import { useContext } from "react";
+import { UserContext } from "../../lib/context";
+import UserProfile from "../../components/UserProfile";
+import PostFeed from "../../components/PostFeed";
+import { postToJson } from "../../lib/firebaseConfig";
+import { orderBy } from "firebase/firestore";
 
 export async function getServerSideProps({ query }) {
   const { username } = query;
-  const userDoc = await getUserWithUsername(username);
+  const userDoc = await getUserWithUsername("attila");
+  if (!userDoc) {
+    console.log("Here I am!");
+  }
 
   let user = null;
   let posts = null;
+
   if (userDoc) {
+    user = userDoc.data();
+    console.log("Here in");
+    const postsQuery = query(
+      collection(db, "posts"),
+      where("published", "==", true, orderBy("createdAt", "desc"), limit(5))
+    );
+    const posts = await getDocs(postsQuery).map(postToJson);
   }
   return {
     props: { user, posts }, // will be passed to the page component as props
   };
 }
 
-const UserProfilePage = ({ posts }) => {
+const UserProfilePage = ({ user, posts }) => {
   const [imageURL, setImageURL] = useState(
-    'https://bulma.io/images/placeholders/128x128.png'
+    "https://bulma.io/images/placeholders/128x128.png"
   );
 
-  const { user, username } = useContext(UserContext);
+  const { username } = useContext(UserContext);
 
   return (
     <div>
@@ -167,7 +180,7 @@ const UserProfilePage = ({ posts }) => {
                     <div className="content">
                       <p>
                         <strong className="has-text-warning">
-                          Kayli Eunice{' '}
+                          Kayli Eunice{" "}
                         </strong>
                         <br />
                         Sed convallis scelerisque mauris, non pulvinar nunc
