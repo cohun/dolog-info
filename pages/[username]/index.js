@@ -1,39 +1,39 @@
-import Head from "next/head";
-import Image from "next/image";
+import Head from 'next/head';
+import Image from 'next/image';
 import {
   collectionGroup,
   query,
   where,
   getDocs,
   limit,
-} from "firebase/firestore";
-import { useState } from "react";
-import Navbar from "../../components/Navbar";
-import { useContext } from "react";
-import { UserContext } from "../../lib/context";
-import UserProfile from "../../components/UserProfile";
-import PostFeed from "../../components/PostFeed";
-import { postToJson } from "../../lib/firebaseConfig";
-import { orderBy } from "firebase/firestore";
-import { db } from "../../lib/firebaseConfig";
+} from 'firebase/firestore';
+import { useState } from 'react';
+import Navbar from '../../components/Navbar';
+import { useContext } from 'react';
+import { UserContext } from '../../lib/context';
+import UserProfile from '../../components/UserProfile';
+import PostFeed from '../../components/PostFeed';
+import { postToJson } from '../../lib/firebaseConfig';
+import { orderBy } from 'firebase/firestore';
+import { db } from '../../lib/firebaseConfig';
 
 const LIMIT = 1;
 
-/* export async function getServerSideProps(context) {
+export async function getServerSideProps(context) {
   const postsQuery = query(
-    collectionGroup(db, "posts"),
-    where("published", "==", true, orderBy("createdAt", "desc"), limit(LIMIT))
+    collectionGroup(db, 'posts'),
+    where('published', '==', true, orderBy('createdAt', 'desc'), limit(LIMIT))
   );
   const posts = (await getDocs(postsQuery)).docs.map(postToJson);
-  console.log("getServerside_ " + posts[0]);
+  console.log('getServerside_ ' + posts[0]);
   return {
     props: { posts }, // will be passed to the page component as props
   };
-} */
+}
 
 const UserProfilePage = ({ posts }) => {
   const [imageURL, setImageURL] = useState(
-    "https://bulma.io/images/placeholders/128x128.png"
+    'https://bulma.io/images/placeholders/128x128.png'
   );
 
   const { user, username } = useContext(UserContext);
@@ -44,10 +44,7 @@ const UserProfilePage = ({ posts }) => {
       <div className="">
         <div className="hero is-fullheight has-background-grey-darker ">
           <div className="section">
-            {/*  {user ? (
-              <UserProfile uid={user.uid} username={username}></UserProfile>
-            ) : null} */}
-            {/* <PostFeed posts={posts}>Hello</PostFeed> */}
+            <PostFeed posts={posts}>Hello</PostFeed>
             <div className="notification is-warning is-light">
               <nav className="level">
                 <div className="level-left">
@@ -55,7 +52,7 @@ const UserProfilePage = ({ posts }) => {
                     <p className="subtitle is-5">
                       <strong className="has-text-warning-dark is-capitalized">
                         {username}
-                      </strong>{" "}
+                      </strong>{' '}
                       posztjaiban:
                     </p>
                   </div>
@@ -176,7 +173,7 @@ const UserProfilePage = ({ posts }) => {
                     <div className="content">
                       <p>
                         <strong className="has-text-warning">
-                          Kayli Eunice{" "}
+                          Kayli Eunice{' '}
                         </strong>
                         <br />
                         Sed convallis scelerisque mauris, non pulvinar nunc
@@ -206,7 +203,7 @@ const UserProfilePage = ({ posts }) => {
                 <div className="content">
                   <p>
                     <strong className="has-text-primary is-capitalized">
-                      {username}{" "}
+                      {username}{' '}
                     </strong>
                   </p>
                 </div>

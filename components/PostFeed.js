@@ -1,19 +1,21 @@
-import Link from "next/link";
+import Link from 'next/link';
 
 const PostFeed = ({ posts, admin }) => {
-  console.log("in PostFeed");
+  console.log('in PostFeed');
   console.log(posts[0]);
-  return posts.map((post) => {
-    console.log(post);
-    <PostItem post={post} key={post.slug} admin={admin} />;
-  });
+  return posts
+    ? posts.map((post) => {
+        console.log('inside' + post.slug);
+        return <PostItem post={post} key={post.slug} admin={admin} />;
+      })
+    : null;
 };
 
 function PostItem({ post, admin = false }) {
   // Naive method to calc word count and read time
   const wordCount = post?.content.trim().split(/\s+/g).length;
   const minutesToRead = (wordCount / 100 + 1).toFixed(0);
-
+  console.log('postItem');
   return (
     <div className="box">
       <Link href={`/${post.username}`}>

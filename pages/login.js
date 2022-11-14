@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { auth, provider } from '../lib/firebaseConfig';
 import { useState, useEffect, useCallback } from 'react';
 import { signInWithPopup, signOut } from 'firebase/auth';
-import { useAuthState } from 'react-firebase-hooks/auth';
 import { useRouter } from 'next/router';
 import Navbar from '../components/Navbar';
 import LogInForm from '../components/LogInForm';
@@ -26,11 +25,6 @@ const Login = (props) => {
   const { user, username } = useContext(UserContext);
 
   const router = useRouter();
-  // const [blogName, setBlogName] = useState(null);
-  /*   const [user, setUser] = useAuthState(auth);
-  useEffect(() => {
-    console.log(user);
-  }, [user]); */
 
   const SignInButton = async (e) => {
     await signInWithPopup(auth, provider);
