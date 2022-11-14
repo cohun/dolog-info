@@ -1,9 +1,12 @@
-import Link from 'next/link';
+import Link from "next/link";
 
 const PostFeed = ({ posts, admin }) => {
-  return posts
-    ? posts.map((post) => <div post={post} key={post.slug} admin={admin} />)
-    : null;
+  console.log("in PostFeed");
+  console.log(posts[0]);
+  return posts.map((post) => {
+    console.log(post);
+    <PostItem post={post} key={post.slug} admin={admin} />;
+  });
 };
 
 function PostItem({ post, admin = false }) {
@@ -12,7 +15,7 @@ function PostItem({ post, admin = false }) {
   const minutesToRead = (wordCount / 100 + 1).toFixed(0);
 
   return (
-    <div className="card">
+    <div className="box">
       <Link href={`/${post.username}`}>
         <a>
           <strong>By @{post.username}</strong>

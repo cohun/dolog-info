@@ -1,30 +1,20 @@
-import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { UserContext } from "../lib/context";
 import { useContext } from "react";
-import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../lib/firebaseConfig";
 import { signOut } from "firebase/auth";
 import { useRouter } from "next/router";
 
 const Navbar = () => {
+  const { user, username } = useContext(UserContext);
   const router = useRouter();
-  const [name, setName] = useState(null);
-  const blogName = null;
 
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      setName(user);
-    } else {
-      setName(null);
-    }
-  });
   const SignOutButton = () =>
     signOut(auth)
       .then(() => {
         console.log("Signed out");
-        setName(null);
+
         router.push("/");
         // Sign-out successful.
       })
@@ -34,7 +24,7 @@ const Navbar = () => {
   return (
     <nav
       className={
-        name
+        user
           ? "navbar is-spaced has-background-black-ter has-shadow"
           : "navbar is-spaced "
       }
@@ -74,19 +64,24 @@ const Navbar = () => {
 
       <div className="navbar-end">
         <div className="navbar-item">
-          {blogName && (
+          {username && (
             <div className="buttons">
               <Link href="/admin">
-                <a className="button has-background-primary-dark">Admin page</a>
+                <a className="button has-background-primary-dark">Bejegyzés</a>
               </Link>
-              <Link href={`/${blogName}`}>
-                <a className="button has-background-warning">{blogName} page</a>
+              <Link href={`/${username}`}>
+                <a className="button has-background-warning">{username}</a>
               </Link>
+              <div onClick={SignOutButton}>
+                <a className="button has-background-danger-dark is-hovered">
+                  Kijelentkezés
+                </a>
+              </div>
             </div>
           )}
-          {!blogName && (
+          {!username && (
             <div className="buttons">
-              {!name && (
+              {!user && (
                 <Link href="/register">
                   <a className="button has-background-warning">
                     <strong>Regisztráció</strong>
@@ -94,7 +89,7 @@ const Navbar = () => {
                 </Link>
               )}
 
-              {name && (
+              {user && (
                 <Link href="/home">
                   <a className="button has-background-primary-dark">
                     Bejegyzések
@@ -102,14 +97,14 @@ const Navbar = () => {
                 </Link>
               )}
 
-              {name && (
+              {user && (
                 <div onClick={SignOutButton}>
                   <a className="button has-background-danger-dark is-hovered">
                     Kijelentkezés
                   </a>
                 </div>
               )}
-              {!name && (
+              {!user && (
                 <Link href="/login">
                   <a className="button has-background-primary-dark">
                     Bejelentkezés

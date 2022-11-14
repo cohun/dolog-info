@@ -1,6 +1,12 @@
 import Head from "next/head";
 import Image from "next/image";
-import { auth, getUserWithUsername } from "../../lib/firebaseConfig";
+import {
+  collectionGroup,
+  query,
+  where,
+  getDocs,
+  limit,
+} from "firebase/firestore";
 import { useState } from "react";
 import Navbar from "../../components/Navbar";
 import { useContext } from "react";
@@ -9,37 +15,28 @@ import UserProfile from "../../components/UserProfile";
 import PostFeed from "../../components/PostFeed";
 import { postToJson } from "../../lib/firebaseConfig";
 import { orderBy } from "firebase/firestore";
+import { db } from "../../lib/firebaseConfig";
 
-export async function getServerSideProps({ query }) {
-  const { username } = query;
-  const userDoc = await getUserWithUsername("attila");
-  if (!userDoc) {
-    console.log("Here I am!");
-  }
+const LIMIT = 1;
 
-  let user = null;
-  let posts = null;
-
-  if (userDoc) {
-    user = userDoc.data();
-    console.log("Here in");
-    const postsQuery = query(
-      collection(db, "posts"),
-      where("published", "==", true, orderBy("createdAt", "desc"), limit(5))
-    );
-    const posts = await getDocs(postsQuery).map(postToJson);
-  }
+/* export async function getServerSideProps(context) {
+  const postsQuery = query(
+    collectionGroup(db, "posts"),
+    where("published", "==", true, orderBy("createdAt", "desc"), limit(LIMIT))
+  );
+  const posts = (await getDocs(postsQuery)).docs.map(postToJson);
+  console.log("getServerside_ " + posts[0]);
   return {
-    props: { user, posts }, // will be passed to the page component as props
+    props: { posts }, // will be passed to the page component as props
   };
-}
+} */
 
-const UserProfilePage = ({ user, posts }) => {
+const UserProfilePage = ({ posts }) => {
   const [imageURL, setImageURL] = useState(
     "https://bulma.io/images/placeholders/128x128.png"
   );
 
-  const { username } = useContext(UserContext);
+  const { user, username } = useContext(UserContext);
 
   return (
     <div>
@@ -47,29 +44,28 @@ const UserProfilePage = ({ user, posts }) => {
       <div className="">
         <div className="hero is-fullheight has-background-grey-darker ">
           <div className="section">
-            {user ? (
+            {/*  {user ? (
               <UserProfile uid={user.uid} username={username}></UserProfile>
-            ) : null}
-            <PostFeed posts={posts}>Hello</PostFeed>
+            ) : null} */}
+            {/* <PostFeed posts={posts}>Hello</PostFeed> */}
             <div className="notification is-warning is-light">
               <nav className="level">
                 <div className="level-left">
                   <div className="level-item">
                     <p className="subtitle is-5">
-                      <strong className="has-text-warning">123</strong> posts
+                      <strong className="has-text-warning-dark is-capitalized">
+                        {username}
+                      </strong>{" "}
+                      posztjaiban:
                     </p>
                   </div>
                   <div className="level-item">
                     <div className="field has-addons">
                       <p className="control">
-                        <input
-                          className="input"
-                          type="text"
-                          placeholder="Find a post"
-                        />
+                        <input className="input" type="text" placeholder="" />
                       </p>
                       <p className="control">
-                        <button className="button">Search</button>
+                        <button className="button">keresés</button>
                       </p>
                     </div>
                   </div>
@@ -209,7 +205,9 @@ const UserProfilePage = ({ user, posts }) => {
               <div className="media-content">
                 <div className="content">
                   <p>
-                    <strong className="has-text-primary">{username} </strong>
+                    <strong className="has-text-primary is-capitalized">
+                      {username}{" "}
+                    </strong>
                   </p>
                 </div>
 
