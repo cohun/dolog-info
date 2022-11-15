@@ -67,10 +67,12 @@ const Navbar = () => {
           {username && (
             <div className="buttons">
               <Link href="/admin">
-                <a className="button has-background-primary-dark">Bejegyzés</a>
+                <a className="button has-background-primary-dark is-capitalized">
+                  {username} admin
+                </a>
               </Link>
               <Link href={`/${username}`}>
-                <a className="button has-background-warning">{username}</a>
+                <a className="button has-background-warning">Bejegyzések</a>
               </Link>
               <div onClick={SignOutButton}>
                 <a className="button has-background-danger-dark is-hovered">
@@ -90,9 +92,9 @@ const Navbar = () => {
               )}
 
               {user && (
-                <Link href="/home">
+                <Link href="/login">
                   <a className="button has-background-primary-dark">
-                    Bejegyzések
+                    Felhasználó név megadás
                   </a>
                 </Link>
               )}

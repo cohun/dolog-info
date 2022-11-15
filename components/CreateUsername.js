@@ -1,20 +1,21 @@
-import debounce from 'lodash.debounce';
-import { doc, getDoc, writeBatch } from 'firebase/firestore';
-import { useCallback, useContext, useEffect, useState } from 'react';
-import { UserContext } from '../lib/context';
-import { db } from '../lib/firebaseConfig';
+import debounce from "lodash.debounce";
+import { doc, getDoc, writeBatch } from "firebase/firestore";
+import { useCallback, useContext, useEffect, useState } from "react";
+import { UserContext } from "../lib/context";
+import { db } from "../lib/firebaseConfig";
+import { useRouter } from "next/router";
 
 const CreateUsername = () => {
-  const [formValue, setFormValue] = useState('');
+  const [formValue, setFormValue] = useState("");
   const [isValid, setIsValid] = useState(false);
   const [loading, setLoading] = useState(false);
-
-  const { user, username } = useContext(UserContext);
+  const router = useRouter();
+  const { user } = useContext(UserContext);
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    const userDoc = doc(db, 'users', user.uid);
-    const usernameDoc = doc(db, 'usernames', formValue);
+    const userDoc = doc(db, "users", user.uid);
+    const usernameDoc = doc(db, "usernames", formValue);
     const batch = writeBatch(db);
     batch.set(userDoc, {
       username: formValue,
@@ -24,6 +25,8 @@ const CreateUsername = () => {
     batch.set(usernameDoc, { uid: user.uid });
 
     await batch.commit();
+
+    router.push("/home");
   };
 
   const onChange = (e) => {
@@ -50,11 +53,12 @@ const CreateUsername = () => {
   const checkUsername = useCallback(
     debounce(async (username) => {
       if (username.length >= 3) {
-        const docRef = doc(db, 'usernames', username);
+        const docRef = doc(db, "usernames", username);
         const docSnap = await getDoc(docRef);
-        console.log('Firestore read executed!' + `${docSnap.exists()}`);
+        console.log("Firestore read executed!" + `${docSnap.exists()}`);
 
         docSnap.exists() ? setIsValid(false) : setIsValid(true);
+        setLoading(false);
       }
     }, 500),
     []
@@ -64,17 +68,17 @@ const CreateUsername = () => {
     if (loading) {
       return <p>Checking...</p>;
     } else if (isValid) {
-      return <p className="text-success">{username} is available!</p>;
+      return <p className="text-success">{username} még elérhető!</p>;
     } else if (username && !isValid) {
-      return <p className="text-danger">That username is taken!</p>;
+      return <p className="text-danger">Ilyen néven már van felhasználó!</p>;
     } else {
       return <p></p>;
     }
   }
 
-  const [isActive, setIsActive] = useState('is-active');
+  const [isActive, setIsActive] = useState("is-active");
   const show = () => {
-    setIsActive('');
+    setIsActive("");
   };
   return (
     <div className={`modal ${isActive}`}>
@@ -84,7 +88,7 @@ const CreateUsername = () => {
           <header className="modal-card-head">
             <p className="modal-card-title">Kérem a felhasználó nevet</p>
             <button
-              onClick={() => setIsActive('')}
+              onClick={() => setIsActive("")}
               className="delete"
               aria-label="close"
             ></button>

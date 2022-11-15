@@ -23,7 +23,6 @@ const SignUpForm = () => {
     createUserWithEmailAndPassword(auth, email, password)
       .then(() => {
         // Signed in
-        Router.push("/home");
       })
       .catch((error) => {
         const errorCode = error.code;

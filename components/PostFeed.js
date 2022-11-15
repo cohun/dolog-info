@@ -1,11 +1,12 @@
-import Link from 'next/link';
+import Link from "next/link";
+import Image from "next/image";
 
 const PostFeed = ({ posts, admin }) => {
-  console.log('in PostFeed');
+  console.log("in PostFeed");
   console.log(posts[0]);
   return posts
     ? posts.map((post) => {
-        console.log('inside' + post.slug);
+        console.log("inside" + post.slug);
         return <PostItem post={post} key={post.slug} admin={admin} />;
       })
     : null;
@@ -15,45 +16,66 @@ function PostItem({ post, admin = false }) {
   // Naive method to calc word count and read time
   const wordCount = post?.content.trim().split(/\s+/g).length;
   const minutesToRead = (wordCount / 100 + 1).toFixed(0);
-  console.log('postItem');
+  console.log("postItem");
   return (
-    <div className="box">
-      <Link href={`/${post.username}`}>
-        <a>
-          <strong>By @{post.username}</strong>
-        </a>
-      </Link>
+    <article className="media">
+      <figure className="media-left">
+        <p className="image is-64x64">
+          <Image
+            src="https://bulma.io/images/placeholders/128x128.png"
+            alt="1"
+            width={64}
+            height={64}
+          />
+        </p>
+      </figure>
+      <div className="media-content">
+        <div className="content">
+          <p className="has-text-white">
+            <Link href={`/${post.username}`}>
+              <a>
+                <strong className="has-text-warning">
+                  By @{post.username}
+                </strong>
+              </a>
+            </Link>
 
-      <Link href={`/${post.username}/${post.slug}`}>
-        <h2>
-          <a>{post.title}</a>
-        </h2>
-      </Link>
+            <br />
+            <Link href={`/${post.username}/${post.slug}`}>
+              <span className="has-text-white title">
+                <a>{post.title}</a>
+              </span>
+            </Link>
 
-      <footer>
-        <span>
-          {wordCount} words. {minutesToRead} min read
-        </span>
-        <span className="push-left">💗 {post.heartCount || 0} Hearts</span>
-      </footer>
+            <br />
+            <small>
+              {wordCount} words · {minutesToRead} min read ·
+              <span className="push-left">
+                💗 {post.heartCount || 0} Hearts
+              </span>
+            </small>
+            <br />
+          </p>
+        </div>
 
-      {/* If admin view, show extra controls for user */}
-      {admin && (
-        <>
-          <Link href={`/admin/${post.slug}`}>
-            <h3>
-              <button className="btn-blue">Edit</button>
-            </h3>
-          </Link>
+        {/* If admin view, show extra controls for user */}
+        {admin && (
+          <>
+            <Link href={`/admin/${post.slug}`}>
+              <h3>
+                <button className="btn-blue">Edit</button>
+              </h3>
+            </Link>
 
-          {post.published ? (
-            <p className="text-success">Live</p>
-          ) : (
-            <p className="text-danger">Unpublished</p>
-          )}
-        </>
-      )}
-    </div>
+            {post.published ? (
+              <p className="text-success">Live</p>
+            ) : (
+              <p className="text-danger">Unpublished</p>
+            )}
+          </>
+        )}
+      </div>
+    </article>
   );
 }
 
