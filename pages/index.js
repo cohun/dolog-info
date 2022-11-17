@@ -4,12 +4,26 @@ import styles from "../styles/Home.module.css";
 import Link from "next/link";
 import Loader from "../components/Loader";
 import Navbar from "../components/Navbar";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../lib/context";
 import UserProfile from "../components/UserProfile";
+import { getCompanies } from "../lib/firebaseConfig";
 
 export default function Home() {
   const { user, username } = useContext(UserContext);
+  const [companies, setCompanies] = useState([]);
+  async function getcom() {
+    try {
+      const result = await getCompanies(username);
+      setCompanies(result);
+    } catch (e) {
+      throw e;
+    }
+  }
+  useEffect(() => {
+    getcom();
+  }, [username]);
+
   return (
     <div>
       <Head>
@@ -29,8 +43,8 @@ export default function Home() {
           <div className="hero-head">
             <Navbar></Navbar>
           </div>
-          {username ? (
-            <UserProfile username={username} />
+          {username && companies ? (
+            <UserProfile username={username} companies={companies} />
           ) : (
             <div className="hero-body">
               <div className="tile is-ancestor">
