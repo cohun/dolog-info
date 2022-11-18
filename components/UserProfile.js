@@ -1,7 +1,32 @@
-import { query, where } from 'firebase/firestore';
+import { query, where } from "firebase/firestore";
+import { useState } from "react";
 
 const UserProfile = ({ username, companies }) => {
   console.log(companies);
+  const [isActive, setIsactive] = useState(false);
+
+  const getCompany = (comp) => {
+    let company = "";
+    let content = [];
+    for (let i = 0; i < comp.length; i++) {
+      company = comp[i];
+      content.push(
+        <div
+          className={
+            isActive
+              ? "button is-large is-info is-outlined mr-6 is-focused"
+              : "button is-large is-info is-outlined mr-6 "
+          }
+          onClick={(i) => console.log(i.target)}
+        >
+          {console.log(company)}
+          {company}
+        </div>
+      );
+    }
+    return content;
+  };
+
   return (
     <div>
       <div className="section is-info">
@@ -15,14 +40,7 @@ const UserProfile = ({ username, companies }) => {
       <div className="section">
         <div className="">
           <div className="columns is-centered is-8">
-            {companies.map((company) => (
-              <div
-                key={company.id}
-                className=" button is-large is-info is-outlined mr-6"
-              >
-                {company}
-              </div>
-            ))}
+            {getCompany(companies)}
           </div>
         </div>
       </div>
