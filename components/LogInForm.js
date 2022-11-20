@@ -50,7 +50,7 @@ const LogInForm = () => {
   function HomeForm() {
     console.log('Username: ' + username);
     console.log('user: ' + user);
-    router.push('/home');
+    router.push('/');
   }
   function UsernameForm() {
     return <CreateUsername></CreateUsername>;
