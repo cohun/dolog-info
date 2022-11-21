@@ -32,7 +32,7 @@ const Navbar = () => {
       aria-label="main navigation"
     >
       <button
-        className="button is-large is-success is-outlined"
+        className="button is-medium is-success is-outlined"
         style={{ background: "black" }}
       >
         <Link className="navbar-brand" href="/">
@@ -40,8 +40,8 @@ const Navbar = () => {
             className=""
             src="/DologInfo.png"
             alt="logo"
-            width="50"
-            height="44"
+            width="40"
+            height="40"
           />
         </Link>
 
@@ -50,11 +50,11 @@ const Navbar = () => {
             <Link className="navbar-item" href="/">
               <a className="">
                 <Image
-                  className="mt-2"
+                  className="mt-1"
                   src="/dolog.png"
                   alt="Dolog"
-                  width="180"
-                  height="51"
+                  width="150"
+                  height="50"
                 />
               </a>
             </Link>

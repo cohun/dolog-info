@@ -1,20 +1,19 @@
-import Head from 'next/head';
-import Image from 'next/image';
-import styles from '../styles/Home.module.css';
-import Link from 'next/link';
-import Loader from '../components/Loader';
-import Navbar from '../components/Navbar';
-import { useContext, useEffect, useState } from 'react';
-import { UserContext } from '../lib/context';
-import UserProfile from '../components/UserProfile';
-import { getCompanies } from '../lib/firebaseConfig';
+import Head from "next/head";
+import Image from "next/image";
+import styles from "../styles/Home.module.css";
+import Link from "next/link";
+import Loader from "../components/Loader";
+import Navbar from "../components/Navbar";
+import { useContext, useEffect, useState } from "react";
+import { UserContext } from "../lib/context";
+import UserProfile from "../components/UserProfile";
+import { getCompanies } from "../lib/firebaseConfig";
 
 export default function Home() {
   const { user, username } = useContext(UserContext);
   const [companies, setCompanies] = useState([]);
   async function getcom() {
     if (username && companies.length === 0) {
-      console.log('username:', username);
       try {
         const result = await getCompanies(username);
         if (result.length === 0) {
@@ -75,7 +74,7 @@ export default function Home() {
                         </p>
                         <p className="subtitle">Használati szabályok</p>
                         <div className="content has-text-black-dark">
-                          Az egyedi dolgok felelőse az{' '}
+                          Az egyedi dolgok felelőse az{" "}
                           <strong>adminisztrátor</strong> (rendelkező személy),
                           aki a használatot illetően intézkedési joggal bír és
                           hozzáférést biztosít mások számára arról, hogy:
@@ -130,15 +129,15 @@ export default function Home() {
                         className="column"
                         src="/DologInfo.png"
                         alt="logo"
-                        width="44"
-                        height="44"
+                        width="40"
+                        height="40"
                       />
                       <Image
                         className="column"
                         src="/dolog.png"
                         alt="logo"
-                        width="110"
-                        height="44"
+                        width="120"
+                        height="40"
                       />
                       <p className="title has-text-warning ml-5 column">Info</p>
                     </div>
