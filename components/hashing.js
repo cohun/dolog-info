@@ -51,7 +51,7 @@ const HashingForm = ({ username, setIsactive }) => {
         dataSubmit();
       } else {
         toast.error(
-          'Töltsd ki a cégnevet és a címet is!!! Próbáld meg mégegyszer! '
+          'Töltsd ki a cégnevet és a címet is!!! Próbáld meg mégegyszer!'
         );
       }
 
@@ -125,7 +125,7 @@ const HashingForm = ({ username, setIsactive }) => {
                   />
                   <span className="is-size-6">
                     {' '}
-                    Ha helyesek az adatok, kattints ide, majd a 'Mehet' gombra!
+                    Ha helyesek az adatok, kattints ide, majd a Mehet gombra!
                   </span>
                 </label>
               </div>
