@@ -1,17 +1,14 @@
-import { query, where } from "firebase/firestore";
-import { useEffect, useState } from "react";
-import HashingForm from "./hashing";
+import { query, where } from 'firebase/firestore';
+import { useEffect, useState } from 'react';
+import HashingForm from './hashing';
 
 const UserProfile = ({ username, companies }) => {
-  console.log(companies);
   const [isActive, setIsactive] = useState(false);
-
-  useEffect(() => {
-    console.log(isActive);
-  }, [isActive]);
+  console.log(companies);
+  console.log('isActive: ', isActive);
 
   const getCompany = (comp) => {
-    let compa = "";
+    let compa = '';
     let content = [];
     for (let i = 0; i < comp.length; i++) {
       compa = comp[i];
@@ -19,8 +16,8 @@ const UserProfile = ({ username, companies }) => {
         <div
           className={
             isActive
-              ? "button is-large is-info is-outlined m-6 is-focused"
-              : "button is-large is-info is-outlined m-6 "
+              ? 'button is-large is-info is-outlined m-6 is-focused'
+              : 'button is-large is-info is-outlined m-6 '
           }
           onClick={(i) => console.log(i.target)}
         >
@@ -44,6 +41,7 @@ const UserProfile = ({ username, companies }) => {
 
   function onHashingForm() {
     setIsactive(true);
+
     return HashingForm;
   }
 
@@ -56,7 +54,8 @@ const UserProfile = ({ username, companies }) => {
   }
 
   useEffect(() => {
-    console.log("wwwww", companies.length);
+    console.log('wwwww', companies.length);
+    setIsactive(false);
   }, [companies.length]);
 
   return (
@@ -69,11 +68,11 @@ const UserProfile = ({ username, companies }) => {
                 <strong className="is-capitalized">Helló {username}! </strong>
                 {companies.length != 0 ? (
                   <div className="subtitle">
-                    az alábbi tulajdonosok dolgaihoz van hozzáférésed:{" "}
+                    az alábbi tulajdonosok dolgaihoz van hozzáférésed:{' '}
                   </div>
                 ) : (
                   <div className="subtitle">
-                    Még nincs hozzáférésed egyetlen céghez sem.{" "}
+                    Még nincs hozzáférésed egyetlen céghez sem.{' '}
                   </div>
                 )}
               </h3>
@@ -90,7 +89,7 @@ const UserProfile = ({ username, companies }) => {
           </div>
         </div>
       ) : (
-        <HashingForm />
+        <HashingForm username={username} setIsactive={setIsactive} />
       )}
     </div>
   );
