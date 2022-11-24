@@ -1,34 +1,36 @@
-import { query, where } from 'firebase/firestore';
-import { useEffect, useState } from 'react';
-import HashingForm from './hashing';
+import { query, where } from "firebase/firestore";
+import { useEffect, useState } from "react";
+import HashingForm from "./hashing";
 
 const UserProfile = ({ username, companies }) => {
   const [isActive, setIsactive] = useState(false);
   console.log(companies);
-  console.log('isActive: ', isActive);
+  console.log("isActive: ", isActive);
 
   const getCompany = (comp) => {
-    let compa = '';
+    let compa = "";
     let content = [];
     for (let i = 0; i < comp.length; i++) {
       compa = comp[i];
       content.push(
-        <div
-          className={
-            isActive
-              ? 'button is-large is-info is-outlined m-6 is-focused'
-              : 'button is-large is-info is-outlined m-6 '
-          }
-          onClick={(i) => console.log(i.target)}
-        >
-          {compa}
+        <div className="column">
+          <div
+            className={
+              isActive
+                ? "button is-large is-one-fifth is-primary is-outlined mt-5 is-focused"
+                : "button is-large is-one-fifth  is-primary has-text-warning is-outlined mt-5 "
+            }
+            onClick={(i) => console.log(i.target)}
+          >
+            {compa}
+          </div>
         </div>
       );
     }
     content.push(
-      <div className="section">
+      <div className="column">
         <button
-          className="button is-large is-primary is-outlined"
+          className="button is-large is-one-fifth has-background-primary-dark is-outlined mt-5"
           onClick={onHashingForm}
         >
           Új cég felvétel
@@ -54,7 +56,7 @@ const UserProfile = ({ username, companies }) => {
   }
 
   useEffect(() => {
-    console.log('wwwww', companies.length);
+    console.log("wwwww", companies.length);
     setIsactive(false);
   }, [companies.length]);
 
@@ -64,23 +66,23 @@ const UserProfile = ({ username, companies }) => {
         <div>
           <div className="section is-info">
             <div className="columns is-centered ">
-              <h3 className="card column is-half title has-text-centered has-background-primary">
+              <h3 className="card column is-half title has-text-centered has-background-primary-dark">
                 <strong className="is-capitalized">Helló {username}! </strong>
                 {companies.length != 0 ? (
                   <div className="subtitle">
-                    az alábbi tulajdonosok dolgaihoz van hozzáférésed:{' '}
+                    az alábbi tulajdonosok dolgaihoz van hozzáférésed:{" "}
                   </div>
                 ) : (
                   <div className="subtitle">
-                    Még nincs hozzáférésed egyetlen céghez sem.{' '}
+                    Még nincs hozzáférésed egyetlen céghez sem.{" "}
                   </div>
                 )}
               </h3>
             </div>
           </div>
-          <div className="section">
-            <div className="">
-              <div className="columns is-centered is-8">
+          <div className="section mx-6">
+            <div className="box mx-6">
+              <div className="columns is-desktop is-centered is-12 mx-6">
                 {companies.length != 0
                   ? getCompany(companies)
                   : AddNewCompany(username)}
