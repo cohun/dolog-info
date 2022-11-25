@@ -67,7 +67,10 @@ const UserProfile = ({ username, companies }) => {
 
   function AddNewCompany(username) {
     return (
-      <button className="button is-medium is-primary is-outlined">
+      <button
+        onClick={onHashingForm}
+        className="button is-medium is-primary is-outlined"
+      >
         Új cég felvétel
       </button>
     );

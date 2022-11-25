@@ -8,6 +8,7 @@ import toast from "react-hot-toast";
 const HashingForm = ({ username, setIsactive }) => {
   const [algorithms] = useState("sha256");
   let [text_input, setTextInput] = useState("");
+  let [text_input2, setTextInput2] = useState("");
   let [file_input, setFileInput] = useState("");
   let [algorithm, setAlgorithm] = useState("");
   let [output, setOutput] = useState("");
@@ -22,6 +23,11 @@ const HashingForm = ({ username, setIsactive }) => {
     e.preventDefault();
     let value = e.target.value;
     setTextInput(value);
+  };
+  const handleTextInput2 = (e) => {
+    e.preventDefault();
+    let value = e.target.value;
+    setTextInput2(value);
   };
   const onCheckboxClick = (e) => {
     setChecked(!checked);
@@ -47,11 +53,13 @@ const HashingForm = ({ username, setIsactive }) => {
 
   const checkHash = async (e) => {
     e.preventDefault();
-    const c = await getCompanyFromHash(text_input);
+    const c = await getCompanyFromHash(text_input2);
     if (c) {
       console.log("iinn:", c);
+      toast.success("Felvételi kérelem elküldve");
     } else {
       console.log("Nincs");
+      toast.error("Hibás kód! próbáld újra!");
     }
   };
 
@@ -126,8 +134,8 @@ const HashingForm = ({ username, setIsactive }) => {
                             type="text"
                             className="input has-background-grey-lighter has-text-black-bis"
                             placeholder="Figyelj a nagy és kis betűkre!!"
-                            value={text_input}
-                            onChange={(e) => handleTextInput(e)}
+                            value={text_input2}
+                            onChange={(e) => handleTextInput2(e)}
                           />
                         </label>
                         <button
