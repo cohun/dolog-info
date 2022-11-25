@@ -1,17 +1,21 @@
-import { useEffect, useState } from "react";
-import { sha256 } from "crypto-hash";
-import { doc, setDoc } from "firebase/firestore";
-import { db, getCompanyFromHash } from "../lib/firebaseConfig";
-import { useRouter } from "next/router";
-import toast from "react-hot-toast";
+import { useEffect, useState } from 'react';
+import { sha256 } from 'crypto-hash';
+import { doc, setDoc } from 'firebase/firestore';
+import {
+  db,
+  getCompanyFromHash,
+  setUserToCompany,
+} from '../lib/firebaseConfig';
+import { useRouter } from 'next/router';
+import toast from 'react-hot-toast';
 
 const HashingForm = ({ username, setIsactive }) => {
-  const [algorithms] = useState("sha256");
-  let [text_input, setTextInput] = useState("");
-  let [text_input2, setTextInput2] = useState("");
-  let [file_input, setFileInput] = useState("");
-  let [algorithm, setAlgorithm] = useState("");
-  let [output, setOutput] = useState("");
+  const [algorithms] = useState('sha256');
+  let [text_input, setTextInput] = useState('');
+  let [text_input2, setTextInput2] = useState('');
+  let [file_input, setFileInput] = useState('');
+  let [algorithm, setAlgorithm] = useState('');
+  let [output, setOutput] = useState('');
   const router = useRouter();
 
   const [isDisabled, setIsDisabled] = useState(true);
@@ -55,11 +59,13 @@ const HashingForm = ({ username, setIsactive }) => {
     e.preventDefault();
     const c = await getCompanyFromHash(text_input2);
     if (c) {
-      console.log("iinn:", c);
-      toast.success("Felvételi kérelem elküldve");
+      console.log('iinn:', c);
+      toast.success('Felvételi kérelem elküldve');
+      await setUserToCompany(c, username);
+      setIsactive(false);
     } else {
-      console.log("Nincs");
-      toast.error("Hibás kód! próbáld újra!");
+      console.log('Nincs');
+      toast.error('Hibás kód! próbáld újra!');
     }
   };
 
@@ -68,23 +74,23 @@ const HashingForm = ({ username, setIsactive }) => {
   };
 
   useEffect(() => {
-    console.log("here", output);
+    console.log('here', output);
     if (output) {
       if (text_input && algorithm) {
         dataSubmit();
       } else {
         toast.error(
-          "Töltsd ki a cégnevet és a címet is!!! Próbáld meg mégegyszer!"
+          'Töltsd ki a cégnevet és a címet is!!! Próbáld meg mégegyszer!'
         );
       }
 
       setIsactive(false);
-      router.push("/");
+      router.push('/');
     }
   }, [output]);
 
   const dataSubmit = async (e) => {
-    await setDoc(doc(db, "companies", text_input), {
+    await setDoc(doc(db, 'companies', text_input), {
       businessName: text_input,
       address: algorithm,
       admin: username,
@@ -105,7 +111,7 @@ const HashingForm = ({ username, setIsactive }) => {
                   <div className="subtitle">
                     Válassz, hogy adminként kívánsz egy új céget felvenni, vagy
                     a rendelkezésedre bocsájtott belépési kóddal szeretnél
-                    hozzáférést kapni?{" "}
+                    hozzáférést kapni?{' '}
                   </div>
                 </h3>
               </div>
@@ -115,13 +121,13 @@ const HashingForm = ({ username, setIsactive }) => {
                 <div className="card column is-5 title has-text-centered has-background-warning">
                   <form
                     onKeyDown={(event) => {
-                      if (event.key === "Enter") {
+                      if (event.key === 'Enter') {
                         toast.error(
-                          "Csak a Mehet gomb lenyomásával lehet adatot bevinni!! Próbáld meg újra !"
+                          'Csak a Mehet gomb lenyomásával lehet adatot bevinni!! Próbáld meg újra !'
                         );
                       }
 
-                      return event.key != "Enter";
+                      return event.key != 'Enter';
                     }}
                   >
                     <div>
@@ -175,13 +181,13 @@ const HashingForm = ({ username, setIsactive }) => {
           <div className="card column is-half title has-text-centered has-background-primary-dark">
             <form
               onKeyDown={(event) => {
-                if (event.key === "Enter") {
+                if (event.key === 'Enter') {
                   toast.error(
-                    "Csak a Mehet gomb lenyomásával lehet adatot bevinni!! Próbáld meg újra !"
+                    'Csak a Mehet gomb lenyomásával lehet adatot bevinni!! Próbáld meg újra !'
                   );
                 }
 
-                return event.key != "Enter";
+                return event.key != 'Enter';
               }}
             >
               <div className="form">
@@ -223,7 +229,7 @@ const HashingForm = ({ username, setIsactive }) => {
                       onChange={(e) => onCheckboxClick(e)}
                     />
                     <span className="is-size-6">
-                      {" "}
+                      {' '}
                       Ha helyesek az adatok, kattints ide, majd a Mehet gombra!
                     </span>
                   </label>
