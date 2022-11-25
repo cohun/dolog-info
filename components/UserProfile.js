@@ -1,17 +1,31 @@
+import { async } from "@firebase/util";
 import { query, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
+import { getHashWhereAdmin } from "../lib/firebaseConfig";
 import HashingForm from "./hashing";
 
 const UserProfile = ({ username, companies }) => {
   const [isActive, setIsactive] = useState(false);
   console.log(companies);
   console.log("isActive: ", isActive);
+  const [adminHash, setAdminHash] = useState([]);
 
   const getCompany = (comp) => {
     let compa = "";
     let content = [];
     for (let i = 0; i < comp.length; i++) {
       compa = comp[i];
+      let hash = "";
+
+      if (adminHash.length > 1) {
+        adminHash.forEach((element) => {
+          if (element.company === compa) {
+            hash = element.hash;
+            console.log("Hash: ", hash);
+          }
+        });
+      }
+
       content.push(
         <div className="column">
           <div
@@ -22,7 +36,11 @@ const UserProfile = ({ username, companies }) => {
             }
             onClick={(i) => console.log(i.target)}
           >
-            {compa}
+            <div className="tile is-vertical ">
+              <div className="tile has-text-centered">{compa}</div>
+
+              <div className="subtitle is-6 has-text-danger">Kód: {hash}</div>
+            </div>
           </div>
         </div>
       );
@@ -55,6 +73,17 @@ const UserProfile = ({ username, companies }) => {
     );
   }
 
+  async function AdminHash() {
+    const admin = await getHashWhereAdmin(username);
+    console.log("adminHash: ", admin);
+    setAdminHash(admin);
+    return adminHash;
+  }
+
+  useEffect(() => {
+    AdminHash();
+  }, [username]);
+
   useEffect(() => {
     console.log("wwwww", companies.length);
     setIsactive(false);
@@ -71,6 +100,9 @@ const UserProfile = ({ username, companies }) => {
                 {companies.length != 0 ? (
                   <div className="subtitle">
                     az alábbi tulajdonosok dolgaihoz van hozzáférésed:{" "}
+                    <div className="is-5">
+                      (ahol kód megjelenik, ott admin vagy.)
+                    </div>
                   </div>
                 ) : (
                   <div className="subtitle">
