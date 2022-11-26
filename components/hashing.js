@@ -57,6 +57,10 @@ const HashingForm = ({ username, setIsactive }) => {
 
   const checkHash = async (e) => {
     e.preventDefault();
+    if (!text_input2) {
+      toast.error('Adj meg egy érvényes kódot!');
+      return;
+    }
     const c = await getCompanyFromHash(text_input2);
     if (c) {
       console.log('iinn:', c);
@@ -174,6 +178,16 @@ const HashingForm = ({ username, setIsactive }) => {
                     </div>
                   </div>
                 </div>
+              </div>
+            </div>
+            <div className="section is-info mb-2">
+              <div className="columns is-centered ">
+                <button
+                  className="button is-large is-outlined is-danger"
+                  onClick={() => setIsactive(false)}
+                >
+                  Vissza
+                </button>
               </div>
             </div>
           </div>
