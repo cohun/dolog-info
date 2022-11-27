@@ -63,7 +63,6 @@ const HashingForm = ({ username, setIsactive }) => {
     }
     const c = await getCompanyFromHash(text_input2);
     if (c) {
-      console.log('iinn:', c);
       toast.success('Felvételi kérelem elküldve');
       await setUserToCompany(c, username);
       setIsactive(false);
@@ -100,6 +99,7 @@ const HashingForm = ({ username, setIsactive }) => {
       admin: username,
       hash: output,
       users: [username],
+      things: [],
     });
   };
 

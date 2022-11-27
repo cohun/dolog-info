@@ -1,7 +1,7 @@
-import { async } from '@firebase/util';
 import { query, where } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import { getHashWhereAdmin } from '../lib/firebaseConfig';
+import CompanyAdmin from './CompanyAdmin';
 import HashingForm from './hashing';
 
 const UserProfile = ({ username, companies }) => {
@@ -9,6 +9,7 @@ const UserProfile = ({ username, companies }) => {
   console.log(companies);
   console.log('isActive: ', isActive);
   const [adminHash, setAdminHash] = useState([]);
+  const [target, setTarget] = useState('');
 
   const getCompany = (comp) => {
     let compa = '';
@@ -21,27 +22,38 @@ const UserProfile = ({ username, companies }) => {
         adminHash.forEach((element) => {
           if (element.company === compa) {
             hash = element.hash;
-            console.log('Hash: ', hash);
           }
         });
       }
 
       content.push(
-        <div className="column">
+        <div className="column mx-1">
           <div
             className={
               isActive
                 ? 'button is-large is-one-fifth is-primary is-outlined mt-5 is-focused'
-                : 'button is-large is-one-fifth  is-primary has-text-warning is-outlined mt-5 '
+                : 'columns button is-large is-one-fifth  is-primary has-text-warning is-outlined mt-5'
             }
-            onClick={(i) => console.log(i.target)}
+            onClick={(i) => {
+              console.log(i.target.innerHTML);
+              setTarget(i.target.innerHTML);
+              console.log('target', target);
+            }}
           >
-            <div className="tile is-vertical ">
-              <div className="tile has-text-centered">{compa}</div>
-
-              <div className="subtitle is-6 has-text-danger">Kód: {hash}</div>
-            </div>
+            <div className="tile has-text-centered">{compa}</div>
           </div>
+
+          {hash === '' ? (
+            <div className="">
+              <div className="column card subtitle is-6 has-text-white has-background-danger-dark p-1">
+                Elbírálás alatt
+              </div>
+            </div>
+          ) : (
+            <div className="card subtitle is-6 has-text-white has-background-info-dark p-1">
+              Kód: {hash}
+            </div>
+          )}
         </div>
       );
     }
@@ -94,41 +106,51 @@ const UserProfile = ({ username, companies }) => {
 
   return (
     <div>
-      {!isActive ? (
+      {target != '' ? (
+        <CompanyAdmin
+          username={username}
+          target={target}
+          setTarget={setTarget}
+        ></CompanyAdmin>
+      ) : (
         <div>
-          <div className="section is-info">
-            <div className="columns is-centered ">
-              <h3 className="card column is-half title has-text-centered has-background-primary-dark">
-                <strong className="is-capitalized has-text-dark">
-                  Helló {username}!{' '}
-                </strong>
-                {companies.length != 0 ? (
-                  <div className="subtitle has-text-dark">
-                    az alábbi tulajdonosok dolgaihoz van hozzáférésed:{' '}
-                    <div className="is-5 has-text-dark">
-                      (ahol kód megjelenik, ott admin vagy.)
-                    </div>
+          {!isActive ? (
+            <div>
+              <div className="section is-info">
+                <div className="columns is-centered ">
+                  <h3 className="card column is-half title has-text-centered has-background-primary-dark">
+                    <strong className="is-capitalized has-text-dark">
+                      Helló {username}!{' '}
+                    </strong>
+                    {companies.length != 0 ? (
+                      <div className="subtitle has-text-dark">
+                        az alábbi tulajdonosok dolgaihoz van hozzáférésed:{' '}
+                        <div className="is-5 has-text-dark">
+                          (ahol kód megjelenik, ott admin vagy.)
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="subtitle">
+                        Még nincs hozzáférésed egyetlen céghez sem.{' '}
+                      </div>
+                    )}
+                  </h3>
+                </div>
+              </div>
+              <div className="section mx-6">
+                <div className="box mx-6">
+                  <div className="columns is-desktop is-centered is-12 ">
+                    {companies.length != 0
+                      ? getCompany(companies)
+                      : AddNewCompany(username)}
                   </div>
-                ) : (
-                  <div className="subtitle">
-                    Még nincs hozzáférésed egyetlen céghez sem.{' '}
-                  </div>
-                )}
-              </h3>
-            </div>
-          </div>
-          <div className="section mx-6">
-            <div className="box mx-6">
-              <div className="columns is-desktop is-centered is-12 mx-6">
-                {companies.length != 0
-                  ? getCompany(companies)
-                  : AddNewCompany(username)}
+                </div>
               </div>
             </div>
-          </div>
+          ) : (
+            <HashingForm username={username} setIsactive={setIsactive} />
+          )}
         </div>
-      ) : (
-        <HashingForm username={username} setIsactive={setIsactive} />
       )}
     </div>
   );
