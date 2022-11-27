@@ -1,6 +1,15 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { getAllUsersInCompany } from '../lib/firebaseConfig';
 
 const CompanyAdmin = ({ username, target, setTarget }) => {
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    setUsers(getAllUsersInCompany(target));
+
+    console.log('use', users);
+  }, [users.length]);
+
   return (
     <div className="">
       <div className="section is-info">
@@ -19,12 +28,24 @@ const CompanyAdmin = ({ username, target, setTarget }) => {
               <p className="panel-heading">Felhasználó</p>
 
               <div className="panel-block"></div>
-              <a className="panel-block is-active">
-                <span className="panel-icon">
-                  <i className="fas fa-book" aria-hidden="true"></i>
-                </span>
-                bulma
-              </a>
+              {/*  {users != [] ? (
+                users.forEach((user) => {
+                  <a className="panel-block is-active">
+                    <span className="panel-icon">
+                      <i className="fas fa-book" aria-hidden="true"></i>
+                    </span>
+                    user
+                  </a>;
+                })
+              ) : (
+                <a className="panel-block is-active">
+                  <span className="panel-icon">
+                    <i className="fas fa-book" aria-hidden="true"></i>
+                  </span>
+                  Nincs felhasználó
+                </a>
+              )} */}
+
               <a className="panel-block">
                 <span className="panel-icon">
                   <i className="fas fa-book" aria-hidden="true"></i>
