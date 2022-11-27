@@ -5,10 +5,32 @@ const CompanyAdmin = ({ username, target, setTarget }) => {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    setUsers(getAllUsersInCompany(target));
+    GetUsers();
 
     console.log('use', users);
   }, [users.length]);
+
+  async function GetUsers() {
+    const result = await getAllUsersInCompany(target);
+    setUsers(result);
+    console.log('use2', users);
+  }
+
+  function UsersList() {
+    console.log('in: ', users);
+    let cList = [];
+    users.forEach((user) => {
+      cList.push(
+        <a className="panel-block is-active">
+          <span className="panel-icon">
+            <i className="fas fa-book" aria-hidden="true"></i>
+          </span>
+          {user}
+        </a>
+      );
+    });
+    return cList;
+  }
 
   return (
     <div className="">
@@ -28,15 +50,8 @@ const CompanyAdmin = ({ username, target, setTarget }) => {
               <p className="panel-heading">Felhasználó</p>
 
               <div className="panel-block"></div>
-              {/*  {users != [] ? (
-                users.forEach((user) => {
-                  <a className="panel-block is-active">
-                    <span className="panel-icon">
-                      <i className="fas fa-book" aria-hidden="true"></i>
-                    </span>
-                    user
-                  </a>;
-                })
+              {users != [] ? (
+                UsersList()
               ) : (
                 <a className="panel-block is-active">
                   <span className="panel-icon">
@@ -44,26 +59,7 @@ const CompanyAdmin = ({ username, target, setTarget }) => {
                   </span>
                   Nincs felhasználó
                 </a>
-              )} */}
-
-              <a className="panel-block">
-                <span className="panel-icon">
-                  <i className="fas fa-book" aria-hidden="true"></i>
-                </span>
-                marksheet
-              </a>
-              <a className="panel-block">
-                <span className="panel-icon">
-                  <i className="fas fa-book" aria-hidden="true"></i>
-                </span>
-                minireset.css
-              </a>
-              <a className="panel-block">
-                <span className="panel-icon">
-                  <i className="fas fa-book" aria-hidden="true"></i>
-                </span>
-                jgthms.github.io
-              </a>
+              )}
             </article>
           </div>
           <div className="column is-6">
@@ -88,12 +84,6 @@ const CompanyAdmin = ({ username, target, setTarget }) => {
                   <i className="fas fa-book" aria-hidden="true"></i>
                 </span>
                 minireset.css
-              </a>
-              <a className="panel-block">
-                <span className="panel-icon">
-                  <i className="fas fa-book" aria-hidden="true"></i>
-                </span>
-                jgthms.github.io
               </a>
             </article>
           </div>
