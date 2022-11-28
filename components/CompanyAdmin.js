@@ -1,23 +1,37 @@
-import React, { useEffect, useState } from 'react';
-import { getAllUsersInCompany } from '../lib/firebaseConfig';
+import React, { useEffect, useState } from "react";
+import { getAllUsersInCompany, getUsersRole } from "../lib/firebaseConfig";
 
 const CompanyAdmin = ({ username, target, setTarget }) => {
   const [users, setUsers] = useState([]);
+  const [roles, setRoles] = useState([]);
+
+  async function getRoles() {
+    let role = [];
+    users.forEach(async (user) => {
+      role.push(await getUsersRole(target, user));
+
+      setRoles(role);
+    });
+
+    return role;
+  }
 
   useEffect(() => {
     GetUsers();
-
-    console.log('use', users);
-  }, [users.length]);
+    if (users) {
+      getRoles();
+    }
+    console.log("Roles", roles);
+  }, [users.length, roles.length]);
 
   async function GetUsers() {
     const result = await getAllUsersInCompany(target);
     setUsers(result);
-    console.log('use2', users);
+    console.log("use2", users);
   }
 
   function UsersList() {
-    console.log('in: ', users);
+    console.log("in: ", users);
     let cList = [];
     users.forEach((user) => {
       cList.push(
@@ -30,6 +44,23 @@ const CompanyAdmin = ({ username, target, setTarget }) => {
       );
     });
     return cList;
+  }
+
+  function RolesList() {
+    console.log("in Role: ", roles);
+    let rList = [];
+    roles.forEach((role) => {
+      rList.push(
+        <a className="panel-block is-active">
+          <span className="panel-icon">
+            <i className="fas fa-book" aria-hidden="true"></i>
+          </span>
+
+          {!role ? "adminisztrátor" : role}
+        </a>
+      );
+    });
+    return rList;
   }
 
   return (
@@ -67,24 +98,16 @@ const CompanyAdmin = ({ username, target, setTarget }) => {
               <p className="panel-heading">Beosztás</p>
 
               <div className="panel-block"></div>
-              <a className="panel-block is-active">
-                <span className="panel-icon">
-                  <i className="fas fa-book" aria-hidden="true"></i>
-                </span>
-                bulma
-              </a>
-              <a className="panel-block">
-                <span className="panel-icon">
-                  <i className="fas fa-book" aria-hidden="true"></i>
-                </span>
-                marksheet
-              </a>
-              <a className="panel-block">
-                <span className="panel-icon">
-                  <i className="fas fa-book" aria-hidden="true"></i>
-                </span>
-                minireset.css
-              </a>
+              {roles != [] ? (
+                RolesList()
+              ) : (
+                <a className="panel-block is-active">
+                  <span className="panel-icon">
+                    <i className="fas fa-book" aria-hidden="true"></i>
+                  </span>
+                  Nincs felhasználó
+                </a>
+              )}
             </article>
           </div>
         </div>
@@ -94,7 +117,7 @@ const CompanyAdmin = ({ username, target, setTarget }) => {
         <div className="columns is-centered ">
           <button
             className="button is-large is-outlined is-danger"
-            onClick={() => setTarget('')}
+            onClick={() => setTarget("")}
           >
             Vissza
           </button>
