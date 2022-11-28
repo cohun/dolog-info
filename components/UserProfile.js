@@ -1,24 +1,27 @@
-import { query, where } from 'firebase/firestore';
-import { useEffect, useState } from 'react';
-import { getHashWhereAdmin } from '../lib/firebaseConfig';
-import CompanyAdmin from './CompanyAdmin';
-import HashingForm from './hashing';
+import { query, where } from "firebase/firestore";
+import { useEffect, useState } from "react";
+import { getHashWhereAdmin } from "../lib/firebaseConfig";
+import CompanyAdmin from "./CompanyAdmin";
+import HashingForm from "./hashing";
 
-const UserProfile = ({ username, companies }) => {
+const UserProfile = ({ username, companies, address }) => {
   const [isActive, setIsactive] = useState(false);
   console.log(companies);
-  console.log('isActive: ', isActive);
+  console.log(address);
+  console.log("isActive: ", isActive);
   const [adminHash, setAdminHash] = useState([]);
-  const [target, setTarget] = useState('');
+  const [target, setTarget] = useState("");
 
-  const getCompany = (comp) => {
-    let compa = '';
+  const getCompany = (comp, addr) => {
+    let compa = "";
+    let addre = "";
     let content = [];
     for (let i = 0; i < comp.length; i++) {
       compa = comp[i];
-      let hash = '';
+      addre = addr[i];
+      let hash = "";
 
-      if (adminHash.length > 1) {
+      if (adminHash.length >= 1) {
         adminHash.forEach((element) => {
           if (element.company === compa) {
             hash = element.hash;
@@ -31,27 +34,29 @@ const UserProfile = ({ username, companies }) => {
           <div
             className={
               isActive
-                ? 'button is-large is-one-fifth is-primary is-outlined mt-5 is-focused'
-                : 'columns button is-large is-one-fifth  is-primary has-text-warning is-outlined mt-5'
+                ? "button is-large is-one-fifth is-primary is-outlined mt-5 is-focused"
+                : "columns button is-large is-one-fifth  is-primary has-text-warning is-outlined mt-5"
             }
             onClick={(i) => {
               console.log(i.target.innerHTML);
               setTarget(i.target.innerHTML);
-              console.log('target', target);
+              console.log("target", target);
             }}
           >
             <div className="tile has-text-centered">{compa}</div>
           </div>
 
-          {hash === '' ? (
+          {hash === "" ? (
             <div className="">
-              <div className="column card subtitle is-6 has-text-white has-background-danger-dark p-1">
-                Elbírálás alatt
+              <div className="card subtitle is-6 has-text-white has-background-danger-dark p-1">
+                Cím: {addre}
+                <div>Jelenleg elbírálás alatt...</div>
               </div>
             </div>
           ) : (
             <div className="card subtitle is-6 has-text-white has-background-info-dark p-1">
-              Kód: {hash}
+              Cím: {addre}
+              <div>Belépési kód: {hash}</div>
             </div>
           )}
         </div>
@@ -90,7 +95,7 @@ const UserProfile = ({ username, companies }) => {
 
   async function AdminHash() {
     const admin = await getHashWhereAdmin(username);
-    console.log('adminHash: ', admin);
+    console.log("adminHash: ", admin);
     setAdminHash(admin);
     return adminHash;
   }
@@ -100,13 +105,13 @@ const UserProfile = ({ username, companies }) => {
   }, [username, companies]);
 
   useEffect(() => {
-    console.log('wwwww', companies.length);
+    console.log("wwwww", companies.length);
     setIsactive(false);
   }, [companies.length]);
 
   return (
     <div>
-      {target != '' ? (
+      {target != "" ? (
         <CompanyAdmin
           username={username}
           target={target}
@@ -120,18 +125,18 @@ const UserProfile = ({ username, companies }) => {
                 <div className="columns is-centered ">
                   <h3 className="card column is-half title has-text-centered has-background-primary-dark">
                     <strong className="is-capitalized has-text-dark">
-                      Helló {username}!{' '}
+                      Helló {username}!{" "}
                     </strong>
                     {companies.length != 0 ? (
                       <div className="subtitle has-text-dark">
-                        az alábbi tulajdonosok dolgaihoz van hozzáférésed:{' '}
+                        az alábbi tulajdonosok dolgaihoz van hozzáférésed:{" "}
                         <div className="is-5 has-text-dark">
                           (ahol kód megjelenik, ott admin vagy.)
                         </div>
                       </div>
                     ) : (
                       <div className="subtitle">
-                        Még nincs hozzáférésed egyetlen céghez sem.{' '}
+                        Még nincs hozzáférésed egyetlen céghez sem.{" "}
                       </div>
                     )}
                   </h3>
@@ -141,7 +146,7 @@ const UserProfile = ({ username, companies }) => {
                 <div className="box mx-6">
                   <div className="columns is-desktop is-centered is-12 ">
                     {companies.length != 0
-                      ? getCompany(companies)
+                      ? getCompany(companies, address)
                       : AddNewCompany(username)}
                   </div>
                 </div>
