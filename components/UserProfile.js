@@ -11,6 +11,7 @@ const UserProfile = ({ username, companies, address }) => {
   console.log("isActive: ", isActive);
   const [adminHash, setAdminHash] = useState([]);
   const [target, setTarget] = useState("");
+  const [hash, setHash] = useState("");
 
   const getCompany = (comp, addr) => {
     let compa = "";
@@ -40,7 +41,9 @@ const UserProfile = ({ username, companies, address }) => {
             onClick={(i) => {
               console.log(i.target.innerHTML);
               setTarget(i.target.innerHTML);
+              setHash(hash);
               console.log("target", target);
+              console.log("hash", hash);
             }}
           >
             <div className="tile has-text-centered">{compa}</div>
@@ -115,6 +118,7 @@ const UserProfile = ({ username, companies, address }) => {
         <CompanyAdmin
           username={username}
           target={target}
+          hash={hash}
           setTarget={setTarget}
         ></CompanyAdmin>
       ) : (
