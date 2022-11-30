@@ -1,18 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import { getAllUsersInCompany, getUsersRole } from '../lib/firebaseConfig';
+import React, { useEffect, useState } from "react";
+import { getAllUsersInCompany, getUsersRole } from "../lib/firebaseConfig";
+import CompanyThings from "./CompanyThings";
+import Image from "next/image";
 
 const CompanyAdmin = ({ username, target, hash, setTarget }) => {
   const [users, setUsers] = useState([]);
   const [roles, setRoles] = useState([]);
-  const [roleChange, setRoleChange] = useState('');
-  const [who, setWho] = useState('');
+  const [roleChange, setRoleChange] = useState("");
+  const [who, setWho] = useState("");
   const [isActive, setIsActive] = useState(false);
   const show = () => {
     setIsActive(false);
   };
 
   const onSubmit = () => {
-    console.log('sss');
+    console.log("sss");
   };
   const onChange = (e) => {
     const val = e.target.value.toLowerCase();
@@ -27,19 +29,19 @@ const CompanyAdmin = ({ username, target, hash, setTarget }) => {
   }
 
   useEffect(() => {
-    if (hash === '') {
+    if (hash === "") {
       getRole();
       return;
     } else {
       GetUsers();
     }
-    console.log('Roles', roles);
+    console.log("Roles", roles);
   }, [users.length, roles.length]);
 
   async function GetUsers() {
     const result = await getAllUsersInCompany(target);
     setUsers(result);
-    console.log('use2', users);
+    console.log("use2", users);
     let role = [];
     users.forEach(async (user) => {
       role.push(await getUsersRole(target, user));
@@ -49,7 +51,7 @@ const CompanyAdmin = ({ username, target, hash, setTarget }) => {
   }
 
   function UsersList() {
-    console.log('in: ', users);
+    console.log("in: ", users);
     let cList = [];
 
     users.forEach((user) => {
@@ -73,7 +75,7 @@ const CompanyAdmin = ({ username, target, hash, setTarget }) => {
   }
 
   function RolesList() {
-    console.log('in Role: ', roles);
+    console.log("in Role: ", roles);
     let rList = [];
 
     for (let index = 0; index < users.length; index++) {
@@ -84,7 +86,7 @@ const CompanyAdmin = ({ username, target, hash, setTarget }) => {
           className="panel-block is-active"
           onClick={() => {
             setIsActive(true);
-            setRoleChange(role ? role : 'adminisztrátor');
+            setRoleChange(role ? role : "adminisztrátor");
             setWho(element);
           }}
         >
@@ -92,7 +94,7 @@ const CompanyAdmin = ({ username, target, hash, setTarget }) => {
             <i className="fas fa-book" aria-hidden="true"></i>
           </span>
 
-          {!role ? 'adminisztrátor' : role}
+          {!role ? "adminisztrátor" : role}
         </a>
       );
     }
@@ -140,12 +142,19 @@ const CompanyAdmin = ({ username, target, hash, setTarget }) => {
       </div>
     </div>
   ) : (
-    <div className="">
+    <div className="card hero is-fullheight">
+      <Image
+        src="/dolog_background.jpg"
+        className="is-fullwidth"
+        alt="background"
+        layout="fill"
+      ></Image>
+
       <div className="section is-info">
         <div className="columns is-centered ">
-          <h3 className="card column is-half title has-text-centered has-background-grey-darker has-text-warning">
+          <h3 className="card column is-half is-size-4 has-text-centered has-background-grey-darker has-text-warning">
             <span>{target} </span>
-            <span className="ml-3 has-text-grey-light"> jogosultak:</span>
+            <span className="ml-3 has-text-info-light"> jogosultak:</span>
           </h3>
         </div>
       </div>
@@ -193,12 +202,13 @@ const CompanyAdmin = ({ username, target, hash, setTarget }) => {
         <div className="columns is-centered ">
           <button
             className="button is-large is-outlined is-danger"
-            onClick={() => setTarget('')}
+            onClick={() => setTarget("")}
           >
             Vissza
           </button>
         </div>
       </div>
+      <CompanyThings target={target}></CompanyThings>
     </div>
   );
 };

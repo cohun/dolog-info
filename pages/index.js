@@ -52,6 +52,7 @@ export default function Home() {
             alt="background"
             layout="fill"
           ></Image>
+
           <div className="hero-head">
             <Navbar></Navbar>
           </div>
@@ -183,6 +184,7 @@ export default function Home() {
             </div>
           )}
           <div className="container"></div>
+          <div className="hero-foot"></div>
         </section>
       </main>
     </div>
