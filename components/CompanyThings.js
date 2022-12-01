@@ -1,6 +1,6 @@
 import React from 'react';
 
-const CompanyThings = ({ target }) => {
+const CompanyThings = ({ target, setIsNew }) => {
   function things() {
     let thingsArray = [''];
     for (let index = 0; index <= 18; index++) {
@@ -57,11 +57,16 @@ const CompanyThings = ({ target }) => {
             <article className="panel is-warning">
               <p className="panel-heading">Dolgok listája</p>
               <p className="panel-tabs">
-                <a className="is-active">Mind</a>
-                <a>Public</a>
-                <a>Private</a>
-                <a>Sources</a>
-                <a>Forks</a>
+                <a className="is-active">
+                  <button
+                    onClick={() => {
+                      setIsNew(true);
+                    }}
+                    className="button is-focused is-medium is-link is-inverted "
+                  >
+                    + Új dolog +
+                  </button>
+                </a>
               </p>
               <div className="panel-block">
                 <p className="control has-icons-left">

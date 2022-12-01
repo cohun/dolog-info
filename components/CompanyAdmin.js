@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { getAllUsersInCompany, getUsersRole } from '../lib/firebaseConfig';
 import CompanyThings from './CompanyThings';
 import Image from 'next/image';
+import NewThing from './NewThing';
 
 const CompanyAdmin = ({ username, target, hash, setTarget }) => {
   const [users, setUsers] = useState([]);
@@ -9,6 +10,8 @@ const CompanyAdmin = ({ username, target, hash, setTarget }) => {
   const [roleChange, setRoleChange] = useState('');
   const [who, setWho] = useState('');
   const [isActive, setIsActive] = useState(false);
+  const [isNew, setIsNew] = useState(false);
+
   const show = () => {
     setIsActive(false);
   };
@@ -102,7 +105,9 @@ const CompanyAdmin = ({ username, target, hash, setTarget }) => {
     return rList;
   }
 
-  return isActive ? (
+  return isNew ? (
+    <NewThing target={target} setIsNew={setIsNew}></NewThing>
+  ) : isActive ? (
     <div className="section is-info">
       <div className="columns is-centered ">
         <form onSubmit={onSubmit}>
@@ -208,7 +213,7 @@ const CompanyAdmin = ({ username, target, hash, setTarget }) => {
           </button>
         </div>
       </div>
-      <CompanyThings target={target}></CompanyThings>
+      <CompanyThings target={target} setIsNew={setIsNew}></CompanyThings>
     </div>
   );
 };
