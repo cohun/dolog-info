@@ -1,53 +1,59 @@
-import React, { useState, useEffect, useRef } from "react";
-import QRCode from "qrcode";
-import toast from "react-hot-toast";
+import React, { useState, useEffect } from 'react';
+import QRCode from 'qrcode';
+import toast from 'react-hot-toast';
+import Image from 'next/image';
 
 const NewThing = ({ target, setIsNew }) => {
-  const [name, setName] = useState("");
-  const [id, setId] = useState("");
-  const [site, setSite] = useState("");
-  const [remark, setRemark] = useState("");
-  const [qrText, setQRText] = useState("");
+  const [name, setName] = useState('');
+  const [id, setId] = useState('');
+  const [site, setSite] = useState('');
+  const [remark, setRemark] = useState('');
+  const [qrText, setQRText] = useState('');
   const [isDisabled, setIsDisabled] = useState(true);
+  const [qrc, setQrc] = useState('');
 
   const show = () => {
-    if (name === "") {
-      toast.error("Megnevezés nem lehet üres!");
-      return;
-    }
+    console.log('show:');
     setIsNew(false);
+  };
+
+  const submit = (event) => {
+    event.preventDefault();
+
+    if (name != '') {
+      setIsNew(false);
+    } else {
+      toast.error('Megnevezés nem lehet üres!!!');
+    }
   };
 
   const GenerateQRCode = (event) => {
     event.preventDefault();
-    if (id === "") {
-      toast.error("Azonosító nem lehet üres!");
+    if (id === '') {
+      toast.error('Azonosító nem lehet üres!');
       return;
     }
     setQRText(id);
     setIsDisabled(false);
   };
-  const canvasRef = useRef();
 
   useEffect(() => {
-    QRCode.toCanvas(
-      canvasRef.current,
-      qrText || "",
-      (error) => error && console.error(error)
-    );
-
-    console.log(canvasRef.current);
+    QRCode.toDataURL(qrText, (error, url) => {
+      if (error) return console.error(error);
+      console.log(url);
+      setQrc(url);
+    });
   }, [qrText]);
 
   const onSubmit = () => {
-    console.log("sss");
+    console.log('sss');
   };
 
   return (
     <div>
       <div className="section is-info">
         <div className="columns is-centered ">
-          <form onSubmit={onSubmit}>
+          <form>
             <div className="modal-card">
               <header className="modal-card-head">
                 <p className="modal-card-title">
@@ -129,7 +135,7 @@ const NewThing = ({ target, setIsNew }) => {
               <footer className="modal-card-foot">
                 <button
                   type="submit"
-                  onClick={show}
+                  onClick={submit}
                   className="button is-info"
                   disabled={isDisabled}
                 >
@@ -151,14 +157,14 @@ const NewThing = ({ target, setIsNew }) => {
         <br />
         <br />
         {isDisabled ? (
-          <div>
-            <canvas ref={canvasRef} />
-          </div>
+          <div></div>
         ) : (
-          <div className="columns is-one-fifth is-centered ">
-            <div className="card ">
-              <div className="column ">
-                <canvas ref={canvasRef} />
+          <div>
+            <div className="columns is-one-fifth is-centered ">
+              <div className="card ">
+                <div className="column ">
+                  <Image src={qrc} alt="qrCode" width={120} height={120} />
+                </div>
               </div>
             </div>
           </div>
