@@ -64,7 +64,6 @@ const SignUpForm = () => {
           placeholder="joe.bloggs@example.com"
           onChange={(event) => {
             event.preventDefault();
-            console.log(event.target.value);
             setEmail(event.target.value);
           }}
           value={email}
