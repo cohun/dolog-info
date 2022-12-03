@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import QRCode from 'qrcode';
 import toast from 'react-hot-toast';
 import Image from 'next/image';
+import { setThing } from '../lib/firebaseConfig';
 
 const NewThing = ({ target, setIsNew }) => {
   const [name, setName] = useState('');
@@ -17,10 +18,11 @@ const NewThing = ({ target, setIsNew }) => {
     setIsNew(false);
   };
 
-  const submit = (event) => {
+  const submit = async (event) => {
     event.preventDefault();
 
     if (name != '') {
+      await setThing(target, name, id, remark, site, qrc);
       setIsNew(false);
     } else {
       toast.error('Megnevezés nem lehet üres!!!');
@@ -145,7 +147,7 @@ const NewThing = ({ target, setIsNew }) => {
                   Vissza
                 </button>
                 <button
-                  className="button is-outlined is-danger"
+                  className="button is-outlined is-link"
                   onClick={GenerateQRCode}
                 >
                   QR-kód generálás
