@@ -14,7 +14,6 @@ const NewThing = ({ target, setIsNew }) => {
   const [qrc, setQrc] = useState('');
 
   const show = () => {
-    console.log('show:');
     setIsNew(false);
   };
 
@@ -102,8 +101,18 @@ const NewThing = ({ target, setIsNew }) => {
                       placeholder="dolog egyedi azonosítója"
                       name="role"
                       value={id}
+                      onKeyUpCapture={(e) => {
+                        if (e.key === '/') {
+                          toast.error(
+                            '/ karakter használata nem megengedett. - karakter behelyettesítve!'
+                          );
+
+                          setId(id.substring(0, id.length - 1) + '-');
+                        }
+                      }}
                       onChange={(event) => {
                         event.preventDefault();
+
                         setId(event.target.value);
                       }}
                     />

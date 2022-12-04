@@ -44,7 +44,7 @@ const CompanyAdmin = ({ username, target, hash, setTarget }) => {
   async function GetUsers() {
     const result = await getAllUsersInCompany(target);
     setUsers(result);
-    console.log('use2', users);
+
     let role = [];
     users.forEach(async (user) => {
       role.push(await getUsersRole(target, user));
@@ -54,7 +54,6 @@ const CompanyAdmin = ({ username, target, hash, setTarget }) => {
   }
 
   function UsersList() {
-    console.log('in: ', users);
     let cList = [];
 
     users.forEach((user) => {
@@ -78,7 +77,6 @@ const CompanyAdmin = ({ username, target, hash, setTarget }) => {
   }
 
   function RolesList() {
-    console.log('in Role: ', roles);
     let rList = [];
 
     for (let index = 0; index < users.length; index++) {

@@ -6,9 +6,6 @@ import HashingForm from './hashing';
 
 const UserProfile = ({ username, companies, address }) => {
   const [isActive, setIsactive] = useState(false);
-  console.log(companies);
-  console.log(address);
-  console.log('isActive: ', isActive);
   const [adminHash, setAdminHash] = useState([]);
   const [target, setTarget] = useState('');
   const [hash, setHash] = useState('');
@@ -31,7 +28,7 @@ const UserProfile = ({ username, companies, address }) => {
       }
 
       content.push(
-        <div className="column mx-1">
+        <div className="column mx-1" key={i}>
           <div
             className={
               isActive
@@ -39,11 +36,8 @@ const UserProfile = ({ username, companies, address }) => {
                 : 'columns button is-large is-one-fifth  is-primary has-text-warning is-outlined mt-5'
             }
             onClick={(i) => {
-              console.log(i.target.innerHTML);
               setTarget(i.target.innerHTML);
               setHash(hash);
-              console.log('target', target);
-              console.log('hash', hash);
             }}
           >
             <div className="tile has-text-centered">{compa}</div>
@@ -103,7 +97,7 @@ const UserProfile = ({ username, companies, address }) => {
 
   async function AdminHash() {
     const admin = await getHashWhereAdmin(username);
-    console.log('adminHash: ', admin);
+
     setAdminHash(admin);
     return adminHash;
   }
@@ -113,7 +107,6 @@ const UserProfile = ({ username, companies, address }) => {
   }, [username, companies]);
 
   useEffect(() => {
-    console.log('wwwww', companies.length);
     setIsactive(false);
   }, [companies.length]);
 
