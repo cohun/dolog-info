@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import QRCode from 'qrcode';
 import toast from 'react-hot-toast';
 import Image from 'next/image';
-import { setThing } from '../lib/firebaseConfig';
+import { getId, setThing } from '../lib/firebaseConfig';
 
 const NewThing = ({ target, setIsNew }) => {
   const [name, setName] = useState('');
@@ -21,11 +21,19 @@ const NewThing = ({ target, setIsNew }) => {
   const submit = async (event) => {
     event.preventDefault();
 
-    if (name != '') {
+    if (name != '' && id != '') {
+      const isAlready = await getId(target, id);
+      if (isAlready) {
+        toast.error('Már ezzel az azonosítóval van bevitt dolog');
+        setId('');
+        setQrc('');
+        setIsDisabled(true);
+        return;
+      }
       await setThing(target, name, id, remark, site, qrc);
       setIsNew(false);
     } else {
-      toast.error('Megnevezés nem lehet üres!!!');
+      toast.error('Megnevezés vagy azonosító nem lehet üres!!!');
     }
   };
 
