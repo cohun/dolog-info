@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { getAllThingsForACompany } from '../lib/firebaseConfig';
 
-const CompanyThings = ({ target, setIsNew }) => {
+const CompanyThings = ({ target, setIsNew, hash }) => {
   const [allThings, setAllThings] = useState([]);
 
   const getThings = async () => {
@@ -90,14 +90,18 @@ const CompanyThings = ({ target, setIsNew }) => {
             <p className="panel-heading">Dolgok listája</p>
             <p className="panel-tabs">
               <a className="is-active">
-                <button
-                  onClick={() => {
-                    setIsNew(true);
-                  }}
-                  className="button is-focused is-medium is-link is-inverted "
-                >
-                  + Új dolog +
-                </button>
+                {hash !== '' ? (
+                  <button
+                    onClick={() => {
+                      setIsNew(true);
+                    }}
+                    className="button is-focused is-medium is-link is-inverted "
+                  >
+                    + Új dolog +
+                  </button>
+                ) : (
+                  <div></div>
+                )}
               </a>
             </p>
             <div className="panel-block">

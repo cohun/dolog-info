@@ -3,6 +3,7 @@ import { getAllUsersInCompany, getUsersRole } from '../lib/firebaseConfig';
 import CompanyThings from './CompanyThings';
 import Image from 'next/image';
 import NewThing from './NewThing';
+import toast from 'react-hot-toast';
 
 const CompanyAdmin = ({ username, target, hash, setTarget }) => {
   const [users, setUsers] = useState([]);
@@ -58,19 +59,35 @@ const CompanyAdmin = ({ username, target, hash, setTarget }) => {
 
     users.forEach((user) => {
       cList.push(
-        <a
-          onClick={() => {
-            setIsActive(true);
-            setWho(user);
-            console.log(user);
-          }}
-          className="panel-block is-active"
-        >
-          <span className="panel-icon">
-            <i className="fas fa-book" aria-hidden="true"></i>
-          </span>
-          {user}
-        </a>
+        <div>
+          {hash != '' ? (
+            <a
+              onClick={() => {
+                setIsActive(true);
+                setWho(user);
+                console.log(user);
+              }}
+              className="panel-block is-active"
+            >
+              <span className="panel-icon">
+                <i className="fas fa-book" aria-hidden="true"></i>
+              </span>
+              {user}
+            </a>
+          ) : (
+            <a
+              onClick={() =>
+                toast.error('Csak adminisztrátor jogosult megváltoztatni')
+              }
+              className="panel-block is-active"
+            >
+              <span className="panel-icon">
+                <i className="fas fa-book" aria-hidden="true"></i>
+              </span>
+              {user}
+            </a>
+          )}
+        </div>
       );
     });
     return cList;
@@ -83,20 +100,36 @@ const CompanyAdmin = ({ username, target, hash, setTarget }) => {
       const element = users[index];
       const role = roles[index];
       rList.push(
-        <a
-          className="panel-block is-active"
-          onClick={() => {
-            setIsActive(true);
-            setRoleChange(role ? role : 'adminisztrátor');
-            setWho(element);
-          }}
-        >
-          <span className="panel-icon">
-            <i className="fas fa-book" aria-hidden="true"></i>
-          </span>
+        <div>
+          {hash != '' ? (
+            <a
+              className="panel-block is-active"
+              onClick={() => {
+                setIsActive(true);
+                setRoleChange(role ? role : 'adminisztrátor');
+                setWho(element);
+              }}
+            >
+              <span className="panel-icon">
+                <i className="fas fa-book" aria-hidden="true"></i>
+              </span>
 
-          {!role ? 'adminisztrátor' : role}
-        </a>
+              {!role ? 'adminisztrátor' : role}
+            </a>
+          ) : (
+            <a
+              onClick={() =>
+                toast.error('Csak adminisztrátor jogosult megváltoztatni')
+              }
+              className="panel-block is-active"
+            >
+              <span className="panel-icon">
+                <i className="fas fa-book" aria-hidden="true"></i>
+              </span>
+              {role}
+            </a>
+          )}
+        </div>
       );
     }
 
@@ -211,7 +244,11 @@ const CompanyAdmin = ({ username, target, hash, setTarget }) => {
           </button>
         </div>
       </div>
-      <CompanyThings target={target} setIsNew={setIsNew}></CompanyThings>
+      <CompanyThings
+        target={target}
+        setIsNew={setIsNew}
+        hash={hash}
+      ></CompanyThings>
     </div>
   );
 };
