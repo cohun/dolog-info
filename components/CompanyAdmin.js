@@ -1,15 +1,31 @@
-import React, { useEffect, useState } from 'react';
-import { getAllUsersInCompany, getUsersRole } from '../lib/firebaseConfig';
-import CompanyThings from './CompanyThings';
-import Image from 'next/image';
-import NewThing from './NewThing';
-import toast from 'react-hot-toast';
+import React, { useEffect, useState } from "react";
+import { getAllUsersInCompany, getUsersRole } from "../lib/firebaseConfig";
+import CompanyThings from "./CompanyThings";
+import Image from "next/image";
+import NewThing from "./NewThing";
+import toast from "react-hot-toast";
+import { db } from "../lib/firebaseConfig";
+import {
+  getFirestore,
+  limit,
+  query,
+  where,
+  collection,
+  getDocs,
+  setDoc,
+  doc,
+  updateDoc,
+  arrayUnion,
+  arrayRemove,
+  getDoc,
+  onSnapshot,
+} from "firebase/firestore";
 
 const CompanyAdmin = ({ username, target, hash, setTarget }) => {
   const [users, setUsers] = useState([]);
-  const [roles, setRoles] = useState([]);
-  const [roleChange, setRoleChange] = useState('');
-  const [who, setWho] = useState('');
+  const [roles, setRoles] = useState([""]);
+  const [roleChange, setRoleChange] = useState("");
+  const [who, setWho] = useState("");
   const [isActive, setIsActive] = useState(false);
   const [isNew, setIsNew] = useState(false);
 
@@ -18,7 +34,7 @@ const CompanyAdmin = ({ username, target, hash, setTarget }) => {
   };
 
   const onSubmit = () => {
-    console.log('sss');
+    console.log("sss");
   };
   const onChange = (e) => {
     const val = e.target.value.toLowerCase();
@@ -26,32 +42,82 @@ const CompanyAdmin = ({ username, target, hash, setTarget }) => {
     setRoleChange(val);
   };
 
-  async function getRole() {
-    const role = await getUsersRole(target, username);
-    setRoles([role]);
-    setUsers([username]);
+  async function getUsersRole(target, usern, roles) {
+    const docRef = doc(db, `companies/${target}/${usern}`, "what");
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      console.log("admitted: ", docSnap.data().admittedAs);
+      if (hash === "") {
+        setRoles([docSnap.data().admittedAs]);
+        return;
+      }
+      let rol = roles;
+      console.log("ussssss", roles);
+      rol.push(docSnap.data().admittedAs);
+      console.log("ussssss", rol);
+      setRoles(rol);
+    } else {
+      // doc.data() will be undefined in this case
+      console.log("No such document!");
+    }
   }
 
   useEffect(() => {
-    if (hash === '') {
-      getRole();
+    if (hash === "") {
+      console.log("Username", username);
+      setUsers([username]);
+      getUsersRole(target, username);
       return;
     } else {
       GetUsers();
     }
-    console.log('Roles', roles);
-  }, [users.length, roles.length]);
+    console.log("Roles", roles);
+  }, [roles.length]);
+
+  async function getAllUsersInComp(target) {
+    console.log("Here");
+    const docRef = doc(db, "companies", target);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      console.log("------", docSnap.data().users);
+      setUsers(docSnap.data().users);
+    } else {
+      // doc.data() will be undefined in this case
+      console.log("No such document!");
+    }
+  }
 
   async function GetUsers() {
-    const result = await getAllUsersInCompany(target);
-    setUsers(result);
+    if (users !== []) {
+      try {
+        await getAllUsersInComp(target);
+        console.log("Inside try:", users);
+        toast.success(
+          "Data was successfully fetched from cloud firestore! Close this alert and check console for output."
+        );
+      } catch (error) {
+        console.log(error);
+        alert(error);
+      }
+    }
 
-    let role = [];
-    users.forEach(async (user) => {
-      role.push(await getUsersRole(target, user));
+    console.log("USERS: ", users);
+    if (users !== []) {
+      users.forEach(async (usern) => {
+        console.log("usern", usern);
+        try {
+          await getUsersRole(target, usern, roles);
+          toast.success(
+            "Roles successfully fetched from cloud firestore! Close this alert and check console for output."
+          );
+        } catch (error) {
+          console.log(error);
+          alert(error);
+        }
 
-      setRoles(role);
-    });
+        console.log("after usern", usern);
+      });
+    }
   }
 
   function UsersList() {
@@ -60,7 +126,7 @@ const CompanyAdmin = ({ username, target, hash, setTarget }) => {
     users.forEach((user) => {
       cList.push(
         <div>
-          {hash != '' ? (
+          {hash != "" ? (
             <a
               onClick={() => {
                 setIsActive(true);
@@ -77,7 +143,7 @@ const CompanyAdmin = ({ username, target, hash, setTarget }) => {
           ) : (
             <a
               onClick={() =>
-                toast.error('Csak adminisztrátor jogosult megváltoztatni')
+                toast.error("Csak adminisztrátor jogosult megváltoztatni")
               }
               className="panel-block is-active"
             >
@@ -95,18 +161,19 @@ const CompanyAdmin = ({ username, target, hash, setTarget }) => {
 
   function RolesList() {
     let rList = [];
-
+    let role;
     for (let index = 0; index < users.length; index++) {
       const element = users[index];
-      const role = roles[index];
+      role = roles[index];
+      console.log("role", role);
       rList.push(
         <div>
-          {hash != '' ? (
+          {hash != "" ? (
             <a
               className="panel-block is-active"
               onClick={() => {
                 setIsActive(true);
-                setRoleChange(role ? role : 'adminisztrátor');
+                setRoleChange(role ? role : "adminisztrátor");
                 setWho(element);
               }}
             >
@@ -114,12 +181,12 @@ const CompanyAdmin = ({ username, target, hash, setTarget }) => {
                 <i className="fas fa-book" aria-hidden="true"></i>
               </span>
 
-              {!role ? 'adminisztrátor' : role}
+              {!role ? "adminisztrátor" : role}
             </a>
           ) : (
             <a
               onClick={() =>
-                toast.error('Csak adminisztrátor jogosult megváltoztatni')
+                toast.error("Csak adminisztrátor jogosult megváltoztatni")
               }
               className="panel-block is-active"
             >
@@ -219,7 +286,7 @@ const CompanyAdmin = ({ username, target, hash, setTarget }) => {
               <p className="panel-heading">Beosztás</p>
 
               <div className="panel-block"></div>
-              {roles != [] ? (
+              {roles != [""] ? (
                 RolesList()
               ) : (
                 <a className="panel-block is-active">
@@ -238,7 +305,7 @@ const CompanyAdmin = ({ username, target, hash, setTarget }) => {
         <div className="columns is-centered ">
           <button
             className="button is-large is-outlined is-danger"
-            onClick={() => setTarget('')}
+            onClick={() => setTarget("")}
           >
             Vissza
           </button>
