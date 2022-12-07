@@ -72,15 +72,38 @@ const CompanyAdmin = ({ username, target, hash, setTarget }) => {
       GetUsers();
     }
     console.log("Roles", roles);
-  }, [roles.length]);
+  }, [users.length]);
 
   async function getAllUsersInComp(target) {
     console.log("Here");
     const docRef = doc(db, "companies", target);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
-      console.log("------", docSnap.data().users);
-      setUsers(docSnap.data().users);
+      const use = [];
+      docSnap.data().users.forEach((doc) => {
+        use.push(doc);
+      });
+      console.log("------", use);
+      setUsers(use);
+      console.log("Now", users);
+
+      if (users !== []) {
+        console.log("Users is not null");
+        users.forEach(async (usern) => {
+          console.log("usern", usern);
+          try {
+            await getUsersRole(target, usern, roles);
+            toast.success(
+              "Roles successfully fetched from cloud firestore! Close this alert and check console for output."
+            );
+          } catch (error) {
+            console.log(error);
+            alert(error);
+          }
+
+          console.log("after usern", usern);
+        });
+      }
     } else {
       // doc.data() will be undefined in this case
       console.log("No such document!");
@@ -102,22 +125,6 @@ const CompanyAdmin = ({ username, target, hash, setTarget }) => {
     }
 
     console.log("USERS: ", users);
-    if (users !== []) {
-      users.forEach(async (usern) => {
-        console.log("usern", usern);
-        try {
-          await getUsersRole(target, usern, roles);
-          toast.success(
-            "Roles successfully fetched from cloud firestore! Close this alert and check console for output."
-          );
-        } catch (error) {
-          console.log(error);
-          alert(error);
-        }
-
-        console.log("after usern", usern);
-      });
-    }
   }
 
   function UsersList() {
