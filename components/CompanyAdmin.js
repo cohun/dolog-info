@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { getAllUsersInCompany, getUsersRole } from "../lib/firebaseConfig";
-import CompanyThings from "./CompanyThings";
-import Image from "next/image";
-import NewThing from "./NewThing";
-import toast from "react-hot-toast";
-import { db } from "../lib/firebaseConfig";
+import React, { useEffect, useState } from 'react';
+import { getAllUsersInCompany, getUsersRole } from '../lib/firebaseConfig';
+import CompanyThings from './CompanyThings';
+import Image from 'next/image';
+import NewThing from './NewThing';
+import toast from 'react-hot-toast';
+import { db } from '../lib/firebaseConfig';
 import {
   getFirestore,
   limit,
@@ -19,13 +19,14 @@ import {
   arrayRemove,
   getDoc,
   onSnapshot,
-} from "firebase/firestore";
+} from 'firebase/firestore';
+import AllUsersInCompany from './AllUsersInCompany';
 
 const CompanyAdmin = ({ username, target, hash, setTarget }) => {
   const [users, setUsers] = useState([]);
-  const [roles, setRoles] = useState([""]);
-  const [roleChange, setRoleChange] = useState("");
-  const [who, setWho] = useState("");
+  const [roles, setRoles] = useState(['']);
+  const [roleChange, setRoleChange] = useState('');
+  const [who, setWho] = useState('');
   const [isActive, setIsActive] = useState(false);
   const [isNew, setIsNew] = useState(false);
 
@@ -34,7 +35,7 @@ const CompanyAdmin = ({ username, target, hash, setTarget }) => {
   };
 
   const onSubmit = () => {
-    console.log("sss");
+    console.log('sss');
   };
   const onChange = (e) => {
     const val = e.target.value.toLowerCase();
@@ -43,70 +44,70 @@ const CompanyAdmin = ({ username, target, hash, setTarget }) => {
   };
 
   async function getUsersRole(target, usern, roles) {
-    const docRef = doc(db, `companies/${target}/${usern}`, "what");
+    const docRef = doc(db, `companies/${target}/${usern}`, 'what');
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
-      console.log("admitted: ", docSnap.data().admittedAs);
-      if (hash === "") {
+      console.log('admitted: ', docSnap.data().admittedAs);
+      if (hash === '') {
         setRoles([docSnap.data().admittedAs]);
         return;
       }
       let rol = roles;
-      console.log("ussssss", roles);
+      console.log('ussssss', roles);
       rol.push(docSnap.data().admittedAs);
-      console.log("ussssss", rol);
+      console.log('ussssss', rol);
       setRoles(rol);
     } else {
       // doc.data() will be undefined in this case
-      console.log("No such document!");
+      console.log('No such document!');
     }
   }
 
   useEffect(() => {
-    if (hash === "") {
-      console.log("Username", username);
+    if (hash === '') {
+      console.log('Username', username);
       setUsers([username]);
       getUsersRole(target, username);
       return;
     } else {
       GetUsers();
     }
-    console.log("Roles", roles);
+    console.log('Roles', roles);
   }, [users.length]);
 
   async function getAllUsersInComp(target) {
-    console.log("Here");
-    const docRef = doc(db, "companies", target);
+    console.log('Here');
+    const docRef = doc(db, 'companies', target);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
       const use = [];
       docSnap.data().users.forEach((doc) => {
         use.push(doc);
       });
-      console.log("------", use);
+      console.log('------', use);
       setUsers(use);
-      console.log("Now", users);
+      console.log('Now', users);
 
       if (users !== []) {
-        console.log("Users is not null");
+        console.log('Users is not null');
         users.forEach(async (usern) => {
-          console.log("usern", usern);
+          console.log('usern', usern);
           try {
             await getUsersRole(target, usern, roles);
             toast.success(
-              "Roles successfully fetched from cloud firestore! Close this alert and check console for output."
+              'Roles successfully fetched from cloud firestore! Close this alert and check console for output.'
             );
           } catch (error) {
             console.log(error);
             alert(error);
           }
 
-          console.log("after usern", usern);
+          console.log('after usern', usern);
         });
       }
     } else {
       // doc.data() will be undefined in this case
-      console.log("No such document!");
+      console.log('No such document!');
     }
   }
 
@@ -114,9 +115,9 @@ const CompanyAdmin = ({ username, target, hash, setTarget }) => {
     if (users !== []) {
       try {
         await getAllUsersInComp(target);
-        console.log("Inside try:", users);
+        console.log('Inside try:', users);
         toast.success(
-          "Data was successfully fetched from cloud firestore! Close this alert and check console for output."
+          'Data was successfully fetched from cloud firestore! Close this alert and check console for output.'
         );
       } catch (error) {
         console.log(error);
@@ -124,46 +125,7 @@ const CompanyAdmin = ({ username, target, hash, setTarget }) => {
       }
     }
 
-    console.log("USERS: ", users);
-  }
-
-  function UsersList() {
-    let cList = [];
-
-    users.forEach((user) => {
-      cList.push(
-        <div>
-          {hash != "" ? (
-            <a
-              onClick={() => {
-                setIsActive(true);
-                setWho(user);
-                console.log(user);
-              }}
-              className="panel-block is-active"
-            >
-              <span className="panel-icon">
-                <i className="fas fa-book" aria-hidden="true"></i>
-              </span>
-              {user}
-            </a>
-          ) : (
-            <a
-              onClick={() =>
-                toast.error("Csak adminisztrátor jogosult megváltoztatni")
-              }
-              className="panel-block is-active"
-            >
-              <span className="panel-icon">
-                <i className="fas fa-book" aria-hidden="true"></i>
-              </span>
-              {user}
-            </a>
-          )}
-        </div>
-      );
-    });
-    return cList;
+    console.log('USERS: ', users);
   }
 
   function RolesList() {
@@ -172,15 +134,15 @@ const CompanyAdmin = ({ username, target, hash, setTarget }) => {
     for (let index = 0; index < users.length; index++) {
       const element = users[index];
       role = roles[index];
-      console.log("role", role);
+      console.log('role', role);
       rList.push(
         <div>
-          {hash != "" ? (
+          {hash != '' ? (
             <a
               className="panel-block is-active"
               onClick={() => {
                 setIsActive(true);
-                setRoleChange(role ? role : "adminisztrátor");
+                setRoleChange(role ? role : 'adminisztrátor');
                 setWho(element);
               }}
             >
@@ -188,12 +150,12 @@ const CompanyAdmin = ({ username, target, hash, setTarget }) => {
                 <i className="fas fa-book" aria-hidden="true"></i>
               </span>
 
-              {!role ? "adminisztrátor" : role}
+              {!role ? 'adminisztrátor' : role}
             </a>
           ) : (
             <a
               onClick={() =>
-                toast.error("Csak adminisztrátor jogosult megváltoztatni")
+                toast.error('Csak adminisztrátor jogosult megváltoztatni')
               }
               className="panel-block is-active"
             >
@@ -276,15 +238,11 @@ const CompanyAdmin = ({ username, target, hash, setTarget }) => {
               <p className="panel-heading">Felhasználó</p>
 
               <div className="panel-block"></div>
-              {users != [] ? (
-                UsersList()
-              ) : (
-                <a className="panel-block is-active">
-                  <span className="panel-icon">
-                    <i className="fas fa-book" aria-hidden="true"></i>
-                  </span>
-                  Nincs felhasználó
-                </a>
+
+              {AllUsersInCompany(
+                (target = { target }),
+                (setIsActive = { setIsActive }),
+                (hash = { hash })
               )}
             </article>
           </div>
@@ -293,7 +251,7 @@ const CompanyAdmin = ({ username, target, hash, setTarget }) => {
               <p className="panel-heading">Beosztás</p>
 
               <div className="panel-block"></div>
-              {roles != [""] ? (
+              {roles != [''] ? (
                 RolesList()
               ) : (
                 <a className="panel-block is-active">
@@ -312,7 +270,7 @@ const CompanyAdmin = ({ username, target, hash, setTarget }) => {
         <div className="columns is-centered ">
           <button
             className="button is-large is-outlined is-danger"
-            onClick={() => setTarget("")}
+            onClick={() => setTarget('')}
           >
             Vissza
           </button>

@@ -4,6 +4,8 @@ import { db } from '../lib/firebaseConfig';
 
 const AllUsersInCompany = ({ target, setIsActive, hash }) => {
   const [users, setUsers] = useState([]);
+  const [roles, setRoles] = useState(['']);
+  const [roleChange, setRoleChange] = useState('');
 
   useEffect(() => {
     getAllUsersInCompany(target);
@@ -21,24 +23,29 @@ const AllUsersInCompany = ({ target, setIsActive, hash }) => {
     }
   }
 
-  function UsersList() {
-    let cList = [];
-    users?.forEach((user) => {
-      cList.push(
+  function RolesList() {
+    let rList = [];
+    let role;
+    for (let index = 0; index < users.length; index++) {
+      const element = users[index];
+      role = roles[index];
+      console.log('role', role);
+      rList.push(
         <div>
           {hash != '' ? (
             <a
+              className="panel-block is-active"
               onClick={() => {
                 setIsActive(true);
-                setWho(user);
-                console.log(user);
+                setRoleChange(role ? role : 'adminisztrátor');
+                setWho(element);
               }}
-              className="panel-block is-active"
             >
               <span className="panel-icon">
                 <i className="fas fa-book" aria-hidden="true"></i>
               </span>
-              {user}
+
+              {!role ? 'adminisztrátor' : role}
             </a>
           ) : (
             <a
@@ -50,13 +57,14 @@ const AllUsersInCompany = ({ target, setIsActive, hash }) => {
               <span className="panel-icon">
                 <i className="fas fa-book" aria-hidden="true"></i>
               </span>
-              {user}
+              {role}
             </a>
           )}
         </div>
       );
-    });
-    return cList;
+    }
+
+    return rList;
   }
 
   return (
