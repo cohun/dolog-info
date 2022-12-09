@@ -1,26 +1,42 @@
-import React, { useEffect, useState } from 'react';
-import { doc, getDoc } from 'firebase/firestore';
-import { db } from '../lib/firebaseConfig';
+import React, { useEffect, useState } from "react";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../lib/firebaseConfig";
 
-const AllUsersInCompany = ({ target, setIsActive, hash }) => {
-  const [users, setUsers] = useState([]);
-  const [roles, setRoles] = useState(['']);
-  const [roleChange, setRoleChange] = useState('');
+const RoleList = ({
+  users,
+  target,
+  setIsActive,
+  hash,
+  setWho,
+  setRoleChange,
+}) => {
+  const [roles, setRoles] = useState([""]);
 
   useEffect(() => {
-    getAllUsersInCompany(target);
-  }, [users]);
+    console.log(" :", users);
+    getUsersRole(target, users);
+  }, [users, roles.length]);
 
-  async function getAllUsersInCompany(target) {
-    const docRef = doc(db, 'companies', target);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      const use = docSnap.data().users;
-      setUsers(use);
-    } else {
-      // doc.data() will be undefined in this case
-      console.log('No such document!');
-    }
+  async function getUsersRole(target, users) {
+    users?.forEach(async (user) => {
+      const docRef = doc(db, `companies/${target}/${user}`, "what");
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        console.log("admitted: ", docSnap.data().admittedAs);
+        if (hash === "") {
+          setRoles([docSnap.data().admittedAs]);
+          return;
+        }
+        let rol = roles;
+        console.log("ussssss", roles);
+        rol.push(docSnap.data().admittedAs);
+        console.log("uuuuuuu", rol);
+        setRoles(rol);
+      } else {
+        // doc.data() will be undefined in this case
+        console.log("No such document!");
+      }
+    });
   }
 
   function RolesList() {
@@ -29,15 +45,16 @@ const AllUsersInCompany = ({ target, setIsActive, hash }) => {
     for (let index = 0; index < users.length; index++) {
       const element = users[index];
       role = roles[index];
-      console.log('role', role);
+      console.log("role", role);
+
       rList.push(
         <div>
-          {hash != '' ? (
+          {hash != "" ? (
             <a
               className="panel-block is-active"
               onClick={() => {
                 setIsActive(true);
-                setRoleChange(role ? role : 'adminisztrátor');
+                setRoleChange(role ? role : "adminisztrátor");
                 setWho(element);
               }}
             >
@@ -45,12 +62,12 @@ const AllUsersInCompany = ({ target, setIsActive, hash }) => {
                 <i className="fas fa-book" aria-hidden="true"></i>
               </span>
 
-              {!role ? 'adminisztrátor' : role}
+              {role === "" ? "adminisztrátor" : role}
             </a>
           ) : (
             <a
               onClick={() =>
-                toast.error('Csak adminisztrátor jogosult megváltoztatni')
+                toast.error("Csak adminisztrátor jogosult megváltoztatni")
               }
               className="panel-block is-active"
             >
@@ -63,14 +80,13 @@ const AllUsersInCompany = ({ target, setIsActive, hash }) => {
         </div>
       );
     }
-
     return rList;
   }
 
   return (
     <div>
-      {users !== [] ? (
-        UsersList()
+      {roles.length > 0 ? (
+        RolesList()
       ) : (
         <a className="panel-block is-active">
           <span className="panel-icon">
@@ -83,4 +99,4 @@ const AllUsersInCompany = ({ target, setIsActive, hash }) => {
   );
 };
 
-export default AllUsersInCompany;
+export default RoleList;
