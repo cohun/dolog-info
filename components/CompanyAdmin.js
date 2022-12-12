@@ -1,18 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { getAllUsersInCompany, getUsersRole } from "../lib/firebaseConfig";
-import CompanyThings from "./CompanyThings";
-import Image from "next/image";
-import NewThing from "./NewThing";
-import toast from "react-hot-toast";
-import { db } from "../lib/firebaseConfig";
-import { doc, getDoc } from "firebase/firestore";
-import AllUsersInCompany from "./AllUsersInCompany";
-import RoleList from "./RoleList";
+import React, { useEffect, useState } from 'react';
+import CompanyThings from './CompanyThings';
+import Image from 'next/image';
+import NewThing from './NewThing';
+import toast from 'react-hot-toast';
+
+import AllUsersInCompany from './AllUsersInCompany';
+import RoleList from './RoleList';
 
 const CompanyAdmin = ({ username, target, hash, setTarget }) => {
   const [users, setUsers] = useState([]);
-  const [roleChange, setRoleChange] = useState("");
-  const [who, setWho] = useState("");
+  const [roleChange, setRoleChange] = useState('');
+  const [who, setWho] = useState('');
   const [isActive, setIsActive] = useState(false);
   const [isNew, setIsNew] = useState(false);
 
@@ -21,17 +19,13 @@ const CompanyAdmin = ({ username, target, hash, setTarget }) => {
   };
 
   const onSubmit = () => {
-    console.log("sss");
+    console.log('sss');
   };
   const onChange = (e) => {
     const val = e.target.value.toLowerCase();
 
     setRoleChange(val);
   };
-
-  useEffect(() => {
-    console.log("USERS:::", users);
-  }, [users, roleChange]);
 
   return (
     <div>
@@ -110,6 +104,7 @@ const CompanyAdmin = ({ username, target, hash, setTarget }) => {
                     hash={hash}
                     setWho={setWho}
                     setUsers={setUsers}
+                    username={username}
                   ></AllUsersInCompany>
                 </article>
               </div>
@@ -118,7 +113,7 @@ const CompanyAdmin = ({ username, target, hash, setTarget }) => {
                   <p className="panel-heading">Beosztás</p>
 
                   <div className="panel-block"></div>
-                  {users != [] ? (
+                  {users.length != 0 ? (
                     <RoleList
                       users={users}
                       target={target}
@@ -144,7 +139,7 @@ const CompanyAdmin = ({ username, target, hash, setTarget }) => {
             <div className="columns is-centered ">
               <button
                 className="button is-large is-outlined is-danger"
-                onClick={() => setTarget("")}
+                onClick={() => setTarget('')}
               >
                 Vissza
               </button>

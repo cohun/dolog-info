@@ -1,17 +1,18 @@
-import React, { useEffect, useState } from "react";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "../lib/firebaseConfig";
+import React, { useEffect, useState } from 'react';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '../lib/firebaseConfig';
+import toast from 'react-hot-toast';
 
-const AllUsersInCompany = ({ target, setIsActive, hash, setWho, setUsers }) => {
+const AllUsersInCompany = ({ target, hash, setUsers, username }) => {
   const [usern, setUsern] = useState([]);
 
   useEffect(() => {
-    console.log("In here");
+    console.log('In here');
     getAllUsersInCompany(target);
   }, [usern.length]);
 
   async function getAllUsersInCompany(target) {
-    const docRef = doc(db, "companies", target);
+    const docRef = doc(db, 'companies', target);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
       const use = docSnap.data().users;
@@ -19,7 +20,7 @@ const AllUsersInCompany = ({ target, setIsActive, hash, setWho, setUsers }) => {
       setUsers(usern);
     } else {
       // doc.data() will be undefined in this case
-      console.log("No such document!");
+      console.log('No such document!');
     }
   }
 
@@ -28,32 +29,32 @@ const AllUsersInCompany = ({ target, setIsActive, hash, setWho, setUsers }) => {
     usern?.forEach((user) => {
       cList.push(
         <div>
-          {hash != "" ? (
-            <a
-              onClick={() => {
-                setIsActive(true);
-                setWho(user);
-                console.log(user);
-              }}
-              className="panel-block is-active"
-            >
+          {hash != '' ? (
+            <div className="panel-block is-active">
               <span className="panel-icon">
                 <i className="fas fa-book" aria-hidden="true"></i>
               </span>
-              {user}
-            </a>
+              {user === username ? (
+                <div className="has-text-white has-background-success-dark px-4">
+                  {user}
+                </div>
+              ) : (
+                user
+              )}
+            </div>
           ) : (
-            <a
-              onClick={() =>
-                toast.error("Csak adminisztrátor jogosult megváltoztatni")
-              }
-              className="panel-block is-active"
-            >
+            <div className="panel-block is-active">
               <span className="panel-icon">
                 <i className="fas fa-book" aria-hidden="true"></i>
               </span>
-              {user}
-            </a>
+              {user === username ? (
+                <div className="has-text-white has-background-success-dark px-4">
+                  {user}
+                </div>
+              ) : (
+                user
+              )}
+            </div>
           )}
         </div>
       );
