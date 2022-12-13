@@ -47,11 +47,15 @@ const RoleList = ({
 
     roles?.forEach((role) => {
       const element = users[index];
+      let danger = '';
+      if (role === 'elbírálás alatt') {
+        danger = 'has-text-danger';
+      }
       cList.push(
         <div>
           {hash != '' ? (
             <a
-              className="panel-block is-active"
+              className={`panel-block is-active ${danger}`}
               onClick={() => {
                 setIsActive(true);
                 setRoleChange(role ? role : 'adminisztrátor');
@@ -69,7 +73,7 @@ const RoleList = ({
               onClick={() =>
                 toast.error('Csak adminisztrátor jogosult megváltoztatni')
               }
-              className="panel-block is-active"
+              className={`panel-block is-active ${danger}`}
             >
               <span className="panel-icon">
                 <i className="fas fa-book" aria-hidden="true"></i>

@@ -6,6 +6,7 @@ import toast from 'react-hot-toast';
 
 import AllUsersInCompany from './AllUsersInCompany';
 import RoleList from './RoleList';
+import { updateRole } from '../lib/firebaseConfig';
 
 const CompanyAdmin = ({ username, target, hash, setTarget }) => {
   const [users, setUsers] = useState([]);
@@ -14,11 +15,23 @@ const CompanyAdmin = ({ username, target, hash, setTarget }) => {
   const [isActive, setIsActive] = useState(false);
   const [isNew, setIsNew] = useState(false);
 
-  const show = () => {
+  const back = () => {
+    setIsActive(false);
+  };
+  const show = async (e) => {
+    e.preventDefault();
+
+    try {
+      await updateRole(target, who, roleChange);
+    } catch (error) {
+      console.log(error.message);
+    }
     setIsActive(false);
   };
 
   const onSubmit = () => {
+    e.preventDefault();
+    setIsActive(true);
     console.log('sss');
   };
   const onChange = (e) => {
@@ -59,12 +72,12 @@ const CompanyAdmin = ({ username, target, hash, setTarget }) => {
                 <footer className="modal-card-foot">
                   <button
                     type="submit"
-                    onClick={show}
+                    onClick={(e) => show(e)}
                     className="button is-success"
                   >
                     Mentés
                   </button>
-                  <button onClick={show} className="button">
+                  <button onClick={back} className="button">
                     Vissza
                   </button>
                 </footer>
@@ -79,6 +92,7 @@ const CompanyAdmin = ({ username, target, hash, setTarget }) => {
             className="is-fullwidth"
             alt="background"
             layout="fill"
+            priority={true}
           ></Image>
 
           <div className="section is-info">

@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { getHashWhereAdmin } from '../lib/firebaseConfig';
 import CompanyAdmin from './CompanyAdmin';
 import HashingForm from './hashing';
+import Image from 'next/image';
 
 const UserProfile = ({ username, companies, address }) => {
   const [isActive, setIsactive] = useState(false);
@@ -33,7 +34,7 @@ const UserProfile = ({ username, companies, address }) => {
             className={
               isActive
                 ? 'button is-large is-one-fifth is-primary is-outlined mt-5 is-focused'
-                : 'columns button is-large is-one-fifth  is-primary has-text-warning is-outlined mt-5'
+                : 'columns button is-large is-responsive is-one-fifth is-primary has-text-warning is-outlined mt-5'
             }
             onClick={(i) => {
               setTarget(i.target.innerHTML);
@@ -122,37 +123,45 @@ const UserProfile = ({ username, companies, address }) => {
       ) : (
         <div>
           {!isActive ? (
-            <div>
-              <div className="section is-info">
-                <div className="columns is-centered ">
-                  <h3 className="card column is-half title has-text-centered has-background-primary-dark">
-                    <strong className="is-capitalized has-text-darker">
-                      Helló{' '}
-                    </strong>
-                    <strong className="is-capitalized has-text-warning">
-                      {username}!{' '}
-                    </strong>
-                    {companies.length != 0 ? (
-                      <div className="subtitle has-text-dark">
-                        az alábbi tulajdonosok dolgaihoz van hozzáférésed:{' '}
-                        <div className="is-5 has-text-dark">
-                          (ahol kód megjelenik, ott admin vagy.)
+            <div className="card hero is-fullheight">
+              <Image
+                src="/dolog_background.jpg"
+                className="is-fullwidth"
+                alt="background"
+                layout="fill"
+              ></Image>
+              <div>
+                <div className="section is-info">
+                  <div className="columns is-centered ">
+                    <h3 className="card column is-half title has-text-centered has-background-primary-dark">
+                      <strong className="is-capitalized has-text-darker">
+                        Helló{' '}
+                      </strong>
+                      <strong className="is-capitalized has-text-warning">
+                        {username}!{' '}
+                      </strong>
+                      {companies.length != 0 ? (
+                        <div className="subtitle has-text-dark">
+                          az alábbi tulajdonosok dolgaihoz van hozzáférésed:{' '}
+                          <div className="is-5 has-text-dark">
+                            (ahol kód megjelenik, ott admin vagy.)
+                          </div>
                         </div>
-                      </div>
-                    ) : (
-                      <div className="subtitle">
-                        Még nincs hozzáférésed egyetlen céghez sem.{' '}
-                      </div>
-                    )}
-                  </h3>
+                      ) : (
+                        <div className="subtitle">
+                          Még nincs hozzáférésed egyetlen céghez sem.{' '}
+                        </div>
+                      )}
+                    </h3>
+                  </div>
                 </div>
-              </div>
-              <div className="section mx-6">
-                <div className="box mx-6">
-                  <div className="columns is-desktop is-centered is-12 ">
-                    {companies.length != 0
-                      ? getCompany(companies, address)
-                      : AddNewCompany(username)}
+                <div className="section mx-6">
+                  <div className="box mx-6">
+                    <div className="columns is-desktop is-centered is-12 ">
+                      {companies.length != 0
+                        ? getCompany(companies, address)
+                        : AddNewCompany(username)}
+                    </div>
                   </div>
                 </div>
               </div>
