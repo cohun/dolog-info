@@ -1,12 +1,12 @@
-import debounce from "lodash.debounce";
-import { doc, getDoc, writeBatch } from "firebase/firestore";
-import { useCallback, useContext, useEffect, useState } from "react";
-import { UserContext } from "../lib/context";
-import { db } from "../lib/firebaseConfig";
-import { useRouter } from "next/router";
+import debounce from 'lodash.debounce';
+import { doc, getDoc, writeBatch } from 'firebase/firestore';
+import { useCallback, useContext, useEffect, useState } from 'react';
+import { UserContext } from '../lib/context';
+import { db } from '../lib/firebaseConfig';
+import { useRouter } from 'next/router';
 
 const CreateUsername = () => {
-  const [formValue, setFormValue] = useState("");
+  const [formValue, setFormValue] = useState('');
   const [isValid, setIsValid] = useState(false);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -14,8 +14,8 @@ const CreateUsername = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    const userDoc = doc(db, "users", user.uid);
-    const usernameDoc = doc(db, "usernames", formValue);
+    const userDoc = doc(db, 'users', user.uid);
+    const usernameDoc = doc(db, 'usernames', formValue);
     const batch = writeBatch(db);
     batch.set(userDoc, {
       username: formValue,
@@ -26,12 +26,13 @@ const CreateUsername = () => {
 
     await batch.commit();
 
-    router.push("/home");
+    router.push('/home');
   };
 
   const onChange = (e) => {
-    const val = e.target.value.toLowerCase();
-    const re = /^(?=[a-zA-Z0-9._]{3,15}$)(?!.*[_.]{2})[^_.].*[^_.]$/;
+    const val = e.target.value;
+    const re =
+      /^(?=[a-zA-Z0-9ÁÉÍÓÖŐÚÜŰáéíóöőúüű\s._]{3,25}$)(?!.*[_.]{2})[^_.].*[^_.]$/;
 
     if (val.length < 3) {
       setFormValue(val);
@@ -53,9 +54,9 @@ const CreateUsername = () => {
   const checkUsername = useCallback(
     debounce(async (username) => {
       if (username.length >= 3) {
-        const docRef = doc(db, "usernames", username);
+        const docRef = doc(db, 'usernames', username);
         const docSnap = await getDoc(docRef);
-        console.log("Firestore read executed!" + `${docSnap.exists()}`);
+        console.log('Firestore read executed!' + `${docSnap.exists()}`);
 
         docSnap.exists() ? setIsValid(false) : setIsValid(true);
         setLoading(false);
@@ -76,9 +77,9 @@ const CreateUsername = () => {
     }
   }
 
-  const [isActive, setIsActive] = useState("is-active");
+  const [isActive, setIsActive] = useState('is-active');
   const show = () => {
-    setIsActive("");
+    setIsActive('');
   };
   return (
     <div className={`modal ${isActive}`}>
@@ -88,7 +89,7 @@ const CreateUsername = () => {
           <header className="modal-card-head">
             <p className="modal-card-title">Kérem a felhasználó nevet</p>
             <button
-              onClick={() => setIsActive("")}
+              onClick={() => setIsActive('')}
               className="delete"
               aria-label="close"
             ></button>
@@ -121,13 +122,11 @@ const CreateUsername = () => {
               Vissza
             </button>
           </footer>
-          <h3>Debug state</h3>
+          <h3></h3>
           <div>
-            Username: {formValue}
             <br />
-            Loading: {loading.toString()}
-            <br />
-            Username Valid: {isValid.toString()}
+            Felhasználó név: {formValue}
+            <br />A választott név : {isValid ? 'OK' : 'nem érvényes'}
           </div>
         </div>
       </form>
