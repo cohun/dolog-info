@@ -19,7 +19,7 @@ const CompanyThings = ({ target, setIsNew, hash }) => {
     let thingsArray = [''];
     for (let index = 0; index < allThings.length; index++) {
       thingsArray.push(
-        <div>
+        <div key={index}>
           <div className="box has-background-warning py-1"></div>
           <div className="panel-block">
             <div className="tile is-ancestor">
@@ -87,7 +87,7 @@ const CompanyThings = ({ target, setIsNew, hash }) => {
         <div className="card ">
           <article className="panel is-warning">
             <p className="panel-heading">Dolgok listája</p>
-            <p className="panel-tabs">
+            <div className="panel-tabs">
               <a className="is-active">
                 {hash !== '' ? (
                   <button
@@ -102,7 +102,7 @@ const CompanyThings = ({ target, setIsNew, hash }) => {
                   <div></div>
                 )}
               </a>
-            </p>
+            </div>
             <div className="panel-block">
               <p className="control has-icons-left">
                 <input

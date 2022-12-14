@@ -176,7 +176,7 @@ const CompanyAdmin = ({ username, target, hash, setTarget }) => {
             </div>
           </div>
 
-          <div className="section is-info mb-2">
+          <div className="section is-info mb-4">
             <div className="columns is-centered ">
               <button
                 className="button is-large is-outlined is-danger"
