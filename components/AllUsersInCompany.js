@@ -7,7 +7,6 @@ const AllUsersInCompany = ({ target, hash, setUsers, username }) => {
   const [usern, setUsern] = useState([]);
 
   useEffect(() => {
-    console.log('In here');
     getAllUsersInCompany(target);
   }, [usern.length]);
 

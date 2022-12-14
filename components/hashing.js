@@ -4,6 +4,7 @@ import { doc, setDoc } from 'firebase/firestore';
 import {
   db,
   getCompanyFromHash,
+  getUsersRole,
   setUserToCompany,
 } from '../lib/firebaseConfig';
 import { useRouter } from 'next/router';
@@ -52,7 +53,6 @@ const HashingForm = ({ username, setIsactive }) => {
     e.preventDefault();
     let result = await sha256(text_input + algorithm);
     setOutput(result.substring(0, 8));
-    console.log(output);
   };
 
   const checkHash = async (e) => {
@@ -63,11 +63,17 @@ const HashingForm = ({ username, setIsactive }) => {
     }
     const c = await getCompanyFromHash(text_input2);
     if (c) {
-      toast.success('Felvételi kérelem elküldve');
-      await setUserToCompany(c, username);
-      setIsactive(false);
+      const alreadyApplied = await getUsersRole(c, username);
+      if (alreadyApplied) {
+        toast.error('Már egyszer jelentkeztél. Várj a jováhagyásig!');
+        setIsactive(false);
+        return;
+      } else {
+        await setUserToCompany(c, username);
+        toast.success('Felvételi kérelem elküldve');
+        setIsactive(false);
+      }
     } else {
-      console.log('Nincs');
       toast.error('Hibás kód! próbáld újra!');
     }
   };
@@ -77,7 +83,6 @@ const HashingForm = ({ username, setIsactive }) => {
   };
 
   useEffect(() => {
-    console.log('here', output);
     if (output) {
       if (text_input && algorithm) {
         dataSubmit();

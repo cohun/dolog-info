@@ -49,7 +49,6 @@ const NewThing = ({ target, setIsNew }) => {
   useEffect(() => {
     QRCode.toDataURL(qrText, (error, url) => {
       if (error) return console.error(error);
-      console.log(url);
       setQrc(url);
     });
   }, [qrText]);

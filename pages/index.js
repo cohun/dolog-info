@@ -29,8 +29,6 @@ export default function Home() {
       });
       setCompanies(comp);
       setAddress(addr);
-      console.log('comp: ', companies);
-      console.log('Address. ', address);
 
       return unsubscribe;
     });

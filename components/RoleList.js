@@ -14,12 +14,10 @@ const RoleList = ({
   const [roles, setRoles] = useState(['']);
 
   useEffect(() => {
-    console.log('In here roles');
     getUsersRole(target, users).then(() => {
-      console.log('RRRR: ', roles);
       RolesList();
     });
-  }, [roles.length]);
+  }, [roles, users.length]);
 
   async function getUsersRole(target, users) {
     const role = [''];
@@ -30,15 +28,16 @@ const RoleList = ({
           if (doc.data()) {
             role.push(doc.data().admittedAs);
           }
-
-          console.log('Current role in CA: ', role.join(', '));
           setRoles(role);
         }
       );
+      return unsubscribe;
     });
-
-    console.log('End', roles);
-    return RolesList();
+    if (roles.length === users.length) {
+      return RolesList();
+    } else {
+      roles.pop();
+    }
   }
 
   function RolesList() {

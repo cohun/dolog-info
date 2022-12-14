@@ -13,7 +13,6 @@ const CompanyThings = ({ target, setIsNew, hash }) => {
   useEffect(() => {
     getThings();
     console.log(allThings.length);
-    console.log(allThings[1]);
   }, [allThings.length]);
 
   function things() {

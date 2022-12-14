@@ -32,7 +32,6 @@ const CompanyAdmin = ({ username, target, hash, setTarget }) => {
   const onSubmit = () => {
     e.preventDefault();
     setIsActive(true);
-    console.log('sss');
   };
   const onChange = (e) => {
     const val = e.target.value.toLowerCase();

@@ -49,7 +49,7 @@ const UserProfile = ({ username, companies, address }) => {
               <div className="card subtitle is-6 has-text-white has-background-danger-dark p-1">
                 Cím: {addre}
                 <div className="navbar-divider"></div>
-                <div>Jelenleg elbírálás alatt...</div>
+                <div>Itt felhasználó vagy</div>
               </div>
             </div>
           ) : (
@@ -57,8 +57,11 @@ const UserProfile = ({ username, companies, address }) => {
               Cím: {addre}
               <div className="navbar-divider"></div>
               <div>
+                <p>Itt admin vagy</p>
                 Belépési kód:{' '}
-                <strong className="has-text-warning-light">{hash}</strong>{' '}
+                <strong className="has-text-primary is-size-5">
+                  {hash}
+                </strong>{' '}
               </div>
             </div>
           )}
@@ -144,7 +147,8 @@ const UserProfile = ({ username, companies, address }) => {
                         <div className="subtitle has-text-dark">
                           az alábbi tulajdonosok dolgaihoz van hozzáférésed:{' '}
                           <div className="is-5 has-text-dark">
-                            (ahol kód megjelenik, ott admin vagy.)
+                            (a belépési kód továbbadásával tudsz meghívni
+                            további felhasználókat)
                           </div>
                         </div>
                       ) : (
