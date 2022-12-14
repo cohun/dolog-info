@@ -23,7 +23,6 @@ export default function Home() {
       const comp = [];
       const addr = [];
       querySnapshot.forEach((doc) => {
-        console.log('ID: ', doc.id, 'ADD: ', doc.data().address);
         comp.push(doc.id);
         addr.push(doc.data().address);
       });

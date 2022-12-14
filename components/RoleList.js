@@ -51,7 +51,7 @@ const RoleList = ({
         danger = 'has-text-danger';
       }
       cList.push(
-        <div>
+        <div key={index}>
           {hash != '' ? (
             <a
               className={`panel-block is-active ${danger}`}

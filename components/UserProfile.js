@@ -69,7 +69,7 @@ const UserProfile = ({ username, companies, address }) => {
       );
     }
     content.push(
-      <div className="column">
+      <div className="column" key={100}>
         <button
           className="button is-large is-one-fifth has-background-primary-dark is-outlined mt-5"
           onClick={onHashingForm}

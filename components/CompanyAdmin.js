@@ -6,7 +6,7 @@ import toast from 'react-hot-toast';
 
 import AllUsersInCompany from './AllUsersInCompany';
 import RoleList from './RoleList';
-import { updateRole } from '../lib/firebaseConfig';
+import { deleteUserFromCompany, updateRole } from '../lib/firebaseConfig';
 
 const CompanyAdmin = ({ username, target, hash, setTarget }) => {
   const [users, setUsers] = useState([]);
@@ -14,19 +14,30 @@ const CompanyAdmin = ({ username, target, hash, setTarget }) => {
   const [who, setWho] = useState('');
   const [isActive, setIsActive] = useState(false);
   const [isNew, setIsNew] = useState(false);
+  const [del, setDel] = useState(false);
 
   const back = () => {
+    setDel(false);
     setIsActive(false);
   };
   const show = async (e) => {
     e.preventDefault();
-
     try {
       await updateRole(target, who, roleChange);
     } catch (error) {
       console.log(error.message);
     }
     setIsActive(false);
+  };
+
+  const delUser = async (e) => {
+    e.preventDefault();
+    setDel(true);
+  };
+  const delUserFirebase = async (e) => {
+    e.preventDefault();
+    await deleteUserFromCompany(target, who);
+    setDel(false);
   };
 
   const onSubmit = () => {
@@ -79,7 +90,24 @@ const CompanyAdmin = ({ username, target, hash, setTarget }) => {
                   <button onClick={back} className="button">
                     Vissza
                   </button>
+                  <button
+                    type="submit"
+                    onClick={(e) => delUser(e)}
+                    className="button is-danger is-outlined"
+                  >
+                    Felhasználó törlése
+                  </button>
                 </footer>
+                {del ? (
+                  <footer className="modal-card-foot">
+                    <button
+                      onClick={(e) => delUserFirebase(e)}
+                      className="button is-outlined has-background-danger-dark has-text-white"
+                    >
+                      Biztosan ki akarod törölni {who} felhasználót?
+                    </button>
+                  </footer>
+                ) : null}
               </div>
             </form>
           </div>

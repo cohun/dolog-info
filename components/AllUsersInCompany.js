@@ -27,7 +27,7 @@ const AllUsersInCompany = ({ target, hash, setUsers, username }) => {
     let cList = [];
     usern?.forEach((user) => {
       cList.push(
-        <div>
+        <div key={user}>
           {hash != '' ? (
             <div className="panel-block is-active">
               <span className="panel-icon">
