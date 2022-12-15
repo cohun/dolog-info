@@ -12,7 +12,6 @@ const CompanyThings = ({ target, setIsNew, hash }) => {
 
   useEffect(() => {
     getThings();
-    console.log(allThings.length);
   }, [allThings.length]);
 
   function things() {
@@ -26,7 +25,7 @@ const CompanyThings = ({ target, setIsNew, hash }) => {
               <div className="tile is-vertical is-10">
                 <div className="tile">
                   <div className="tile is-parent is-vertical is-3">
-                    <article className="tile is-child box">
+                    <article className="tile is-child box has-background-warning">
                       <p className="has-text-weight-bold">Azonosító:</p>
                       <p className="subtitle has-text-danger-dark">
                         {allThings[index].id}

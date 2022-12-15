@@ -5,6 +5,8 @@ import toast from 'react-hot-toast';
 
 const AllUsersInCompany = ({ target, hash, setUsers, username }) => {
   const [usern, setUsern] = useState([]);
+  const [marked, setMarked] = useState(false);
+  const [chosen, setChosen] = useState('');
 
   useEffect(() => {
     getAllUsersInCompany(target);
@@ -29,7 +31,13 @@ const AllUsersInCompany = ({ target, hash, setUsers, username }) => {
       cList.push(
         <div key={user}>
           {hash != '' ? (
-            <div className="panel-block is-active">
+            <a
+              className="panel-block is-active"
+              onClick={() => {
+                setMarked(!marked);
+                setChosen(user);
+              }}
+            >
               <span className="panel-icon">
                 <i className="fas fa-book" aria-hidden="true"></i>
               </span>
@@ -37,10 +45,14 @@ const AllUsersInCompany = ({ target, hash, setUsers, username }) => {
                 <div className="has-text-white has-background-success-dark px-4">
                   {user}
                 </div>
+              ) : marked && chosen === user ? (
+                <div className="has-text-white has-background-warning-dark px-4">
+                  {user}
+                </div>
               ) : (
                 user
               )}
-            </div>
+            </a>
           ) : (
             <div className="panel-block is-active">
               <span className="panel-icon">
