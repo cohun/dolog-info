@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import CompanyThings from './CompanyThings';
-import Image from 'next/image';
-import NewThing from './NewThing';
-import toast from 'react-hot-toast';
+import React, { useEffect, useState } from "react";
+import CompanyThings from "./CompanyThings";
+import Image from "next/image";
+import NewThing from "./NewThing";
+import toast from "react-hot-toast";
 
-import AllUsersInCompany from './AllUsersInCompany';
-import RoleList from './RoleList';
-import { deleteUserFromCompany, updateRole } from '../lib/firebaseConfig';
+import AllUsersInCompany from "./AllUsersInCompany";
+import RoleList from "./RoleList";
+import { deleteUserFromCompany, updateRole } from "../lib/firebaseConfig";
 
 const CompanyAdmin = ({ username, target, hash, setTarget }) => {
   const [users, setUsers] = useState([]);
-  const [roleChange, setRoleChange] = useState('');
-  const [who, setWho] = useState('');
+  const [roleChange, setRoleChange] = useState("");
+  const [who, setWho] = useState("");
   const [isActive, setIsActive] = useState(false);
   const [isNew, setIsNew] = useState(false);
   const [del, setDel] = useState(false);
@@ -127,28 +127,25 @@ const CompanyAdmin = ({ username, target, hash, setTarget }) => {
               <div className="card column is-one-third is-size-4 has-text-centered has-background-grey-darker has-text-warning">
                 <span>{target} </span>
                 <span className="ml-3 has-text-info-light">
-                  {' '}
+                  {" "}
                   jogosultak és beosztásuk:
                 </span>
-                <p className="menu-label is-size-7 ml-3 has-text-info-light"></p>
-                <ul className="menu-list">
-                  <li>
-                    <div className="menu-list ml-3 has-text-info-light">
-                      Kattints a felhasználóra, vagy a beosztására:
-                    </div>
 
+                {/* <ul className="menu-list mt-1">
+                  <div className="container has-background-grey-darker has-text-info-light is-size-6">
+                    Kattints a felhasználóra, vagy a beosztására:
                     <li>
-                      <p className="is-size-6 has-text-info-light">
+                      <p className="is-size-7 has-text-info-light">
                         a.) dolgok hozzárendelése érdekében
                       </p>
                     </li>
                     <li>
-                      <p className="is-size-6 has-text-info-light">
+                      <p className="is-size-7 has-text-info-light ">
                         b.) jogosultságok megváltoztatása érdekében
                       </p>
                     </li>
-                  </li>
-                </ul>
+                  </div>
+                </ul> */}
               </div>
             </div>
           </div>
@@ -202,7 +199,7 @@ const CompanyAdmin = ({ username, target, hash, setTarget }) => {
             <div className="columns is-centered ">
               <button
                 className="button is-large is-outlined is-danger"
-                onClick={() => setTarget('')}
+                onClick={() => setTarget("")}
               >
                 Vissza
               </button>
