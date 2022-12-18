@@ -1,9 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../lib/firebaseConfig';
-import toast from 'react-hot-toast';
+import AddThingsToUser from './AddThingsToUser';
 
-const AllUsersInCompany = ({ target, hash, setUsers, username }) => {
+const AllUsersInCompany = ({
+  target,
+  hash,
+  setUsers,
+  username,
+  setUserMarked,
+}) => {
   const [usern, setUsern] = useState([]);
   const [marked, setMarked] = useState(false);
   const [chosen, setChosen] = useState('');
@@ -11,6 +17,23 @@ const AllUsersInCompany = ({ target, hash, setUsers, username }) => {
   useEffect(() => {
     getAllUsersInCompany(target);
   }, [usern.length]);
+
+  useEffect(() => {
+    if (chosen != '' && marked) {
+      console.log('both true');
+      console.log(chosen);
+    } else {
+      console.log('not true');
+      console.log(chosen);
+    }
+  }, [chosen, marked]);
+
+  const handleUserClick = (user) => {
+    setMarked(!marked);
+
+    setChosen(user);
+    setUserMarked(true);
+  };
 
   async function getAllUsersInCompany(target) {
     const docRef = doc(db, 'companies', target);
@@ -34,8 +57,7 @@ const AllUsersInCompany = ({ target, hash, setUsers, username }) => {
             <a
               className="panel-block is-active"
               onClick={() => {
-                setMarked(!marked);
-                setChosen(user);
+                handleUserClick(user);
               }}
             >
               <span className="panel-icon">
@@ -45,7 +67,7 @@ const AllUsersInCompany = ({ target, hash, setUsers, username }) => {
                 <div className="has-text-white has-background-success-dark px-4">
                   {user}
                 </div>
-              ) : marked && chosen === user ? (
+              ) : marked === true && chosen === user ? (
                 <div className="has-text-white has-background-warning-dark px-4">
                   {user}
                 </div>
@@ -76,7 +98,11 @@ const AllUsersInCompany = ({ target, hash, setUsers, username }) => {
   return (
     <div>
       {usern !== [] ? (
-        UsersList()
+        chosen != '' && marked ? (
+          AddThingsToUser()
+        ) : (
+          UsersList()
+        )
       ) : (
         <a className="panel-block is-active">
           <span className="panel-icon">
