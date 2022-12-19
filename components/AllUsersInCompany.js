@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../lib/firebaseConfig';
-import AddThingsToUser from './AddThingsToUser';
 
 const AllUsersInCompany = ({
   target,
@@ -9,6 +8,7 @@ const AllUsersInCompany = ({
   setUsers,
   username,
   setUserMarked,
+  setWho,
 }) => {
   const [usern, setUsern] = useState([]);
   const [marked, setMarked] = useState(false);
@@ -32,7 +32,8 @@ const AllUsersInCompany = ({
     setMarked(!marked);
 
     setChosen(user);
-    setUserMarked(true);
+    setWho(user);
+    setUserMarked(!marked);
   };
 
   async function getAllUsersInCompany(target) {
@@ -98,11 +99,7 @@ const AllUsersInCompany = ({
   return (
     <div>
       {usern !== [] ? (
-        chosen != '' && marked ? (
-          AddThingsToUser()
-        ) : (
-          UsersList()
-        )
+        UsersList()
       ) : (
         <a className="panel-block is-active">
           <span className="panel-icon">

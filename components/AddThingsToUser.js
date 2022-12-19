@@ -1,6 +1,42 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { getAllThingsForACompany } from '../lib/firebaseConfig';
 
-const AddThingsToUser = ({ setUserMarked }) => {
+const AddThingsToUser = ({ setUserMarked, who, target }) => {
+  const [allThings, setAllThings] = useState([]);
+
+  const getThings = async () => {
+    const all = await getAllThingsForACompany(target);
+    setAllThings(all);
+  };
+
+  useEffect(() => {
+    getThings();
+  }, [allThings.length]);
+
+  function things() {
+    let thingsArray = [''];
+    for (let index = 0; index < allThings.length; index++) {
+      thingsArray.push(
+        <div key={index}>
+          <strong className="">{allThings[index].id}</strong>
+          <span> - </span>
+          <span className="has-text-link-dark">
+            {allThings[index].description}
+          </span>
+          <span>
+            <label className="checkbox">
+              <input name="tos" value="yes" type="checkbox" required />
+              Remember me
+            </label>
+          </span>
+
+          <div className="box has-background-warning py-1"></div>
+        </div>
+      );
+    }
+    return thingsArray;
+  }
+
   return (
     <div className="section is-info">
       <div className="columns is-centered ">
@@ -9,8 +45,7 @@ const AddThingsToUser = ({ setUserMarked }) => {
             <header className="modal-card-head">
               <p className="modal-card-title">
                 {' '}
-                {chosen} felhasználót választottad. Az alábbi dolgokhoz férhet
-                hozzá:
+                {who} felhasználót választottad. :
               </p>
               <button
                 onClick={() => setUserMarked(false)}
@@ -18,14 +53,7 @@ const AddThingsToUser = ({ setUserMarked }) => {
                 aria-label="close"
               ></button>
             </header>
-            <section className="modal-card-body">
-              <input
-                className="input is-primary"
-                type="text"
-                placeholder="Felhasználó név"
-                name="role"
-              />
-            </section>
+            <section className="modal-card-body">{things()}</section>
             <footer className="modal-card-foot">
               <button type="submit" className="button is-success">
                 Mentés

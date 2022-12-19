@@ -52,6 +52,10 @@ const CompanyAdmin = ({ username, target, hash, setTarget }) => {
     setRoleChange(val);
   };
 
+  useEffect(() => {
+    console.log('WHO:', who);
+  }, [who]);
+
   return (
     <div>
       {isNew ? (
@@ -114,10 +118,8 @@ const CompanyAdmin = ({ username, target, hash, setTarget }) => {
             </form>
           </div>
         </div>
-      ) : userMarked ? (
-        AddThingsToUser((setUserMarked = { setUserMarked }))
       ) : (
-        <div className="card hero is-fullheight">
+        <div className="hero">
           <Image
             src="/dolog_background.jpg"
             className="is-fullwidth"
@@ -209,11 +211,19 @@ const CompanyAdmin = ({ username, target, hash, setTarget }) => {
               </button>
             </div>
           </div>
-          <CompanyThings
-            target={target}
-            setIsNew={setIsNew}
-            hash={hash}
-          ></CompanyThings>
+          {userMarked ? (
+            <AddThingsToUser
+              setUserMarked={setUserMarked}
+              who={who}
+              target={target}
+            ></AddThingsToUser>
+          ) : (
+            <CompanyThings
+              target={target}
+              setIsNew={setIsNew}
+              hash={hash}
+            ></CompanyThings>
+          )}
         </div>
       )}
     </div>
