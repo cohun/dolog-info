@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { getAllThingsForACompany } from '../lib/firebaseConfig';
+import React, { useEffect, useState } from "react";
+import { getAllThingsForACompany } from "../lib/firebaseConfig";
 
 const AddThingsToUser = ({ setUserMarked, who, target }) => {
   const [allThings, setAllThings] = useState([]);
@@ -14,27 +14,42 @@ const AddThingsToUser = ({ setUserMarked, who, target }) => {
   }, [allThings.length]);
 
   function things() {
-    let thingsArray = [''];
+    let thingsArray = [""];
     for (let index = 0; index < allThings.length; index++) {
       thingsArray.push(
-        <div key={index}>
-          <strong className="">{allThings[index].id}</strong>
-          <span> - </span>
-          <span className="has-text-link-dark">
-            {allThings[index].description}
-          </span>
-          <span>
+        <tr key={index}>
+          <td>{allThings[index].id}</td>
+          <td>{allThings[index].description}</td>
+          <td>
             <label className="checkbox">
-              <input name="tos" value="yes" type="checkbox" required />
-              Remember me
+              <input
+                name="tos"
+                value={allThings[index].id}
+                type="checkbox"
+                required
+                onClick={(e) => console.log(e.target.value)}
+              />
             </label>
-          </span>
-
-          <div className="box has-background-warning py-1"></div>
-        </div>
+          </td>
+        </tr>
       );
     }
-    return thingsArray;
+    return (
+      <div class="table-container">
+        <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Azonosító</th>
+                <th>Megnevezés</th>
+                <th>Hozzáférés</th>
+              </tr>
+            </thead>
+            <tbody>{thingsArray}</tbody>
+          </table>
+        </table>
+      </div>
+    );
   }
 
   return (
@@ -44,8 +59,12 @@ const AddThingsToUser = ({ setUserMarked, who, target }) => {
           <div className="modal-card">
             <header className="modal-card-head">
               <p className="modal-card-title">
-                {' '}
-                {who} felhasználót választottad. :
+                {" "}
+                <span className="has-background-warning-dark has-text-white">
+                  {who}
+                </span>
+                <span> </span>
+                felhasználó hozzáférései:
               </p>
               <button
                 onClick={() => setUserMarked(false)}
@@ -58,9 +77,11 @@ const AddThingsToUser = ({ setUserMarked, who, target }) => {
               <button type="submit" className="button is-success">
                 Mentés
               </button>
-              <button className="button">Vissza</button>
+              <button className="button" onClick={() => setUserMarked(false)}>
+                Vissza
+              </button>
               <button type="submit" className="button is-danger is-outlined">
-                Felhasználó törlése
+                Összes hozzáférés törlése
               </button>
             </footer>
           </div>
