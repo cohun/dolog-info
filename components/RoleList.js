@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { doc, getDoc, onSnapshot } from "firebase/firestore";
-import { db } from "../lib/firebaseConfig";
-import toast from "react-hot-toast";
+import React, { useEffect, useState } from 'react';
+import { doc, getDoc, onSnapshot } from 'firebase/firestore';
+import { db } from '../lib/firebaseConfig';
+import toast from 'react-hot-toast';
 
 const RoleList = ({
   users,
@@ -11,7 +11,7 @@ const RoleList = ({
   setWho,
   setRoleChange,
 }) => {
-  const [roles, setRoles] = useState([""]);
+  const [roles, setRoles] = useState(['']);
 
   useEffect(() => {
     getUsersRole(target, users).then(() => {
@@ -20,20 +20,21 @@ const RoleList = ({
   }, [roles, users.length]);
 
   async function getUsersRole(target, users) {
-    const role = [""];
+    const role = [''];
     users?.forEach(async (user) => {
       const unsubscribe = onSnapshot(
-        doc(db, `companies/${target}/${user}`, "what"),
+        doc(db, `companies/${target}/${user}`, 'what'),
         (doc) => {
           if (doc.data()) {
-            role.push(doc.data().admittedAs);
+            if (role.length < users.length) {
+              role.push(doc.data().admittedAs);
+            }
           }
           setRoles(role);
         }
       );
-
       if (roles.length === users.length) {
-        console.log("stopped");
+        console.log('stopped');
         unsubscribe();
       }
 
@@ -52,18 +53,18 @@ const RoleList = ({
 
     roles?.forEach((role) => {
       const element = users[index];
-      let danger = "";
-      if (role === "elbírálás alatt") {
-        danger = "has-text-danger";
+      let danger = '';
+      if (role === 'elbírálás alatt') {
+        danger = 'has-text-danger';
       }
       cList.push(
         <div key={index}>
-          {hash != "" ? (
+          {hash != '' ? (
             <a
               className={`panel-block is-active ${danger}`}
               onClick={() => {
                 setIsActive(true);
-                setRoleChange(role ? role : "adminisztrátor");
+                setRoleChange(role ? role : 'adminisztrátor');
                 setWho(element);
               }}
             >
@@ -71,19 +72,19 @@ const RoleList = ({
                 <i className="fas fa-book" aria-hidden="true"></i>
               </span>
 
-              {role === "" ? "adminisztrátor" : role}
+              {role === '' ? 'adminisztrátor' : role}
             </a>
           ) : (
             <a
               onClick={() =>
-                toast.error("Csak adminisztrátor jogosult megváltoztatni")
+                toast.error('Csak adminisztrátor jogosult megváltoztatni')
               }
               className={`panel-block is-active ${danger}`}
             >
               <span className="panel-icon">
                 <i className="fas fa-book" aria-hidden="true"></i>
               </span>
-              {role === "" ? "adminisztrátor" : role}
+              {role === '' ? 'adminisztrátor' : role}
             </a>
           )}
         </div>

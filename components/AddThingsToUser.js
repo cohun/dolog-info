@@ -1,21 +1,44 @@
-import React, { useEffect, useState } from "react";
-import { getAllThingsForACompany } from "../lib/firebaseConfig";
+import React, { useEffect, useState } from 'react';
+import {
+  getAllThingsForACompany,
+  getThingsId,
+  updateThingsId,
+} from '../lib/firebaseConfig';
 
 const AddThingsToUser = ({ setUserMarked, who, target }) => {
   const [allThings, setAllThings] = useState([]);
+  const [thingsId, setThingsId] = useState([]);
 
   const getThings = async () => {
     const all = await getAllThingsForACompany(target);
     setAllThings(all);
   };
+  const getIds = async () => {
+    const ids = await getThingsId(target, who);
+    setThingsId(ids.thingsId);
+  };
+
+  const updateThings = async (id, checked) => {
+    await updateThingsId(target, who, checked, id);
+    await getIds();
+  };
 
   useEffect(() => {
     getThings();
+    getIds();
   }, [allThings.length]);
 
   function things() {
-    let thingsArray = [""];
+    let thingsArray = [''];
+    let checkedArray = [];
+    allThings.forEach(() => checkedArray.push(false));
     for (let index = 0; index < allThings.length; index++) {
+      if (thingsId?.includes(allThings[index].id)) {
+        checkedArray[index] = true;
+      } else {
+        checkedArray[index] = false;
+      }
+
       thingsArray.push(
         <tr key={index}>
           <td>{allThings[index].id}</td>
@@ -26,14 +49,19 @@ const AddThingsToUser = ({ setUserMarked, who, target }) => {
                 name="tos"
                 value={allThings[index].id}
                 type="checkbox"
-                required
-                onClick={(e) => console.log(e.target.value)}
+                checked={checkedArray[index]}
+                onClick={(e) => {
+                  e.preventDefault();
+                  updateThings(allThings[index].id, e.target.checked);
+                }}
               />
             </label>
+            {checkedArray[index] ? <span> igen</span> : <span> nem</span>}
           </td>
         </tr>
       );
     }
+
     return (
       <div class="table-container">
         <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
@@ -59,7 +87,7 @@ const AddThingsToUser = ({ setUserMarked, who, target }) => {
           <div className="modal-card">
             <header className="modal-card-head">
               <p className="modal-card-title">
-                {" "}
+                {' '}
                 <span className="has-background-warning-dark has-text-white">
                   {who}
                 </span>
