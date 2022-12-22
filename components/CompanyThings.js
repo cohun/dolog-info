@@ -1,22 +1,40 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { getAllThingsForACompany } from '../lib/firebaseConfig';
+import { getAllThingsForACompany, getThingsId } from '../lib/firebaseConfig';
+import toast from 'react-hot-toast';
 
-const CompanyThings = ({ target, setIsNew, hash }) => {
+const CompanyThings = ({ target, setIsNew, hash, username }) => {
   const [allThings, setAllThings] = useState([]);
+  const [thingsId, setThingsId] = useState([]);
 
   const getThings = async () => {
     const all = await getAllThingsForACompany(target);
     setAllThings(all);
   };
+  const getIds = async () => {
+    const ids = await getThingsId(target, username);
+    if (ids) {
+      setThingsId(ids.thingsId);
+    } else {
+      console.log('Adminisztrátor minden dologhoz hozzáfér');
+    }
+  };
 
   useEffect(() => {
     getThings();
+    if (username != '') {
+      getIds();
+    }
   }, [allThings.length]);
 
   function things() {
     let thingsArray = [''];
     for (let index = 0; index < allThings.length; index++) {
+      // if hash === "" if (thingsId?.includes(allThings[index].id))
+      if (hash === '' && !thingsId?.includes(allThings[index].id)) {
+        console.log(hash, thingsId);
+        continue;
+      }
       thingsArray.push(
         <div key={index}>
           <div className="box has-background-warning py-1"></div>

@@ -211,7 +211,7 @@ const CompanyAdmin = ({ username, target, hash, setTarget }) => {
               </button>
             </div>
           </div>
-          {userMarked ? (
+          {userMarked && username != who ? (
             <AddThingsToUser
               setUserMarked={setUserMarked}
               who={who}
@@ -222,6 +222,7 @@ const CompanyAdmin = ({ username, target, hash, setTarget }) => {
               target={target}
               setIsNew={setIsNew}
               hash={hash}
+              username={username}
             ></CompanyThings>
           )}
         </div>

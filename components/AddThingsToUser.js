@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import {
   getAllThingsForACompany,
   getThingsId,
@@ -15,7 +16,11 @@ const AddThingsToUser = ({ setUserMarked, who, target }) => {
   };
   const getIds = async () => {
     const ids = await getThingsId(target, who);
-    setThingsId(ids.thingsId);
+    if (ids) {
+      setThingsId(ids.thingsId);
+    } else {
+      toast.success('Adminisztrátor minden dologhoz hozzáfér');
+    }
   };
 
   const updateThings = async (id, checked) => {
@@ -88,7 +93,7 @@ const AddThingsToUser = ({ setUserMarked, who, target }) => {
             <header className="modal-card-head">
               <p className="modal-card-title">
                 {' '}
-                <span className="has-background-warning-dark has-text-white">
+                <span className="has-background-warning-dark has-text-white px-3">
                   {who}
                 </span>
                 <span> </span>
@@ -102,14 +107,12 @@ const AddThingsToUser = ({ setUserMarked, who, target }) => {
             </header>
             <section className="modal-card-body">{things()}</section>
             <footer className="modal-card-foot">
-              <button type="submit" className="button is-success">
-                Mentés
-              </button>
-              <button className="button" onClick={() => setUserMarked(false)}>
-                Vissza
-              </button>
-              <button type="submit" className="button is-danger is-outlined">
-                Összes hozzáférés törlése
+              <button
+                type="submit"
+                className="button is-success"
+                onClick={() => setUserMarked(false)}
+              >
+                Rendben
               </button>
             </footer>
           </div>
