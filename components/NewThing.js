@@ -42,7 +42,7 @@ const NewThing = ({ target, setIsNew }) => {
       toast.error('Azonosító nem lehet üres!');
       return;
     }
-    setQRText(id);
+    setQRText(`${target} - ${id}`);
     setIsDisabled(false);
   };
 

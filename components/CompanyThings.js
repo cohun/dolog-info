@@ -119,6 +119,21 @@ const CompanyThings = ({ target, setIsNew, hash, username }) => {
                   <div></div>
                 )}
               </a>
+
+              <a className="is-active">
+                {hash !== '' ? (
+                  <button
+                    onClick={() => {
+                      setIsNew(true);
+                    }}
+                    className="button is-focused is-medium is-danger is-inverted "
+                  >
+                    - Dolog törlése -
+                  </button>
+                ) : (
+                  <div></div>
+                )}
+              </a>
             </div>
             <div className="panel-block">
               <p className="control has-icons-left">
