@@ -6,6 +6,7 @@ import toast from 'react-hot-toast';
 const CompanyThings = ({ target, setIsNew, hash, username }) => {
   const [allThings, setAllThings] = useState([]);
   const [thingsId, setThingsId] = useState([]);
+  const [delView, setDelView] = useState(false);
 
   const getThings = async () => {
     const all = await getAllThingsForACompany(target);
@@ -51,7 +52,7 @@ const CompanyThings = ({ target, setIsNew, hash, username }) => {
                     </article>
                     <article className="tile is-child box">
                       <p className="has-text-weight-bold">Megnevezés:</p>
-                      <p className="title has-text-link-dark">
+                      <p className="subtitle has-text-link-dark">
                         {allThings[index].description}
                       </p>
                     </article>
@@ -93,9 +94,11 @@ const CompanyThings = ({ target, setIsNew, hash, username }) => {
     <div className="">
       <div className="section is-info">
         <div className="columns is-centered ">
-          <h3 className="card column is-one-third is-size-4 has-text-centered has-background-grey-darker has-text-warning">
-            <span>{target} </span>
-            <span className="ml-3 has-text-danger-light"> dolgai:</span>
+          <div className="button is-medium has-background-warning has-text-dark has-text-weight-bold">
+            {target}{' '}
+          </div>
+          <h3 className="card pr-3 pt-2 is-size-4 has-text-centered has-background-black has-text-warning">
+            <div className="ml-3 has-text-danger-light"> dolgai:</div>
           </h3>
         </div>
       </div>
@@ -104,37 +107,44 @@ const CompanyThings = ({ target, setIsNew, hash, username }) => {
         <div className="card ">
           <article className="panel is-warning">
             <p className="panel-heading">Dolgok listája</p>
-            <div className="panel-tabs">
-              <a className="is-active">
-                {hash !== '' ? (
-                  <button
-                    onClick={() => {
-                      setIsNew(true);
-                    }}
-                    className="button is-focused is-medium is-link is-inverted "
-                  >
-                    + Új dolog +
-                  </button>
+            {hash !== '' ? (
+              <div className="panel-tabs">
+                {delView ? (
+                  <a className="is-active">
+                    <button
+                      onClick={() => {
+                        setDelView(false);
+                      }}
+                      className="button is-focused is-medium is-primary "
+                    >
+                      Vissza a listához
+                    </button>
+                  </a>
                 ) : (
-                  <div></div>
+                  <a className="is-active">
+                    <button
+                      onClick={() => {
+                        setIsNew(true);
+                      }}
+                      className="button is-focused is-medium is-link is-inverted "
+                    >
+                      + Új dolog +
+                    </button>
+                    <span className="block mx-5"> </span>
+                    <button
+                      onClick={() => {
+                        setDelView(true);
+                      }}
+                      className="button is-focused is-medium is-danger is-inverted "
+                    >
+                      - Dolog törlése -
+                    </button>
+                  </a>
                 )}
-              </a>
-
-              <a className="is-active">
-                {hash !== '' ? (
-                  <button
-                    onClick={() => {
-                      setIsNew(true);
-                    }}
-                    className="button is-focused is-medium is-danger is-inverted "
-                  >
-                    - Dolog törlése -
-                  </button>
-                ) : (
-                  <div></div>
-                )}
-              </a>
-            </div>
+              </div>
+            ) : (
+              <div></div>
+            )}
             <div className="panel-block">
               <p className="control has-icons-left">
                 <input

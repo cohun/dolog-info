@@ -129,29 +129,17 @@ const CompanyAdmin = ({ username, target, hash, setTarget }) => {
           ></Image>
 
           <div className="section is-info">
-            <div className="columns is-centered ">
-              <div className="card column is-one-third is-size-4 has-text-centered has-background-grey-darker has-text-warning">
-                <span>{target} </span>
-                <span className="ml-3 has-text-info-light">
+            <div className="columns is-vertical is-multiline is-centered">
+              <div className="button is-medium has-background-warning has-text-dark has-text-weight-bold mb-3">
+                {target}{' '}
+              </div>
+            </div>
+            <div className="columns is-vertical is-centered">
+              <div className="card column is-narrow is-2 has-text-centered has-background-black has-text-warning">
+                <div className="ml-3 has-text-info-light">
                   {' '}
                   jogosultak és beosztásuk:
-                </span>
-
-                {/* <ul className="menu-list mt-1">
-                  <div className="container has-background-grey-darker has-text-info-light is-size-6">
-                    Kattints a felhasználóra, vagy a beosztására:
-                    <li>
-                      <p className="is-size-7 has-text-info-light">
-                        a.) dolgok hozzárendelése érdekében
-                      </p>
-                    </li>
-                    <li>
-                      <p className="is-size-7 has-text-info-light ">
-                        b.) jogosultságok megváltoztatása érdekében
-                      </p>
-                    </li>
-                  </div>
-                </ul> */}
+                </div>
               </div>
             </div>
           </div>
