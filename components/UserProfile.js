@@ -1,9 +1,10 @@
-import { query, where } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import { getHashWhereAdmin } from '../lib/firebaseConfig';
 import CompanyAdmin from './CompanyAdmin';
 import HashingForm from './hashing';
 import Image from 'next/image';
+import toast from 'react-hot-toast';
+import { query, where } from 'firebase/firestore';
 
 const UserProfile = ({ username, companies, address }) => {
   const [isActive, setIsactive] = useState(false);
@@ -19,11 +20,13 @@ const UserProfile = ({ username, companies, address }) => {
       compa = comp[i];
       addre = addr[i];
       let hash = '';
+      let allowed = false;
 
       if (adminHash.length >= 1) {
         adminHash.forEach((element) => {
           if (element.company === compa) {
             hash = element.hash;
+            allowed = element.allowed;
           }
         });
       }
@@ -37,8 +40,12 @@ const UserProfile = ({ username, companies, address }) => {
                 : 'columns button is-large is-responsive is-one-fifth is-primary has-text-warning is-outlined mt-5'
             }
             onClick={(i) => {
-              setTarget(i.target.innerHTML);
-              setHash(hash);
+              if (allowed) {
+                setTarget(i.target.innerHTML);
+                setHash(hash);
+              } else {
+                toast.error('Engedélyezés még folyamatban...');
+              }
             }}
           >
             <div className="tile has-text-centered">{compa}</div>
@@ -60,7 +67,7 @@ const UserProfile = ({ username, companies, address }) => {
                 <p>Itt admin vagy</p>
                 Belépési kód:{' '}
                 <strong className="has-text-primary is-size-5">
-                  {hash}
+                  {allowed ? hash : 'engedély még folyamatban...'}
                 </strong>{' '}
               </div>
             </div>

@@ -104,7 +104,7 @@ const HashingForm = ({ username, setIsactive }) => {
       admin: username,
       hash: output,
       users: [username],
-      things: [],
+      allowed: false,
     });
   };
 
