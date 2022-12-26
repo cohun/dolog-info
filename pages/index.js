@@ -67,31 +67,29 @@ export default function Home() {
                   <div className="tile">
                     <div className="tile is-parent is-vertical">
                       <article className="tile is-child notification is-warning">
-                        <p className="title has-text-success-dark">
-                          Azonosítás...
-                        </p>
-                        <p className="subtitle has-text-black-dark">
-                          A dolgok egyedivé tétele
+                        <p className="title has-text-success-dark">Dolog...</p>
+                        <p className="subtitle has-text-black-dark has-text-weight-bold">
+                          Az anyagi világ bármely önálló része, ami
+                          meghatározott tulajdonságokkal rendelkezik és így
+                          elkülöníthető egy másik hasonlótól.
                         </p>
                         <div className="content has-text-black-dark">
-                          NFC chip-el vagy QR kóddal beazonosított dolgok a
-                          rájuk egyedileg jellemző információkat is hordozzák.
+                          A dolgok hasznosságát fizikai valóságuk és a hozzájuk
+                          kapcsolt információk határozzák meg. A dolgok
+                          beazonosítását, információk gyűjtését, megörzését,
+                          elérhetőségét biztosítja a DoLog Info.
                         </div>
                       </article>
                       <article className="tile is-child notification is-warning">
                         <p className="title has-text-success-dark">
                           ...felhasználói jogosultságok
                         </p>
-                        <p className="subtitle">Használati szabályok</p>
                         <div className="content has-text-black-dark">
-                          Az egyedi dolgok felelőse az{' '}
-                          <strong>adminisztrátor</strong> (rendelkező személy),
-                          aki a használatot illetően intézkedési joggal bír és
-                          hozzáférést biztosít mások számára arról, hogy:
-                          <ul>
-                            <li>ki és milyen minőségben jogosult használni?</li>
-                            <li>hol, mikor, mennyi ideig?</li>
-                          </ul>
+                          A dolog tulajdonosa vagy a tulajdonos képviselője az
+                          <strong> adminisztrátor</strong> (rendelkező személy),
+                          aki a dolog használatát illetve a dologhoz kapcsolt
+                          információ-folyam elérhetőségét biztosítja mások
+                          számára.
                         </div>
                       </article>
                     </div>
@@ -99,26 +97,29 @@ export default function Home() {
                       <article className="tile is-child notification has-background-black-ter">
                         <div className="content">
                           <p className="title has-text-warning">
-                            Értesítések...
+                            Információ a dolog fizikai tulajdonságain túl...
                           </p>
                           <p className="subtitle has-text-warning-dark">
                             Azonnali infók minden felhasználónak
                           </p>
                           <div className="content has-text-warning">
-                            A dolog egyedi azonosítója alapján
+                            A dolog QR-kódja alapján minden jogosult felhasználó
+                            képes információkat feltölteni, illetve kiolvasni az
+                            adott dologgal kapcsolatban. Így
                             <ul>
                               <li>
                                 a <strong>tulajdonos</strong> naprakész
-                                informácókat tud kapni a dolog állapotáról.
+                                informácókat tud kapni a dolog állapotáról,
                               </li>
                               <li>
-                                az <strong>üzemeltető</strong> naprakész
-                                információkat tud kapni a használattal
-                                összefüggésben.
+                                az <strong>üzemeltetők</strong> a biztonságos és
+                                hatékony használathoz nélkülözhetetlen
+                                információkat kapnak folyamatosan
                               </li>
                             </ul>
                             <div></div>
-                            Természetesen archív adatok is elérhetőek.
+                            Továbbá minden fontos adat archíválódik és szükség
+                            esetén könnyen elérhető.
                           </div>
                         </div>
                       </article>
@@ -126,8 +127,14 @@ export default function Home() {
                   </div>
                   <div className="tile is-parent">
                     <article className="tile is-child notification has-background-danger-dark">
-                      <p className="title has-text-black">...hibaüzenetek</p>
-                      <p className="subtitle">...akkor és ahol keletkeznek</p>
+                      <p className="title has-text-black">
+                        ...figyelmeztetések, hibaüzenetek
+                      </p>
+                      <p className="subtitle">
+                        ...azonnal, minden felhasználó részére elérhető
+                        információ a dolog biztonságos használatával
+                        kapcsolatban
+                      </p>
                       <div className="content"></div>
                     </article>
                   </div>
@@ -156,24 +163,22 @@ export default function Home() {
                       Használd és naplózz...
                     </p>
                     <div className="content has-text-warning">
-                      Használata lehetővé teszi, hogy minden dolog egyértelműen
-                      beazonosítható legyen és mindenki, akinek dolga van vele
-                      egyértelmű jogosultságok mentén tudjon információkat
-                      feltölteni, amelyek a dolog elválaszhatatlan részeivé
-                      válnak.
-                      <div>
-                        A felhelyezett chip, vagy QR kód segítségével a
-                        jogosultsággal rendelkező a mobiltelefonjával tud
-                        kommunikációt kezdeményezni. Ilyenkor létrejön egy
-                        naplóbejegyzés pontos időponttal és a mobiltelefonra
-                        küldött kóddal. Később a kód birtokában lehet további
-                        bejegyzéseket, fájlokat feltölteni az adott időponthoz.
-                        Ezek a feltöltött információk mindenki számára azonnal
-                        olvashatóvá válnak.
+                      <div className="block">
+                        Használata lehetővé teszi, hogy minden dolog
+                        egyértelműen beazonosítható legyen és mindenki, akinek
+                        dolga van vele információkat (bejegyzések, fájlok)
+                        tudjon feltölteni hozzá.
                       </div>
-                      <div>
-                        Általános nem időpobthoz kötött információk a
-                        jogosultság függvényében szintén bármikor feltölthetőek.
+
+                      <div className="block">
+                        Nem csak az informácó, hanem annak forrása és időpontja
+                        is a dolog elválaszhatatlan részeivé válnak.
+                      </div>
+                      <div className="block">
+                        A dolog egyedi azonosítója révén (felhelyezett chip,
+                        vagy QR kód) a jogosultsággal rendelkezők webes
+                        kapcsolatba léphetnek a dologgal és valamennyi
+                        feltöltött információt azonnal kiolvashatnak.
                       </div>
                     </div>
                   </article>

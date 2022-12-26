@@ -147,8 +147,8 @@ const UserProfile = ({ username, companies, address }) => {
                         <div className="subtitle has-text-dark">
                           az alábbi tulajdonosok dolgaihoz van hozzáférésed:{' '}
                           <div className="is-5 has-text-dark">
-                            (a belépési kód továbbadásával tudsz meghívni
-                            további felhasználókat)
+                            (a belépési kód továbbadásával tudsz meghívni új
+                            felhasználókat)
                           </div>
                         </div>
                       ) : (
