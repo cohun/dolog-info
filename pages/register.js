@@ -1,13 +1,14 @@
-import styles from "../styles/Home.module.css";
-import Head from "next/head";
-import Image from "next/image";
-import Link from "next/link";
-import Navbar from "../components/Navbar";
-import SignUpForm from "../components/SignUpForm";
-import CreateUsername from "../components/CreateUsername";
-import { UserContext } from "../lib/context";
-import { useContext } from "react";
-import { useState } from "react";
+import styles from '../styles/Home.module.css';
+import Head from 'next/head';
+import Image from 'next/image';
+import Link from 'next/link';
+import Navbar from '../components/Navbar';
+import SignUpForm from '../components/SignUpForm';
+import CreateUsername from '../components/CreateUsername';
+import { UserContext } from '../lib/context';
+import { useContext } from 'react';
+import { useState } from 'react';
+import toast from 'react-hot-toast';
 
 const Register = () => {
   const { user } = useContext(UserContext);
@@ -37,7 +38,7 @@ const Register = () => {
             ) : (
               <button
                 className="button is-large is-success is-outlined m-5"
-                style={{ background: "black" }}
+                style={{ background: 'black' }}
               >
                 <Link className="navbar-brand" href="/">
                   <Image
@@ -77,8 +78,8 @@ const Register = () => {
                 Amennyiben még nem regisztráltál, hozz létre egy új fiókot email
                 címmelel és jelszóval, majd adj meg egy
                 <strong className="has-text-warning">
-                  {" "}
-                  felhasználó nevet{" "}
+                  {' '}
+                  felhasználó nevet{' '}
                 </strong>
                 , amellyel azonosítod a bejegyzéseidet.
               </div>

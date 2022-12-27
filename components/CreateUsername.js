@@ -4,6 +4,7 @@ import { useCallback, useContext, useEffect, useState } from 'react';
 import { UserContext } from '../lib/context';
 import { db } from '../lib/firebaseConfig';
 import { useRouter } from 'next/router';
+import toast from 'react-hot-toast';
 
 const CreateUsername = () => {
   const [formValue, setFormValue] = useState('');
@@ -26,8 +27,11 @@ const CreateUsername = () => {
       displayName: user.displayName,
     });
     batch.set(usernameDoc, { uid: user.uid });
-
-    await batch.commit();
+    try {
+      await batch.commit();
+    } catch (error) {
+      toast.error('Valami hiba lépett fel');
+    }
 
     router.push('/home');
   };
