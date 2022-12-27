@@ -7,7 +7,7 @@ import {
   getDocs,
   limit,
 } from 'firebase/firestore';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Navbar from '../../components/Navbar';
 import { useContext } from 'react';
 import { UserContext } from '../../lib/context';
@@ -38,8 +38,11 @@ const UserProfilePage = ({ posts }) => {
   );
   const [chosen, setChosen] = useState(false);
   const [company, setCompany] = useState('');
-
+  const [filteredPosts, setFilteredPosts] = useState([]);
   const { user, username } = useContext(UserContext);
+  useEffect(() => {
+    setFilteredPosts(posts.filter((post) => post.company === company));
+  }, [posts, company]);
 
   return (
     <div>
@@ -61,13 +64,13 @@ const UserProfilePage = ({ posts }) => {
                   <div className="level-left">
                     <div className="level-item">
                       <p className="subtitle is-size-5">
-                        <strong className="has-text-warning-dark is-capitalized">
+                        <strong className="has-text-primary-dark is-capitalized">
                           {username}
                         </strong>
                         {'  '}
                         felhasználó
                         {'  '}
-                        <strong className="has-text-warning-dark is-capitalized">
+                        <strong className="has-text-warning-dark is-capitalized is-underlined">
                           {company}
                         </strong>{' '}
                         cégben az alábbi posztokat olvashatja:
@@ -77,13 +80,15 @@ const UserProfilePage = ({ posts }) => {
 
                   <div className="" onClick={() => setChosen(false)}>
                     <p className="level-item">
-                      <a className="button is-success">Másik cég választásas</a>
+                      <a className="button has-background-warning-dark has-text-warning-light">
+                        Másik cég választásas
+                      </a>
                     </p>
                   </div>
                 </nav>
               </div>
               <br />
-              <PostFeed posts={posts}></PostFeed>
+              <PostFeed posts={filteredPosts}></PostFeed>
 
               <article className="media">
                 <figure className="media-left">

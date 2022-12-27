@@ -1,12 +1,9 @@
-import Link from "next/link";
-import Image from "next/image";
+import Link from 'next/link';
+import Image from 'next/image';
 
 const PostFeed = ({ posts, admin }) => {
-  console.log("in PostFeed");
-  console.log(posts[0]);
   return posts
     ? posts.map((post) => {
-        console.log("inside" + post.slug);
         return <PostItem post={post} key={post.slug} admin={admin} />;
       })
     : null;
@@ -16,7 +13,7 @@ function PostItem({ post, admin = false }) {
   // Naive method to calc word count and read time
   const wordCount = post?.content.trim().split(/\s+/g).length;
   const minutesToRead = (wordCount / 100 + 1).toFixed(0);
-  console.log("postItem");
+
   return (
     <article className="media">
       <figure className="media-left">
