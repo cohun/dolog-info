@@ -20,7 +20,7 @@ const UserProfile = ({ username, companies, address }) => {
       compa = comp[i];
       addre = addr[i];
       let hash = '';
-      let allowed = false;
+      let allowed = true;
 
       if (adminHash.length >= 1) {
         adminHash.forEach((element) => {
@@ -45,6 +45,13 @@ const UserProfile = ({ username, companies, address }) => {
                 setHash(hash);
               } else {
                 toast.error('Engedélyezés még folyamatban...');
+                setTimeout(
+                  () =>
+                    toast.error(
+                      'Használati megállapodás aláírása után kerül a cég regisztrálásra!'
+                    ),
+                  3000
+                );
               }
             }}
           >

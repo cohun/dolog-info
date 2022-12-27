@@ -14,6 +14,9 @@ const CreateUsername = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
+    if (formValue === '') {
+      return;
+    }
     const userDoc = doc(db, 'users', user.uid);
     const usernameDoc = doc(db, 'usernames', formValue);
     const batch = writeBatch(db);
@@ -118,7 +121,7 @@ const CreateUsername = () => {
             >
               Mentés
             </button>
-            <button onClick={show} className="button">
+            <button onClick={() => setIsActive('')} className="button">
               Vissza
             </button>
           </footer>
