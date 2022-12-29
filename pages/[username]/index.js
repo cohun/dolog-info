@@ -6,6 +6,8 @@ import {
   where,
   getDocs,
   limit,
+  orderBy,
+  startAfter,
 } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import Navbar from '../../components/Navbar';
@@ -13,36 +15,66 @@ import { useContext } from 'react';
 import { UserContext } from '../../lib/context';
 import UserProfile from '../../components/UserProfile';
 import PostFeed from '../../components/PostFeed';
-import { postToJson } from '../../lib/firebaseConfig';
-import { orderBy } from 'firebase/firestore';
+import { postToJson, fromMillis } from '../../lib/firebaseConfig';
 import { db } from '../../lib/firebaseConfig';
 import WhichCompany from '../../components/WhichCompany';
 
-const LIMIT = 1;
+const LIMIT = 5;
 
-export async function getServerSideProps(context) {
-  const postsQuery = query(
-    collectionGroup(db, 'posts'),
-    where('published', '==', true, orderBy('createdAt', 'desc'), limit(LIMIT))
-  );
-  const posts = (await getDocs(postsQuery)).docs.map(postToJson);
-  console.log('getServerside_ ' + posts[0]);
-  return {
-    props: { posts }, // will be passed to the page component as props
-  };
-}
-
-const UserProfilePage = ({ posts }) => {
+const UserProfilePage = () => {
   const [imageURL, setImageURL] = useState(
     'https://bulma.io/images/placeholders/128x128.png'
   );
+  const [loading, setLoading] = useState(false);
+  const [postsEnd, setPostsEnd] = useState(false);
   const [chosen, setChosen] = useState(false);
   const [company, setCompany] = useState('');
   const [filteredPosts, setFilteredPosts] = useState([]);
   const { user, username } = useContext(UserContext);
   useEffect(() => {
-    setFilteredPosts(posts.filter((post) => post.company === company));
-  }, [posts, company]);
+    if (company !== '') {
+      getPosts(company);
+      setPostsEnd(false);
+    }
+  }, [company]);
+
+  const getPosts = async function (company) {
+    const postsQuery = query(
+      collectionGroup(db, 'posts'),
+      where('published', '==', true),
+      where('company', '==', company),
+      orderBy('createdAt', 'desc'),
+      limit(LIMIT)
+    );
+    const posts = (await getDocs(postsQuery)).docs.map(postToJson);
+    setFilteredPosts(posts);
+    return posts;
+  };
+  const getMorePosts = async function () {
+    setLoading(true);
+    const last = filteredPosts[filteredPosts.length - 1];
+    const cursor =
+      typeof last.createdAt === 'number'
+        ? fromMillis(last.createdAt)
+        : last.createdAt;
+    const postsQuery = query(
+      collectionGroup(db, 'posts'),
+      where('published', '==', true),
+      where('company', '==', company),
+      orderBy('createdAt', 'desc'),
+      startAfter(cursor),
+      limit(LIMIT)
+    );
+    const newPosts = (await getDocs(postsQuery)).docs.map(postToJson);
+
+    setFilteredPosts(filteredPosts.concat(newPosts));
+    setLoading(false);
+
+    if (newPosts.length < LIMIT) {
+      setPostsEnd(true);
+    }
+    return newPosts;
+  };
 
   return (
     <div>
@@ -63,7 +95,7 @@ const UserProfilePage = ({ posts }) => {
                 <nav className="level">
                   <div className="level-left">
                     <div className="level-item">
-                      <p className="subtitle is-size-5">
+                      <p className="subtitle is-size-6">
                         <strong className="has-text-primary-dark is-capitalized">
                           {username}
                         </strong>
@@ -81,7 +113,7 @@ const UserProfilePage = ({ posts }) => {
                   <div className="" onClick={() => setChosen(false)}>
                     <p className="level-item">
                       <a className="button has-background-warning-dark has-text-warning-light">
-                        Másik cég választásas
+                        Másik cég választása
                       </a>
                     </p>
                   </div>
@@ -89,7 +121,28 @@ const UserProfilePage = ({ posts }) => {
               </div>
               <br />
               <PostFeed posts={filteredPosts}></PostFeed>
-
+              <hr />
+              {!loading && !postsEnd && (
+                <div className=" columns is-mobile">
+                  <div className="column is-half is-offset-5">
+                    {filteredPosts.length >= 1 && (
+                      <button
+                        className="button has-background-warning-light"
+                        onClick={getMorePosts}
+                      >
+                        További posztok
+                      </button>
+                    )}
+                  </div>
+                </div>
+              )}
+              {postsEnd && (
+                <div className=" columns is-mobile">
+                  <div className="column is-half is-offset-5">
+                    Nincs további poszt
+                  </div>
+                </div>
+              )}
               <article className="media">
                 <figure className="media-left">
                   <p className="image is-64x64">
@@ -109,14 +162,14 @@ const UserProfilePage = ({ posts }) => {
                     <p className="control">
                       <textarea
                         className="textarea has-background-warning-light"
-                        placeholder="Add a comment..."
+                        placeholder="Írj ide valamit..."
                       ></textarea>
                     </p>
                   </div>
                   <div className="field">
                     <p className="control">
                       <button className="button is-primary">
-                        Post comment
+                        Posztold a megjegyzést
                       </button>
                     </p>
                   </div>

@@ -32,7 +32,7 @@ function PostItem({ post, admin = false }) {
             <Link href={`/${post.username}`}>
               <a>
                 <strong className="has-text-warning">
-                  By @{post.username}
+                  Írta: @{post.username}
                 </strong>
               </a>
             </Link>
