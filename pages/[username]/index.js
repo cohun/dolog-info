@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import Link from 'next/link';
 import Image from 'next/image';
 import {
   collectionGroup,
@@ -18,6 +19,7 @@ import PostFeed from '../../components/PostFeed';
 import { postToJson, fromMillis } from '../../lib/firebaseConfig';
 import { db } from '../../lib/firebaseConfig';
 import WhichCompany from '../../components/WhichCompany';
+import AdminPostsPage from '../admin';
 
 const LIMIT = 5;
 
@@ -28,6 +30,7 @@ const UserProfilePage = () => {
   const [loading, setLoading] = useState(false);
   const [postsEnd, setPostsEnd] = useState(false);
   const [chosen, setChosen] = useState(false);
+  const [admin, setAdmin] = useState(false);
   const [company, setCompany] = useState('');
   const [filteredPosts, setFilteredPosts] = useState([]);
   const { user, username } = useContext(UserContext);
@@ -35,6 +38,7 @@ const UserProfilePage = () => {
     if (company !== '') {
       getPosts(company);
       setPostsEnd(false);
+      user.photoURL && setImageURL(user.photoURL);
     }
   }, [company]);
 
@@ -47,6 +51,8 @@ const UserProfilePage = () => {
       limit(LIMIT)
     );
     const posts = (await getDocs(postsQuery)).docs.map(postToJson);
+
+    console.log(posts);
     setFilteredPosts(posts);
     return posts;
   };
@@ -120,7 +126,7 @@ const UserProfilePage = () => {
                 </nav>
               </div>
               <br />
-              <PostFeed posts={filteredPosts}></PostFeed>
+              <PostFeed posts={filteredPosts} username={username}></PostFeed>
               <hr />
               {!loading && !postsEnd && (
                 <div className=" columns is-mobile">
@@ -159,18 +165,21 @@ const UserProfilePage = () => {
                   </div>
 
                   <div className="field has-background-warning-light">
-                    <p className="control">
+                    <p className="control ">
                       <textarea
-                        className="textarea has-background-warning-light"
-                        placeholder="Írj ide valamit..."
+                        rows={1}
+                        className="textarea has-background-warning-light is-size-3"
+                        placeholder="Add meg új posztod címét..."
                       ></textarea>
                     </p>
                   </div>
                   <div className="field">
                     <p className="control">
-                      <button className="button is-primary">
-                        Posztold a megjegyzést
-                      </button>
+                      <Link href="/admin">
+                        <a className="button is-primary">
+                          <strong>Poszt írás</strong>
+                        </a>
+                      </Link>
                     </p>
                   </div>
                 </div>

@@ -1,15 +1,17 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import { useState } from 'react';
+import { fromMillis } from '../lib/firebaseConfig';
 
-const PostFeed = ({ posts, admin }) => {
+const PostFeed = ({ posts, username }) => {
   return posts
     ? posts.map((post) => {
-        return <PostItem post={post} key={post.slug} admin={admin} />;
+        return <PostItem post={post} key={post.slug} username={username} />;
       })
     : null;
 };
 
-function PostItem({ post, admin = false }) {
+function PostItem({ post, username }) {
   // Naive method to calc word count and read time
   const wordCount = post?.content.trim().split(/\s+/g).length;
   const minutesToRead = (wordCount / 100 + 1).toFixed(0);
@@ -31,9 +33,28 @@ function PostItem({ post, admin = false }) {
           <p className="has-text-white">
             <Link href={`/${post.username}`}>
               <a>
-                <strong className="has-text-warning">
-                  Írta: @{post.username}
-                </strong>
+                {post.username === username ? (
+                  <strong className="has-text-primary is-capitalized">
+                    Írta: @{post.username} {'  '}{' '}
+                  </strong>
+                ) : (
+                  <strong className="has-text-warning is-capitalized">
+                    Írta: @{post.username} {'  '}{' '}
+                  </strong>
+                )}
+
+                <span className="block m-3"></span>
+                <span className="has-text-info">
+                  {'  « '} Létrehozva:{' '}
+                  {new Date(post.createdAt).toLocaleString('hu-HU')}
+                  {' » '}
+                </span>
+                <span className="block m-3"></span>
+                <span className="has-text-info">
+                  {'  « '} Módosítva:{' '}
+                  {new Date(post.updatedAt).toLocaleString('hu-HU')}
+                  {' » '}
+                </span>
               </a>
             </Link>
 
@@ -46,9 +67,9 @@ function PostItem({ post, admin = false }) {
 
             <br />
             <small>
-              {wordCount} words · {minutesToRead} min read ·
-              <span className="push-left">
-                💗 {post.heartCount || 0} Hearts
+              {wordCount} szó · {minutesToRead} perc olvasás ·
+              <span className="block ml-3">
+                💗 {post.heartCount || 0} népszerűségi pont
               </span>
             </small>
             <br />
@@ -56,19 +77,13 @@ function PostItem({ post, admin = false }) {
         </div>
 
         {/* If admin view, show extra controls for user */}
-        {admin && (
+        {username === post.username && (
           <>
             <Link href={`/admin/${post.slug}`}>
               <h3>
-                <button className="btn-blue">Edit</button>
+                <button className="button is-small is-primary">Edit</button>
               </h3>
             </Link>
-
-            {post.published ? (
-              <p className="text-success">Live</p>
-            ) : (
-              <p className="text-danger">Unpublished</p>
-            )}
           </>
         )}
       </div>
