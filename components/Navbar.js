@@ -1,10 +1,10 @@
-import Image from "next/image";
-import Link from "next/link";
-import { UserContext } from "../lib/context";
-import { useContext } from "react";
-import { auth } from "../lib/firebaseConfig";
-import { signOut } from "firebase/auth";
-import { useRouter } from "next/router";
+import Image from 'next/image';
+import Link from 'next/link';
+import { UserContext } from '../lib/context';
+import { useContext } from 'react';
+import { auth } from '../lib/firebaseConfig';
+import { signOut } from 'firebase/auth';
+import { useRouter } from 'next/router';
 
 const Navbar = () => {
   const { user, username } = useContext(UserContext);
@@ -13,9 +13,9 @@ const Navbar = () => {
   const SignOutButton = () =>
     signOut(auth)
       .then(() => {
-        console.log("Signed out");
+        console.log('Signed out');
 
-        router.push("/");
+        router.push('/');
         // Sign-out successful.
       })
       .catch((error) => {
@@ -25,15 +25,15 @@ const Navbar = () => {
     <nav
       className={
         user
-          ? "navbar is-spaced has-background-black-ter has-shadow"
-          : "navbar is-spaced "
+          ? 'navbar is-spaced has-background-black-ter has-shadow'
+          : 'navbar is-spaced '
       }
       role="navigation"
       aria-label="main navigation"
     >
       <button
         className="button is-medium is-success is-outlined"
-        style={{ background: "black" }}
+        style={{ background: 'black' }}
       >
         <Link className="navbar-brand" href="/">
           <Image
@@ -54,7 +54,7 @@ const Navbar = () => {
                   src="/dolog.png"
                   alt="Dolog"
                   width="150"
-                  height="50"
+                  height="48"
                 />
               </a>
             </Link>
