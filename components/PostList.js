@@ -33,7 +33,7 @@ const PostList = () => {
   return (
     <>
       <h1 className="title has-text-centered has-text-grey-light is-underlined">
-        Szerkezd posztjaidat
+        Szerkeszd posztjaidat
       </h1>
       <PostFeed posts={post} admin />
     </>
