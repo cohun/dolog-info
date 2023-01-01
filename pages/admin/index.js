@@ -18,10 +18,6 @@ import PostList from '../../components/PostList';
 import Navbar from '../../components/Navbar';
 
 const AdminPostsPage = () => {
-  const { user } = useContext(UserContext);
-  const [posts, setPosts] = useState([]);
-  console.log(user.uid);
-
   return (
     <main>
       <AuthCheck>
