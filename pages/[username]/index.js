@@ -126,7 +126,11 @@ const UserProfilePage = () => {
                 </nav>
               </div>
               <br />
-              <PostFeed posts={filteredPosts} username={username}></PostFeed>
+              <PostFeed
+                posts={filteredPosts}
+                username={username}
+                company={company}
+              ></PostFeed>
               <hr />
               {!loading && !postsEnd && (
                 <div className=" columns is-mobile">

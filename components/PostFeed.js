@@ -1,17 +1,22 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { useState } from 'react';
-import { fromMillis } from '../lib/firebaseConfig';
 
-const PostFeed = ({ posts, username }) => {
+const PostFeed = ({ posts, username, company }) => {
   return posts
     ? posts.map((post) => {
-        return <PostItem post={post} key={post.slug} username={username} />;
+        return (
+          <PostItem
+            post={post}
+            key={post.slug}
+            username={username}
+            company={company}
+          />
+        );
       })
     : null;
 };
 
-function PostItem({ post, username }) {
+function PostItem({ post, username, company }) {
   // Naive method to calc word count and read time
   const wordCount = post?.content.trim().split(/\s+/g).length;
   const minutesToRead = (wordCount / 100 + 1).toFixed(0);
@@ -31,7 +36,7 @@ function PostItem({ post, username }) {
       <div className="media-content">
         <div className="content">
           <p className="has-text-white">
-            <Link href={`/${post.username}`}>
+            <Link href={`/${post.username}/${company}/${post.slug}`}>
               <a>
                 {post.username === username ? (
                   <strong className="has-text-primary is-capitalized">
@@ -59,7 +64,7 @@ function PostItem({ post, username }) {
             </Link>
 
             <br />
-            <Link href={`/${post.username}/${post.slug}`}>
+            <Link href={`/${post.username}/${company}/${post.slug}`}>
               <span className="has-text-white title">
                 <a>{post.title}</a>
               </span>
