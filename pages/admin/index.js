@@ -34,8 +34,9 @@ const AdminPostsPage = () => {
               <p className="image is-64x64">
                 <Image
                   src={
-                    user.photoURL ||
-                    'https://bulma.io/images/placeholders/128x128.png'
+                    user.photoURL
+                      ? user.photoURL
+                      : 'https://bulma.io/images/placeholders/128x128.png'
                   }
                   alt="4"
                   width={48}
