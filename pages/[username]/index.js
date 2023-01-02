@@ -1,6 +1,6 @@
-import Head from "next/head";
-import Link from "next/link";
-import Image from "next/image";
+import Head from 'next/head';
+import Link from 'next/link';
+import Image from 'next/image';
 import {
   collectionGroup,
   query,
@@ -9,33 +9,33 @@ import {
   limit,
   orderBy,
   startAfter,
-} from "firebase/firestore";
-import { useEffect, useState } from "react";
-import Navbar from "../../components/Navbar";
-import { useContext } from "react";
-import { UserContext } from "../../lib/context";
-import UserProfile from "../../components/UserProfile";
-import PostFeed from "../../components/PostFeed";
-import { postToJson, fromMillis } from "../../lib/firebaseConfig";
-import { db } from "../../lib/firebaseConfig";
-import WhichCompany from "../../components/WhichCompany";
-import AdminPostsPage from "../admin";
+} from 'firebase/firestore';
+import { useEffect, useState } from 'react';
+import Navbar from '../../components/Navbar';
+import { useContext } from 'react';
+import { UserContext } from '../../lib/context';
+import UserProfile from '../../components/UserProfile';
+import PostFeed from '../../components/PostFeed';
+import { postToJson, fromMillis } from '../../lib/firebaseConfig';
+import { db } from '../../lib/firebaseConfig';
+import WhichCompany from '../../components/WhichCompany';
+import AdminPostsPage from '../admin';
 
 const LIMIT = 5;
 
 const UserProfilePage = () => {
   const [imageURL, setImageURL] = useState(
-    "https://bulma.io/images/placeholders/128x128.png"
+    'https://bulma.io/images/placeholders/128x128.png'
   );
   const [loading, setLoading] = useState(false);
   const [postsEnd, setPostsEnd] = useState(false);
   const [chosen, setChosen] = useState(false);
   const [admin, setAdmin] = useState(false);
-  const [company, setCompany] = useState("");
+  const [company, setCompany] = useState('');
   const [filteredPosts, setFilteredPosts] = useState([]);
   const { user, username } = useContext(UserContext);
   useEffect(() => {
-    if (company !== "") {
+    if (company !== '') {
       getPosts(company);
       setPostsEnd(false);
       user.photoURL && setImageURL(user.photoURL);
@@ -44,10 +44,10 @@ const UserProfilePage = () => {
 
   const getPosts = async function (company) {
     const postsQuery = query(
-      collectionGroup(db, "posts"),
-      where("published", "==", true),
-      where("company", "==", company),
-      orderBy("createdAt", "desc"),
+      collectionGroup(db, 'posts'),
+      where('published', '==', true),
+      where('company', '==', company),
+      orderBy('createdAt', 'desc'),
       limit(LIMIT)
     );
     const posts = (await getDocs(postsQuery)).docs.map(postToJson);
@@ -60,14 +60,14 @@ const UserProfilePage = () => {
     setLoading(true);
     const last = filteredPosts[filteredPosts.length - 1];
     const cursor =
-      typeof last.createdAt === "number"
+      typeof last.createdAt === 'number'
         ? fromMillis(last.createdAt)
         : last.createdAt;
     const postsQuery = query(
-      collectionGroup(db, "posts"),
-      where("published", "==", true),
-      where("company", "==", company),
-      orderBy("createdAt", "desc"),
+      collectionGroup(db, 'posts'),
+      where('published', '==', true),
+      where('company', '==', company),
+      orderBy('createdAt', 'desc'),
       startAfter(cursor),
       limit(LIMIT)
     );
@@ -93,7 +93,7 @@ const UserProfilePage = () => {
               setChosen={setChosen}
               setCompany={setCompany}
             >
-              {" "}
+              {' '}
             </WhichCompany>
           ) : (
             <div className="section">
@@ -105,12 +105,12 @@ const UserProfilePage = () => {
                         <strong className="has-text-primary-dark is-capitalized">
                           {username}
                         </strong>
-                        {"  "}
+                        {'  '}
                         felhasználó
-                        {"  "}
+                        {'  '}
                         <strong className="has-text-warning-dark is-capitalized is-underlined">
                           {company}
-                        </strong>{" "}
+                        </strong>{' '}
                         cégben az alábbi posztokat olvashatja:
                       </div>
                     </div>
@@ -161,31 +161,20 @@ const UserProfilePage = () => {
                 </figure>
                 <div className="media-content">
                   <div className="content">
-                    <div>
-                      <strong className="has-text-primary is-capitalized">
-                        {username}{" "}
+                    <div className="">
+                      <strong className="has-text-primary is-capitalized mr-2">
+                        {username}{' '}
                       </strong>
+                      <span className="">
+                        <Link href="/admin">
+                          <a className="button is-primary is-outlined">
+                            <strong>Új poszt írás</strong>
+                          </a>
+                        </Link>
+                      </span>
                     </div>
                   </div>
-
-                  <div className="field has-background-warning-light">
-                    <div className="control ">
-                      <textarea
-                        rows={1}
-                        className="textarea has-background-warning-light is-size-3"
-                        placeholder="Add meg új posztod címét..."
-                      ></textarea>
-                    </div>
-                  </div>
-                  <div className="field">
-                    <div className="control">
-                      <Link href="/admin">
-                        <a className="button is-primary">
-                          <strong>Poszt írás</strong>
-                        </a>
-                      </Link>
-                    </div>
-                  </div>
+                  <div className="field"></div>
                 </div>
               </article>
             </div>

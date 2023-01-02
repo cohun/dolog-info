@@ -90,7 +90,7 @@ const AdminPostsPage = () => {
               <div className="dropdown-content">{DropDown()}</div>
             </div>
           </div>
-          <h1 className="title has-text-centered has-text-grey-light is-underlined">
+          <h1 className="is-size-4 has-text-weight-semibold has-text-centered has-text-info-light mt-2">
             Új poszt írás
           </h1>
           <article className="media">
@@ -119,7 +119,7 @@ const AdminPostsPage = () => {
                 <div className="control ">
                   <textarea
                     rows={1}
-                    className="textarea has-background-warning-light is-size-3"
+                    className="textarea has-background-warning-light is-size-4"
                     placeholder="Add meg új posztod címét..."
                   ></textarea>
                 </div>

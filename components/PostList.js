@@ -31,7 +31,7 @@ const PostList = ({ username, company }) => {
 
   return (
     <>
-      <h1 className="title has-text-centered has-text-grey-light is-underlined">
+      <h1 className="my-4 is-size-4 has-text-weight-semibold has-text-centered has-text-info-light">
         Szerkeszd posztjaidat
       </h1>
       <PostFeed posts={post} username={username} company={company} />
