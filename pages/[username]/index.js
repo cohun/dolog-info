@@ -1,6 +1,6 @@
-import Head from 'next/head';
-import Link from 'next/link';
-import Image from 'next/image';
+import Head from "next/head";
+import Link from "next/link";
+import Image from "next/image";
 import {
   collectionGroup,
   query,
@@ -9,33 +9,53 @@ import {
   limit,
   orderBy,
   startAfter,
-} from 'firebase/firestore';
-import { useEffect, useState } from 'react';
-import Navbar from '../../components/Navbar';
-import { useContext } from 'react';
-import { UserContext } from '../../lib/context';
-import UserProfile from '../../components/UserProfile';
-import PostFeed from '../../components/PostFeed';
-import { postToJson, fromMillis } from '../../lib/firebaseConfig';
-import { db } from '../../lib/firebaseConfig';
-import WhichCompany from '../../components/WhichCompany';
-import AdminPostsPage from '../admin';
+} from "firebase/firestore";
+import { useEffect, useState } from "react";
+import Navbar from "../../components/Navbar";
+import { useContext } from "react";
+import { UserContext } from "../../lib/context";
+import UserProfile from "../../components/UserProfile";
+import PostFeed from "../../components/PostFeed";
+import {
+  postToJson,
+  fromMillis,
+  getAllThingsForACompany,
+} from "../../lib/firebaseConfig";
+import { db } from "../../lib/firebaseConfig";
+import WhichCompany from "../../components/WhichCompany";
+import AdminPostsPage from "../admin";
 
 const LIMIT = 5;
 
 const UserProfilePage = () => {
   const [imageURL, setImageURL] = useState(
-    'https://bulma.io/images/placeholders/128x128.png'
+    "https://bulma.io/images/placeholders/128x128.png"
   );
   const [loading, setLoading] = useState(false);
   const [postsEnd, setPostsEnd] = useState(false);
   const [chosen, setChosen] = useState(false);
   const [admin, setAdmin] = useState(false);
-  const [company, setCompany] = useState('');
+  const [company, setCompany] = useState("");
   const [filteredPosts, setFilteredPosts] = useState([]);
   const { user, username } = useContext(UserContext);
+
+  const [isActive2, setIsActive2] = useState("");
+  const [things, setThings] = useState([]);
+  const [chosen2, setChosen2] = useState("");
+  const [desc, setDesc] = useState("");
+
+  async function getAllThings() {
+    if (company !== "") {
+      const thin = await getAllThingsForACompany(company);
+      setThings(thin);
+    }
+  }
   useEffect(() => {
-    if (company !== '') {
+    getAllThings();
+  }, [isActive2]);
+
+  useEffect(() => {
+    if (company !== "") {
       getPosts(company);
       setPostsEnd(false);
       user.photoURL && setImageURL(user.photoURL);
@@ -44,15 +64,13 @@ const UserProfilePage = () => {
 
   const getPosts = async function (company) {
     const postsQuery = query(
-      collectionGroup(db, 'posts'),
-      where('published', '==', true),
-      where('company', '==', company),
-      orderBy('createdAt', 'desc'),
+      collectionGroup(db, "posts"),
+      where("published", "==", true),
+      where("company", "==", company),
+      orderBy("createdAt", "desc"),
       limit(LIMIT)
     );
     const posts = (await getDocs(postsQuery)).docs.map(postToJson);
-
-    console.log(posts);
     setFilteredPosts(posts);
     return posts;
   };
@@ -60,27 +78,47 @@ const UserProfilePage = () => {
     setLoading(true);
     const last = filteredPosts[filteredPosts.length - 1];
     const cursor =
-      typeof last.createdAt === 'number'
+      typeof last.createdAt === "number"
         ? fromMillis(last.createdAt)
         : last.createdAt;
     const postsQuery = query(
-      collectionGroup(db, 'posts'),
-      where('published', '==', true),
-      where('company', '==', company),
-      orderBy('createdAt', 'desc'),
+      collectionGroup(db, "posts"),
+      where("published", "==", true),
+      where("company", "==", company),
+      orderBy("createdAt", "desc"),
       startAfter(cursor),
       limit(LIMIT)
     );
     const newPosts = (await getDocs(postsQuery)).docs.map(postToJson);
-
     setFilteredPosts(filteredPosts.concat(newPosts));
     setLoading(false);
-
     if (newPosts.length < LIMIT) {
       setPostsEnd(true);
     }
     return newPosts;
   };
+
+  function DropDown2() {
+    const list2 = [];
+    things.forEach((thing) => {
+      list2.push(
+        <div key={thing.id}>
+          <a
+            href="#"
+            className="dropdown-item"
+            onClick={() => {
+              setChosen2(thing.id);
+              setDesc(thing.description);
+            }}
+          >
+            {thing.description} - {thing.id}
+          </a>
+          <hr className="dropdown-divider" />
+        </div>
+      );
+    });
+    return list2;
+  }
 
   return (
     <div>
@@ -93,7 +131,7 @@ const UserProfilePage = () => {
               setChosen={setChosen}
               setCompany={setCompany}
             >
-              {' '}
+              {" "}
             </WhichCompany>
           ) : (
             <div className="section">
@@ -102,21 +140,64 @@ const UserProfilePage = () => {
                   <div className="level-left">
                     <div className="level-item">
                       <div className="subtitle is-size-6">
-                        <strong className="has-text-primary-dark is-capitalized">
-                          {username}
-                        </strong>
-                        {'  '}
-                        felhasználó
-                        {'  '}
-                        <strong className="has-text-warning-dark is-capitalized is-underlined">
+                        <strong className="has-text-warning-dark is-capitalized is-underlined is-size-3">
                           {company}
-                        </strong>{' '}
-                        cégben az alábbi posztokat olvashatja:
+                        </strong>{" "}
+                        <strong className="has-text-warning-dark ml-4">
+                          dolgaihoz írt posztok:
+                        </strong>
                       </div>
                     </div>
                   </div>
 
-                  <div className="" onClick={() => setChosen(false)}>
+                  <div
+                    className={`dropdown ${isActive2}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      isActive2 === ""
+                        ? setIsActive2("is-active")
+                        : setIsActive2("");
+                    }}
+                  >
+                    <div className="dropdown-trigger">
+                      <button
+                        className={
+                          chosen2 === ""
+                            ? "button has-background-warning-light has-text-warning-dark"
+                            : "button is-warning-dark is-outlined"
+                        }
+                        aria-haspopup="true"
+                        aria-controls="dropdown-menu"
+                      >
+                        <span className="has-text-warning-dark">
+                          {chosen2 === ""
+                            ? "Dolog kiválasztása"
+                            : `${chosen2} - ${desc}`}
+                        </span>
+                        <span className="icon is-small">
+                          <i
+                            className="fas fa-angle-down"
+                            aria-hidden="true"
+                          ></i>
+                        </span>
+                      </button>
+                    </div>
+                    <div
+                      className="dropdown-menu"
+                      id="dropdown-menu"
+                      role="menu"
+                    >
+                      <div className="dropdown-content">{DropDown2()}</div>
+                    </div>
+                  </div>
+
+                  <div
+                    className=""
+                    onClick={() => {
+                      setChosen2("");
+                      setChosen(false);
+                    }}
+                  >
                     <div className="level-item">
                       <a className="button has-background-warning-dark has-text-warning-light">
                         Másik cég választása
@@ -163,7 +244,7 @@ const UserProfilePage = () => {
                   <div className="content">
                     <div className="">
                       <strong className="has-text-primary is-capitalized mr-2">
-                        {username}{' '}
+                        {username}{" "}
                       </strong>
                       <span className="">
                         <Link href="/admin">

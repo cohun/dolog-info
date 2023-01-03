@@ -1,13 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 import {
   collection,
   query,
   where,
   onSnapshot,
   limit,
-} from 'firebase/firestore';
-import { db } from '../lib/firebaseConfig';
-import toast from 'react-hot-toast';
+} from "firebase/firestore";
+import { db } from "../lib/firebaseConfig";
+import toast from "react-hot-toast";
 
 const WhichCompany = ({ username, setChosen, setCompany }) => {
   const [companies, setCompanies] = useState([]);
@@ -15,11 +15,10 @@ const WhichCompany = ({ username, setChosen, setCompany }) => {
   const [checked, setChecked] = useState(false);
 
   useEffect(() => {
-    console.log(username);
-    const companiesRef = collection(db, 'companies');
+    const companiesRef = collection(db, "companies");
     const q = query(
       companiesRef,
-      where('users', 'array-contains', username, limit(1))
+      where("users", "array-contains", username, limit(1))
     );
 
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
@@ -37,8 +36,8 @@ const WhichCompany = ({ username, setChosen, setCompany }) => {
   }, []);
 
   function companyList() {
-    let addr = '';
-    let company = '';
+    let addr = "";
+    let company = "";
     let companiesArray = [];
 
     for (let index = 0; index < companies.length; index++) {
@@ -73,7 +72,7 @@ const WhichCompany = ({ username, setChosen, setCompany }) => {
           <table className="table">
             <thead>
               <tr>
-                <th>Cég neve</th>
+                <th>Tulajdonos neve</th>
                 <th>Címe</th>
                 <th>Választ</th>
               </tr>
@@ -92,7 +91,7 @@ const WhichCompany = ({ username, setChosen, setCompany }) => {
           <div className="modal-card">
             <header className="modal-card-head">
               <p className="modal-card-title">
-                {' '}
+                {" "}
                 <span className="has-background-warning-dark has-text-white px-3">
                   {username}
                 </span>
@@ -103,7 +102,7 @@ const WhichCompany = ({ username, setChosen, setCompany }) => {
                 onClick={(e) => {
                   e.preventDefault();
                   toast.error(
-                    'Válassz ki egy céget, vagy nyomj a DoLog logóra!'
+                    "Válassz ki egy céget, vagy nyomj a DoLog logóra!"
                   );
                 }}
                 className="delete"

@@ -1,5 +1,5 @@
-import Link from 'next/link';
-import Image from 'next/image';
+import Link from "next/link";
+import Image from "next/image";
 
 const PostFeed = ({ posts, username, company }) => {
   return posts
@@ -40,25 +40,25 @@ function PostItem({ post, username, company }) {
               <a>
                 {post.username === username ? (
                   <strong className="has-text-primary is-capitalized">
-                    Írta: @{post.username} {'  '}{' '}
+                    Írta: @{post.username} {"  "}{" "}
                   </strong>
                 ) : (
                   <strong className="has-text-warning is-capitalized">
-                    Írta: @{post.username} {'  '}{' '}
+                    Írta: @{post.username} {"  "}{" "}
                   </strong>
                 )}
 
                 <span className="block m-3"></span>
                 <span className="has-text-info">
-                  {'  « '} Létrehozva:{' '}
-                  {new Date(post.createdAt).toLocaleString('hu-HU')}
-                  {' » '}
+                  {"  « "} Létrehozva:{" "}
+                  {new Date(post.createdAt).toLocaleString("hu-HU")}
+                  {" » "}
                 </span>
                 <span className="block m-3"></span>
                 <span className="has-text-info">
-                  {'  « '} Módosítva:{' '}
-                  {new Date(post.updatedAt).toLocaleString('hu-HU')}
-                  {' » '}
+                  {"  « "} Módosítva:{" "}
+                  {new Date(post.updatedAt).toLocaleString("hu-HU")}
+                  {" » "}
                 </span>
               </a>
             </Link>
@@ -71,12 +71,19 @@ function PostItem({ post, username, company }) {
             </Link>
 
             <br />
-            <small>
-              {wordCount} szó · {minutesToRead} perc olvasás ·
-              <span className="block ml-3">
-                💗 {post.heartCount || 0} népszerűségi pont
+            {post.published ? (
+              <small>
+                {wordCount} szó · {minutesToRead} perc olvasás ·
+                <span className="block ml-3">
+                  💗 {post.heartCount || 0} népszerűségi pont
+                </span>
+              </small>
+            ) : (
+              <span className="has-text-warning">
+                {"  « "} Nem publikus még {" » "}
               </span>
-            </small>
+            )}
+
             <br />
           </p>
         </div>
@@ -85,9 +92,13 @@ function PostItem({ post, username, company }) {
         {username === post.username && (
           <>
             <Link href={`/admin/${post.slug}`}>
-              <h3>
-                <button className="button is-small is-primary">Edit</button>
-              </h3>
+              <div>
+                {post.published ? (
+                  <button className="button is-small is-primary">Edit</button>
+                ) : (
+                  <button className="button is-small is-warning">Edit</button>
+                )}
+              </div>
             </Link>
           </>
         )}

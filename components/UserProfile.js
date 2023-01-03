@@ -1,25 +1,25 @@
-import { useEffect, useState } from 'react';
-import { getHashWhereAdmin } from '../lib/firebaseConfig';
-import CompanyAdmin from './CompanyAdmin';
-import HashingForm from './hashing';
-import Image from 'next/image';
-import toast from 'react-hot-toast';
-import { query, where } from 'firebase/firestore';
+import { useEffect, useState } from "react";
+import { getHashWhereAdmin } from "../lib/firebaseConfig";
+import CompanyAdmin from "./CompanyAdmin";
+import HashingForm from "./hashing";
+import Image from "next/image";
+import toast from "react-hot-toast";
+import { query, where } from "firebase/firestore";
 
 const UserProfile = ({ username, companies, address }) => {
   const [isActive, setIsactive] = useState(false);
   const [adminHash, setAdminHash] = useState([]);
-  const [target, setTarget] = useState('');
-  const [hash, setHash] = useState('');
+  const [target, setTarget] = useState("");
+  const [hash, setHash] = useState("");
 
   const getCompany = (comp, addr) => {
-    let compa = '';
-    let addre = '';
+    let compa = "";
+    let addre = "";
     let content = [];
     for (let i = 0; i < comp.length; i++) {
       compa = comp[i];
       addre = addr[i];
-      let hash = '';
+      let hash = "";
       let allowed = true;
 
       if (adminHash.length >= 1) {
@@ -36,19 +36,19 @@ const UserProfile = ({ username, companies, address }) => {
           <div
             className={
               isActive
-                ? 'button is-large is-one-fifth is-primary is-outlined mt-5 is-focused'
-                : 'columns button is-large is-responsive is-one-fifth is-primary has-text-warning is-outlined mt-5'
+                ? "button is-large is-one-fifth is-primary is-outlined mt-5 is-focused"
+                : "columns button is-large is-responsive is-one-fifth is-primary has-text-warning is-outlined mt-5"
             }
             onClick={(i) => {
               if (allowed) {
                 setTarget(i.target.innerHTML);
                 setHash(hash);
               } else {
-                toast.error('Engedélyezés még folyamatban...');
+                toast.error("Engedélyezés még folyamatban...");
                 setTimeout(
                   () =>
                     toast.error(
-                      'Használati megállapodás aláírása után kerül a cég regisztrálásra!'
+                      "Használati megállapodás aláírása után kerül a cég regisztrálásra!"
                     ),
                   3000
                 );
@@ -58,7 +58,7 @@ const UserProfile = ({ username, companies, address }) => {
             <div className="tile has-text-centered">{compa}</div>
           </div>
 
-          {hash === '' ? (
+          {hash === "" ? (
             <div className="">
               <div className="card subtitle is-6 has-text-white has-background-danger-dark p-1">
                 Cím: {addre}
@@ -72,10 +72,10 @@ const UserProfile = ({ username, companies, address }) => {
               <div className="navbar-divider"></div>
               <div>
                 <p>Itt admin vagy</p>
-                Belépési kód:{' '}
+                Belépési kód:{" "}
                 <strong className="has-text-primary is-size-5">
-                  {allowed ? hash : 'engedély még folyamatban...'}
-                </strong>{' '}
+                  {allowed ? hash : "engedély még folyamatban..."}
+                </strong>{" "}
               </div>
             </div>
           )}
@@ -88,7 +88,7 @@ const UserProfile = ({ username, companies, address }) => {
           className="button is-large is-one-fifth has-background-primary-dark is-outlined mt-5"
           onClick={onHashingForm}
         >
-          Új cég felvétel
+          <strong>+ tulajdonos</strong>
         </button>
       </div>
     );
@@ -130,7 +130,7 @@ const UserProfile = ({ username, companies, address }) => {
 
   return (
     <div>
-      {target != '' ? (
+      {target != "" ? (
         <CompanyAdmin
           username={username}
           target={target}
@@ -152,14 +152,14 @@ const UserProfile = ({ username, companies, address }) => {
                   <div className="columns is-centered ">
                     <h3 className="card column is-half title has-text-centered has-background-primary-dark">
                       <strong className="is-capitalized has-text-darker">
-                        Helló{' '}
+                        Helló{" "}
                       </strong>
                       <strong className="is-capitalized has-text-warning">
-                        {username}!{' '}
+                        {username}!{" "}
                       </strong>
                       {companies.length != 0 ? (
                         <div className="subtitle has-text-dark">
-                          az alábbi tulajdonosok dolgaihoz van hozzáférésed:{' '}
+                          az alábbi tulajdonosok dolgaihoz van hozzáférésed:{" "}
                           <div className="is-5 has-text-dark">
                             (a belépési kód továbbadásával tudsz meghívni új
                             felhasználókat)
@@ -167,7 +167,7 @@ const UserProfile = ({ username, companies, address }) => {
                         </div>
                       ) : (
                         <div className="subtitle">
-                          Még nincs hozzáférésed egyetlen céghez sem.{' '}
+                          Még nincs hozzáférésed egyetlen céghez sem.{" "}
                         </div>
                       )}
                     </h3>
