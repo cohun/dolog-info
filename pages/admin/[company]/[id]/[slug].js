@@ -15,7 +15,7 @@ import { db } from '../../../../lib/firebaseConfig';
 
 const AdminPostEdit = () => {
   const { user, username } = useContext(UserContext);
-  const uid = user.uid;
+  const uid = user?.uid;
   return (
     <AuthCheck>
       <PostManager uid={uid} />
