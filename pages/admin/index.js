@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
-import toast from "react-hot-toast";
-import AuthCheck from "../../components/AuthCheck";
-import kebabCase from "lodash.kebabcase";
-import { useContext } from "react";
-import { UserContext } from "../../lib/context";
+import React, { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
+import AuthCheck from '../../components/AuthCheck';
+import kebabCase from 'lodash.kebabcase';
+import { useContext } from 'react';
+import { UserContext } from '../../lib/context';
 import {
   collection,
   query,
@@ -14,30 +14,30 @@ import {
   doc,
   orderBy,
   serverTimestamp,
-} from "firebase/firestore";
-import PostFeed from "../../components/PostFeed";
+} from 'firebase/firestore';
+import PostFeed from '../../components/PostFeed';
 import {
   postToJson,
   fromMillis,
   db,
   getAllCompaniesForAUser,
   getAllThingsForACompany,
-} from "../../lib/firebaseConfig";
-import PostList from "../../components/PostList";
-import Navbar from "../../components/Navbar";
-import { useRouter } from "next/router";
-import Image from "next/image";
+} from '../../lib/firebaseConfig';
+import PostList from '../../components/PostList';
+import Navbar from '../../components/Navbar';
+import { useRouter } from 'next/router';
+import Image from 'next/image';
 
 const AdminPostsPage = () => {
   const { user, username } = useContext(UserContext);
-  const [isActive, setIsActive] = useState("");
+  const [isActive, setIsActive] = useState('');
   const [companies, setCompanies] = useState([]);
-  const [chosen, setChosen] = useState("");
+  const [chosen, setChosen] = useState('');
 
-  const [isActive2, setIsActive2] = useState("");
+  const [isActive2, setIsActive2] = useState('');
   const [things, setThings] = useState([]);
-  const [chosen2, setChosen2] = useState("");
-  const [desc, setDesc] = useState("");
+  const [chosen2, setChosen2] = useState('');
+  const [desc, setDesc] = useState('');
 
   async function getAllCompanies() {
     const comp = await getAllCompaniesForAUser(username);
@@ -45,7 +45,7 @@ const AdminPostsPage = () => {
   }
 
   async function getAllThings() {
-    if (chosen !== "") {
+    if (chosen !== '') {
       const thin = await getAllThingsForACompany(chosen);
       setThings(thin);
     }
@@ -71,8 +71,8 @@ const AdminPostsPage = () => {
             className="dropdown-item"
             onClick={() => {
               setChosen(comp.businessName);
-              setChosen2("");
-              setDesc("");
+              setChosen2('');
+              setDesc('');
             }}
           >
             {comp.businessName} - {comp.address}
@@ -115,19 +115,19 @@ const AdminPostsPage = () => {
             className={`dropdown ${isActive}`}
             onClick={(e) => {
               e.preventDefault();
-              isActive === "" ? setIsActive("is-active") : setIsActive("");
+              isActive === '' ? setIsActive('is-active') : setIsActive('');
             }}
           >
             <div className="dropdown-trigger">
               <button
                 className={
-                  chosen === "" ? "button" : "button is-primary is-outlined"
+                  chosen === '' ? 'button' : 'button is-primary is-outlined'
                 }
                 aria-haspopup="true"
                 aria-controls="dropdown-menu"
               >
                 <span className="has-text--primary">
-                  {chosen === "" ? "Cég kiválasztása" : chosen}
+                  {chosen === '' ? 'Cég kiválasztása' : chosen}
                 </span>
                 <span className="icon is-small">
                   <i className="fas fa-angle-down" aria-hidden="true"></i>
@@ -138,25 +138,25 @@ const AdminPostsPage = () => {
               <div className="dropdown-content">{DropDown()}</div>
             </div>
           </div>
-          {"  "}
+          {'  '}
           <div
             className={`dropdown ${isActive2}`}
             onClick={(e) => {
               e.preventDefault();
-              isActive2 === "" ? setIsActive2("is-active") : setIsActive2("");
+              isActive2 === '' ? setIsActive2('is-active') : setIsActive2('');
             }}
           >
             <div className="dropdown-trigger">
               <button
                 className={
-                  chosen2 === "" ? "button" : "button is-primary is-outlined"
+                  chosen2 === '' ? 'button' : 'button is-primary is-outlined'
                 }
                 aria-haspopup="true"
                 aria-controls="dropdown-menu"
               >
                 <span className="has-text--primary">
-                  {chosen2 === ""
-                    ? "Dolog kiválasztása"
+                  {chosen2 === ''
+                    ? 'Dolog kiválasztása'
                     : `${chosen2} - ${desc}`}
                 </span>
                 <span className="icon is-small">
@@ -173,7 +173,7 @@ const AdminPostsPage = () => {
             Új poszt írás
           </h1>
           {CreateNewPost(chosen, chosen2)}
-          {chosen !== "" && chosen2 !== "" ? (
+          {chosen !== '' && chosen2 !== '' ? (
             <PostList username={username} company={chosen} id={chosen2} />
           ) : null}
 
@@ -189,15 +189,15 @@ const AdminPostsPage = () => {
 function CreateNewPost(chosen, chosen2) {
   const router = useRouter();
   const { user, username } = useContext(UserContext);
-  const [title, setTitle] = useState("");
+  const [title, setTitle] = useState('');
   const slug = encodeURI(kebabCase(title));
   const isValid = title.length > 3 && title.length < 100;
 
   // Create a new post in firestore
   const createPost = async (e) => {
     e.preventDefault();
-    if (chosen === "" || chosen2 === "") {
-      toast.error("Válassz egy céget és dolgot is!");
+    if (chosen === '' || chosen2 === '') {
+      toast.error('Válassz egy céget és dolgot is!');
       return;
     }
     const id = chosen2;
@@ -210,13 +210,13 @@ function CreateNewPost(chosen, chosen2) {
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
-      console.log("Document data:", docSnap.data());
-      toast.error("Már írtál ilyen címen bejegyzést!");
-      toast.success("Válassz más címet");
+      console.log('Document data:', docSnap.data());
+      toast.error('Már írtál ilyen címen bejegyzést!');
+      toast.success('Válassz más címet');
       return;
     } else {
       // doc.data() will be undefined in this case
-      console.log("No such document!");
+      console.log('No such document!');
     }
 
     await setDoc(doc(db, `users/${uid}/${company}/${id}/posts`, slug), {
@@ -227,14 +227,14 @@ function CreateNewPost(chosen, chosen2) {
       uid: uid,
       username: username,
       published: false,
-      content: "# hello mindenkinek!",
+      content: '# hello mindenkinek!',
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
       heartCount: 0,
     });
-    toast.success("Post created!");
+    toast.success('Post created!');
     // Imperative navigation after doc is set
-    router.push(`/admin/${company}/${id}/${slug}`);
+    router.push({ pathname: `/admin/${company}/${id}/${slug}` });
   };
 
   return (
@@ -246,7 +246,7 @@ function CreateNewPost(chosen, chosen2) {
               src={
                 user?.photoURL
                   ? user.photoURL
-                  : "https://bulma.io/images/placeholders/128x128.png"
+                  : 'https://bulma.io/images/placeholders/128x128.png'
               }
               alt="4"
               width={48}
@@ -257,7 +257,7 @@ function CreateNewPost(chosen, chosen2) {
         <div className="media-content">
           <div className="content">
             <strong className="has-text-primary is-capitalized">
-              {username}{" "}
+              {username}{' '}
             </strong>
           </div>
 
@@ -267,7 +267,7 @@ function CreateNewPost(chosen, chosen2) {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="A posztom címe"
-                className={"input has-background-warning-light is-size-4"}
+                className={'input has-background-warning-light is-size-4'}
               />
 
               {/* <textarea
