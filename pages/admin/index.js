@@ -9,13 +9,17 @@ import {
   query,
   where,
   getDocs,
+  setDoc,
+  getDoc,
+  doc,
   orderBy,
-  db,
+  serverTimestamp,
 } from "firebase/firestore";
 import PostFeed from "../../components/PostFeed";
 import {
   postToJson,
   fromMillis,
+  db,
   getAllCompaniesForAUser,
   getAllThingsForACompany,
 } from "../../lib/firebaseConfig";
@@ -54,6 +58,7 @@ const AdminPostsPage = () => {
 
   useEffect(() => {
     getAllThings();
+    DropDown2();
   }, [isActive2]);
 
   function DropDown() {
@@ -167,54 +172,12 @@ const AdminPostsPage = () => {
           <h1 className="is-size-4 has-text-weight-semibold has-text-centered has-text-info-light mt-2">
             Új poszt írás
           </h1>
-          <article className="media">
-            <figure className="media-left">
-              <div className="image is-64x64">
-                <Image
-                  src={
-                    user?.photoURL
-                      ? user.photoURL
-                      : "https://bulma.io/images/placeholders/128x128.png"
-                  }
-                  alt="4"
-                  width={48}
-                  height={48}
-                />
-              </div>
-            </figure>
-            <div className="media-content">
-              <div className="content">
-                <strong className="has-text-primary is-capitalized">
-                  {username}{" "}
-                </strong>
-              </div>
+          {CreateNewPost(chosen, chosen2)}
+          {chosen !== "" && chosen2 !== "" ? (
+            <PostList username={username} company={chosen} id={chosen2} />
+          ) : null}
 
-              <div className="field has-background-warning-light">
-                <div className="control ">
-                  <textarea
-                    rows={1}
-                    className="textarea has-background-warning-light is-size-4"
-                    placeholder="Add meg új posztod címét..."
-                  ></textarea>
-                </div>
-              </div>
-              <div className="field">
-                <div className="control">
-                  <a
-                    className="button is-primary"
-                    onClick={() => {
-                      chosen === "" ? toast.error("Válassz egy céget") : null;
-                    }}
-                  >
-                    <strong>Poszt írás</strong>
-                  </a>
-                </div>
-              </div>
-            </div>
-          </article>
-          <PostList username={username} company={chosen} />
           <hr />
-          <CreateNewPost />
         </div>
 
         <div className="section has-background-black-ter is-large"></div>
@@ -223,12 +186,116 @@ const AdminPostsPage = () => {
   );
 };
 
-function CreateNewPost() {
+function CreateNewPost(chosen, chosen2) {
   const router = useRouter();
-  const { username } = useContext(UserContext);
+  const { user, username } = useContext(UserContext);
   const [title, setTitle] = useState("");
   const slug = encodeURI(kebabCase(title));
   const isValid = title.length > 3 && title.length < 100;
+
+  // Create a new post in firestore
+  const createPost = async (e) => {
+    e.preventDefault();
+    if (chosen === "" || chosen2 === "") {
+      toast.error("Válassz egy céget és dolgot is!");
+      return;
+    }
+    const id = chosen2;
+    const company = chosen;
+    const uid = user.uid;
+    console.log(id, company, uid, slug);
+    console.log(`users/${uid}/posts`);
+
+    const docRef = doc(db, `users/${uid}/${company}/${id}/posts`, slug);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      console.log("Document data:", docSnap.data());
+      toast.error("Már írtál ilyen címen bejegyzést!");
+      toast.success("Válassz más címet");
+      return;
+    } else {
+      // doc.data() will be undefined in this case
+      console.log("No such document!");
+    }
+
+    await setDoc(doc(db, `users/${uid}/${company}/${id}/posts`, slug), {
+      company: company,
+      id: id,
+      title: title,
+      slug: slug,
+      uid: uid,
+      username: username,
+      published: false,
+      content: "# hello mindenkinek!",
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+      heartCount: 0,
+    });
+    toast.success("Post created!");
+    // Imperative navigation after doc is set
+    router.push(`/admin/${company}/${id}/${slug}`);
+  };
+
+  return (
+    <form>
+      <article className="media">
+        <figure className="media-left">
+          <div className="image is-64x64">
+            <Image
+              src={
+                user?.photoURL
+                  ? user.photoURL
+                  : "https://bulma.io/images/placeholders/128x128.png"
+              }
+              alt="4"
+              width={48}
+              height={48}
+            />
+          </div>
+        </figure>
+        <div className="media-content">
+          <div className="content">
+            <strong className="has-text-primary is-capitalized">
+              {username}{" "}
+            </strong>
+          </div>
+
+          <div className="field has-background-warning-light">
+            <div className="control ">
+              <input
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder="A posztom címe"
+                className={"input has-background-warning-light is-size-4"}
+              />
+
+              {/* <textarea
+                rows={1}
+                className="textarea has-background-warning-light is-size-4"
+                placeholder="Add meg új posztod címét..."
+              ></textarea> */}
+            </div>
+          </div>
+          <p>
+            <strong>Slug:</strong> {slug}
+          </p>
+          <div className="field">
+            <div className="control">
+              <button
+                className="button is-primary"
+                type="submit"
+                disabled={!isValid}
+                onClick={(e) => createPost(e)}
+              >
+                <strong>Poszt írás</strong>
+              </button>
+            </div>
+          </div>
+        </div>
+      </article>
+    </form>
+  );
 }
 
 export default AdminPostsPage;

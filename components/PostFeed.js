@@ -91,7 +91,7 @@ function PostItem({ post, username, company }) {
         {/* If admin view, show extra controls for user */}
         {username === post.username && (
           <>
-            <Link href={`/admin/${post.slug}`}>
+            <Link href={`/admin/company/id/${post.slug}`}>
               <div>
                 {post.published ? (
                   <button className="button is-small is-primary">Edit</button>

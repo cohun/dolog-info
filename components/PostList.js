@@ -7,12 +7,12 @@ import { postToJson, fromMillis } from "../lib/firebaseConfig";
 import PostFeed from "./PostFeed";
 import { useEffect, useState } from "react";
 
-const PostList = ({ username, company }) => {
+const PostList = ({ username, company, id }) => {
   const uid = auth.currentUser?.uid;
   const [post, setPost] = useState([]);
   async function GetList(uid) {
     const querySnapshot = await getDocs(
-      collection(db, `users/${uid}/posts`),
+      collection(db, `users/${uid}/${company}/${id}/posts`),
       orderBy("createdAt")
     );
     querySnapshot.forEach((doc) => {
@@ -27,7 +27,7 @@ const PostList = ({ username, company }) => {
   }
   useEffect(() => {
     GetList(uid);
-  }, [company]);
+  }, [company, id]);
 
   return (
     <>

@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { doc, getDoc } from 'firebase/firestore';
-import { db } from '../lib/firebaseConfig';
+import React, { useEffect, useState } from "react";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../lib/firebaseConfig";
 
 const AllUsersInCompany = ({
   target,
@@ -12,21 +12,11 @@ const AllUsersInCompany = ({
 }) => {
   const [usern, setUsern] = useState([]);
   const [marked, setMarked] = useState(false);
-  const [chosen, setChosen] = useState('');
+  const [chosen, setChosen] = useState("");
 
   useEffect(() => {
     getAllUsersInCompany(target);
   }, [usern.length]);
-
-  useEffect(() => {
-    if (chosen != '' && marked) {
-      console.log('both true');
-      console.log(chosen);
-    } else {
-      console.log('not true');
-      console.log(chosen);
-    }
-  }, [chosen, marked]);
 
   const handleUserClick = (user) => {
     setMarked(!marked);
@@ -37,7 +27,7 @@ const AllUsersInCompany = ({
   };
 
   async function getAllUsersInCompany(target) {
-    const docRef = doc(db, 'companies', target);
+    const docRef = doc(db, "companies", target);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
       const use = docSnap.data().users;
@@ -45,7 +35,7 @@ const AllUsersInCompany = ({
       setUsers(usern);
     } else {
       // doc.data() will be undefined in this case
-      console.log('No such document!');
+      console.log("No such document!");
     }
   }
 
@@ -54,7 +44,7 @@ const AllUsersInCompany = ({
     usern?.forEach((user) => {
       cList.push(
         <div key={user}>
-          {hash != '' ? (
+          {hash != "" ? (
             <a
               className="panel-block is-active"
               onClick={() => {
