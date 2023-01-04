@@ -22,7 +22,7 @@ function PostManager() {
   const router = useRouter();
   const { slug } = router.query;
 
-  return <div></div>;
+  return <div>AdminPostEdit</div>;
 }
 
 export default AdminPostEdit;

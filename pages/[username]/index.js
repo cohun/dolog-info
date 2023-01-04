@@ -1,6 +1,6 @@
-import Head from 'next/head';
-import Link from 'next/link';
-import Image from 'next/image';
+import Head from "next/head";
+import Link from "next/link";
+import Image from "next/image";
 import {
   collectionGroup,
   query,
@@ -9,43 +9,43 @@ import {
   limit,
   orderBy,
   startAfter,
-} from 'firebase/firestore';
-import { useEffect, useState } from 'react';
-import Navbar from '../../components/Navbar';
-import { useContext } from 'react';
-import { UserContext } from '../../lib/context';
-import UserProfile from '../../components/UserProfile';
-import PostFeed from '../../components/PostFeed';
+} from "firebase/firestore";
+import { useEffect, useState } from "react";
+import Navbar from "../../components/Navbar";
+import { useContext } from "react";
+import { UserContext } from "../../lib/context";
+import UserProfile from "../../components/UserProfile";
+import PostFeed from "../../components/PostFeed";
 import {
   postToJson,
   fromMillis,
   getAllThingsForACompany,
-} from '../../lib/firebaseConfig';
-import { db } from '../../lib/firebaseConfig';
-import WhichCompany from '../../components/WhichCompany';
-import AdminPostsPage from '../admin';
+} from "../../lib/firebaseConfig";
+import { db } from "../../lib/firebaseConfig";
+import WhichCompany from "../../components/WhichCompany";
+import AdminPostsPage from "../admin";
 
 const LIMIT = 5;
 
 const UserProfilePage = () => {
   const [imageURL, setImageURL] = useState(
-    'https://bulma.io/images/placeholders/128x128.png'
+    "https://bulma.io/images/placeholders/128x128.png"
   );
   const [loading, setLoading] = useState(false);
   const [postsEnd, setPostsEnd] = useState(false);
   const [chosen, setChosen] = useState(false);
   const [admin, setAdmin] = useState(false);
-  const [company, setCompany] = useState('');
+  const [company, setCompany] = useState("");
   const [filteredPosts, setFilteredPosts] = useState([]);
   const { user, username } = useContext(UserContext);
 
-  const [isActive2, setIsActive2] = useState('');
+  const [isActive2, setIsActive2] = useState("");
   const [things, setThings] = useState([]);
-  const [chosen2, setChosen2] = useState('');
-  const [desc, setDesc] = useState('');
+  const [chosen2, setChosen2] = useState("");
+  const [desc, setDesc] = useState("");
 
   async function getAllThings() {
-    if (company !== '') {
+    if (company !== "") {
       const thin = await getAllThingsForACompany(company);
       setThings(thin);
     }
@@ -55,19 +55,20 @@ const UserProfilePage = () => {
   }, [isActive2]);
 
   useEffect(() => {
-    if (company !== '') {
+    if (company !== "" && chosen2 !== "") {
       getPosts(company);
       setPostsEnd(false);
       user.photoURL && setImageURL(user.photoURL);
     }
-  }, [company]);
+  }, [company, chosen2]);
 
   const getPosts = async function (company) {
     const postsQuery = query(
-      collectionGroup(db, 'posts'),
-      where('published', '==', true),
-      where('company', '==', company),
-      orderBy('createdAt', 'desc'),
+      collectionGroup(db, "posts"),
+      where("published", "==", true),
+      where("company", "==", company),
+      where("id", "==", chosen2),
+      orderBy("createdAt", "desc"),
       limit(LIMIT)
     );
     const posts = (await getDocs(postsQuery)).docs.map(postToJson);
@@ -78,14 +79,15 @@ const UserProfilePage = () => {
     setLoading(true);
     const last = filteredPosts[filteredPosts.length - 1];
     const cursor =
-      typeof last.createdAt === 'number'
+      typeof last.createdAt === "number"
         ? fromMillis(last.createdAt)
         : last.createdAt;
     const postsQuery = query(
-      collectionGroup(db, 'posts'),
-      where('published', '==', true),
-      where('company', '==', company),
-      orderBy('createdAt', 'desc'),
+      collectionGroup(db, "posts"),
+      where("published", "==", true),
+      where("company", "==", company),
+      where("id", "==", chosen2),
+      orderBy("createdAt", "desc"),
       startAfter(cursor),
       limit(LIMIT)
     );
@@ -131,7 +133,7 @@ const UserProfilePage = () => {
               setChosen={setChosen}
               setCompany={setCompany}
             >
-              {' '}
+              {" "}
             </WhichCompany>
           ) : (
             <div className="section">
@@ -142,7 +144,7 @@ const UserProfilePage = () => {
                       <div className="subtitle is-size-7-tablet is-size-5-desktop mr-2">
                         <strong className="has-text-warning-dark is-capitalized is-underlined is-size-5 is-size-3-tablet">
                           {company}
-                        </strong>{' '}
+                        </strong>{" "}
                       </div>
                     </div>
                     <div className="level-item">
@@ -150,24 +152,24 @@ const UserProfilePage = () => {
                         className={`dropdown ${isActive2}`}
                         onClick={(e) => {
                           e.preventDefault();
-                          isActive2 === ''
-                            ? setIsActive2('is-active')
-                            : setIsActive2('');
+                          isActive2 === ""
+                            ? setIsActive2("is-active")
+                            : setIsActive2("");
                         }}
                       >
                         <div className="dropdown-trigger">
                           <button
                             className={
-                              chosen2 === ''
-                                ? 'button has-background-warning-light has-text-warning-dark'
-                                : 'button is-warning-dark is-outlined'
+                              chosen2 === ""
+                                ? "button has-background-warning-light has-text-warning-dark"
+                                : "button is-warning-dark is-outlined"
                             }
                             aria-haspopup="true"
                             aria-controls="dropdown-menu"
                           >
                             <span className="has-text-warning-dark has-text-weight-semibold">
-                              {chosen2 === ''
-                                ? 'Dolog kiválasztása'
+                              {chosen2 === ""
+                                ? "Dolog kiválasztása"
                                 : `${chosen2} - ${desc}`}
                             </span>
                             <span className="icon is-small">
@@ -193,7 +195,7 @@ const UserProfilePage = () => {
                     <div
                       className="mt-1"
                       onClick={() => {
-                        setChosen2('');
+                        setChosen2("");
                         setChosen(false);
                       }}
                     >
@@ -207,11 +209,14 @@ const UserProfilePage = () => {
                 </nav>
               </div>
               <br />
-              <PostFeed
-                posts={filteredPosts}
-                username={username}
-                company={company}
-              ></PostFeed>
+              {chosen2 !== "" ? (
+                <PostFeed
+                  posts={filteredPosts}
+                  username={username}
+                  company={company}
+                ></PostFeed>
+              ) : null}
+
               <hr />
               {!loading && !postsEnd && (
                 <div className=" columns is-mobile">
@@ -244,7 +249,7 @@ const UserProfilePage = () => {
                   <div className="content">
                     <div className="">
                       <strong className="has-text-primary is-capitalized mr-2">
-                        {username}{' '}
+                        {username}{" "}
                       </strong>
                       <span className="">
                         <Link href="/admin">
