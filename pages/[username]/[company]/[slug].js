@@ -2,9 +2,9 @@ import Link from 'next/link';
 import { useDocumentData } from 'react-firebase-hooks/firestore';
 import { useContext } from 'react';
 
-export async function getStaticProps({ params }) {
-  const { username, company, slug } = params;
-  const userDoc = await getUserWithUsername(username);
+// export async function getStaticProps({ params }) {
+//   const { username, company, slug } = params;
+c; /* onst userDoc = await getUserWithUsername(username);
 
   let post;
   let path;
@@ -41,12 +41,12 @@ export async function getStaticPaths() {
     paths,
     fallback: 'blocking',
   };
-}
+} */
 
 const PostPage = () => {
   return (
-    <main className={styles.container}>
-      <Metatags title={post.title} description={post.title} />
+    <main className={container}>
+      {/* <Metatags title={post.title} description={post.title} />
 
       <section>
         <PostContent post={post} />
@@ -72,7 +72,7 @@ const PostPage = () => {
             <button className="btn-blue">Edit Post</button>
           </Link>
         )}
-      </aside>
+      </aside> */}
     </main>
   );
 };
