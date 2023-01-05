@@ -58,7 +58,28 @@ function PostManager({ uid }) {
         {post && (
           <div className="section has-background-success-light has-text-black has-text-weight-strong">
             <div className="">
-              <h1 className="title">{post.title}</h1>
+              <nav class="level">
+                <div class="level-item has-text-centered">
+                  <div>
+                    <p class="heading">Tulajdonos</p>
+                    <p class="subtitle">{post.company}</p>
+                  </div>
+                </div>
+                <div class="level-item has-text-centered">
+                  <div>
+                    <p class="heading">dolog azonosító</p>
+                    <p class="subtitle">{post.id}</p>
+                  </div>
+                </div>
+              </nav>
+              <nav class="level">
+                <div class="level-item has-text-centered">
+                  <div>
+                    <p class="heading">Poszt címe</p>
+                    <p class="title">{post.title}</p>
+                  </div>
+                </div>
+              </nav>
 
               <PostForm
                 postRef={docRef}
