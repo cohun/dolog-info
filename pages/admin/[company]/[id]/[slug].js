@@ -20,7 +20,7 @@ import {
 import { db } from "../../../../lib/firebaseConfig";
 
 const AdminPostEdit = () => {
-  const { user, username } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const uid = user?.uid;
   return (
     <AuthCheck>
@@ -98,7 +98,7 @@ function PostManager({ uid }) {
                 </button>
               </div>
               <div className="level-item has-text-centered">
-                <Link href={`/${post.username}/${post.slug}`}>
+                <Link href={`/${post.username}/${company}/${post.slug}`}>
                   <button className="button is-link">Valós nézet</button>
                 </Link>
               </div>
@@ -177,7 +177,7 @@ function PostForm({ postRef, defaultValues, preview }) {
               type="checkbox"
               {...register("published")}
             />
-            <label>Published</label>
+            <label>Publikálva</label>
           </fieldset>
 
           <button
@@ -185,7 +185,7 @@ function PostForm({ postRef, defaultValues, preview }) {
             className="button is-success mt-3"
             disabled={!isDirty || !isValid}
           >
-            Save Changes
+            Változások mentése
           </button>
         </div>
       )}

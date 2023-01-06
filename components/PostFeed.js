@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/router";
 
 const PostFeed = ({ posts, username, company }) => {
   return posts
@@ -17,9 +18,17 @@ const PostFeed = ({ posts, username, company }) => {
 };
 
 function PostItem({ post, username, company }) {
+  const router = useRouter();
   // Naive method to calc word count and read time
   const wordCount = post?.content.trim().split(/\s+/g).length;
   const minutesToRead = (wordCount / 100 + 1).toFixed(0);
+
+  function gotoSlug() {
+    console.log("gotoSlug");
+    router.push({
+      pathname: `/${post.username}/${company}/${post.id}/${post.slug}`,
+    });
+  }
 
   return (
     <article className="media">
@@ -36,7 +45,7 @@ function PostItem({ post, username, company }) {
       <div className="media-content">
         <div className="content">
           <p className="has-text-white">
-            <Link href={`/${post.username}/${company}/${post.slug}`}>
+            <Link href={`/${post.username}/${company}/${post.id}/${post.slug}`}>
               <a>
                 {post.username === username ? (
                   <strong className="has-text-primary is-capitalized">
@@ -64,11 +73,11 @@ function PostItem({ post, username, company }) {
             </Link>
 
             <br />
-            <Link href={`/${post.username}/${company}/${post.slug}`}>
+            <div onClick={gotoSlug}>
               <span className="has-text-white title">
                 <a>{post.title}</a>
               </span>
-            </Link>
+            </div>
 
             <br />
             {post.published ? (
