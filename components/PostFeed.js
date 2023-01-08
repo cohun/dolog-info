@@ -1,6 +1,6 @@
-import Link from "next/link";
-import Image from "next/image";
-import { useRouter } from "next/router";
+import Link from 'next/link';
+import Image from 'next/image';
+import { useRouter } from 'next/router';
 
 const PostFeed = ({ posts, username, company }) => {
   return posts
@@ -24,7 +24,7 @@ function PostItem({ post, username, company }) {
   const minutesToRead = (wordCount / 100 + 1).toFixed(0);
 
   function gotoSlug() {
-    console.log("gotoSlug");
+    console.log('gotoSlug');
     router.push({
       pathname: `/${post.username}/${company}/${post.id}/${post.slug}`,
     });
@@ -33,41 +33,41 @@ function PostItem({ post, username, company }) {
   return (
     <article className="media">
       <figure className="media-left">
-        <p className="image is-64x64">
+        <div className="image is-64x64">
           <Image
             src="https://bulma.io/images/placeholders/128x128.png"
             alt="1"
             width={64}
             height={64}
           />
-        </p>
+        </div>
       </figure>
       <div className="media-content">
         <div className="content">
-          <p className="has-text-white">
+          <div className="has-text-white">
             <Link href={`/${post.username}/${company}/${post.id}/${post.slug}`}>
               <a>
                 {post.username === username ? (
                   <strong className="has-text-primary is-capitalized">
-                    Írta: @{post.username} {"  "}{" "}
+                    Írta: @{post.username} {'  '}{' '}
                   </strong>
                 ) : (
                   <strong className="has-text-warning is-capitalized">
-                    Írta: @{post.username} {"  "}{" "}
+                    Írta: @{post.username} {'  '}{' '}
                   </strong>
                 )}
 
                 <span className="block m-3"></span>
                 <span className="has-text-info">
-                  {"  « "} Létrehozva:{" "}
-                  {new Date(post.createdAt).toLocaleString("hu-HU")}
-                  {" » "}
+                  {'  « '} Létrehozva:{' '}
+                  {new Date(post.createdAt).toLocaleString('hu-HU')}
+                  {' » '}
                 </span>
                 <span className="block m-3"></span>
                 <span className="has-text-info">
-                  {"  « "} Módosítva:{" "}
-                  {new Date(post.updatedAt).toLocaleString("hu-HU")}
-                  {" » "}
+                  {'  « '} Módosítva:{' '}
+                  {new Date(post.updatedAt).toLocaleString('hu-HU')}
+                  {' » '}
                 </span>
               </a>
             </Link>
@@ -89,12 +89,12 @@ function PostItem({ post, username, company }) {
               </small>
             ) : (
               <span className="has-text-warning">
-                {"  « "} Nem publikus még {" » "}
+                {'  « '} Nem publikus még {' » '}
               </span>
             )}
 
             <br />
-          </p>
+          </div>
         </div>
 
         {/* If admin view, show extra controls for user */}
