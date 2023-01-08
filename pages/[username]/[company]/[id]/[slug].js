@@ -83,11 +83,6 @@ const PostPage = () => {
     <main className="">
       <Navbar />
       <aside className="hero has-background-warning-light">
-        <p className="has-text-centered pt-5 has-text-danger-dark">
-          Népszerűségi pont:
-          <strong> {post.heartCount || 0} 💗</strong>
-        </p>
-
         <AuthCheck
           fallback={
             <Link href="/">
@@ -98,13 +93,31 @@ const PostPage = () => {
           {/* <HeartButton postRef={postRef} /> */}
         </AuthCheck>
 
-        {username === post?.username && (
-          <div className="container">
-            <Link href={`/admin/${company}/${id}/${slug}`}>
-              <button className="button is-primary">Szerkeszd posztodat</button>
-            </Link>
+        <nav class="level">
+          <div class="level-item has-text-centered">
+            <div className="mt-3">
+              <p class="heading has-text-black">Tulajdonos</p>
+              <p class="subtitle">{post.company}</p>
+            </div>
           </div>
-        )}
+          <div class="level-item has-text-centered">
+            <div className="mt-3">
+              <p class="heading has-text-black">dolog azonosító</p>
+              <p class="subtitle">{post.id}</p>
+            </div>
+          </div>
+          <div class="level-item has-text-centered">
+            <div>
+              {username === post?.username && (
+                <Link href={`/admin/${company}/${id}/${slug}`} className="">
+                  <button className="button is-primary mt-2">
+                    Szerkeszd posztodat
+                  </button>
+                </Link>
+              )}
+            </div>
+          </div>
+        </nav>
       </aside>
       <section>
         <PostContent post={post} />

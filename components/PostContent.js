@@ -29,6 +29,10 @@ const PostContent = ({ post }) => {
               </span>
               {'     '}
               <span className="m-2">Az írás dátuma: {createdAt}</span>
+              <span className="m-2 has-text-centered pt-5 has-text-danger-dark">
+                Népszerűségi pont:
+                <strong> {post.heartCount || 0} 💗</strong>
+              </span>
             </span>
             <div className="card">
               <div className="card-content">

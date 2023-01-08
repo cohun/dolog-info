@@ -1,14 +1,14 @@
-import { useState } from "react";
-import { useRouter } from "next/router";
-import { useContext } from "react";
-import { UserContext } from "../../../../lib/context";
+import { useState } from 'react';
+import { useRouter } from 'next/router';
+import { useContext } from 'react';
+import { UserContext } from '../../../../lib/context';
 
-import ReactMarkdown from "react-markdown";
-import { useForm } from "react-hook-form";
-import Link from "next/link";
-import toast from "react-hot-toast";
-import AuthCheck from "../../../../components/AuthCheck";
-import Navbar from "../../../../components/Navbar";
+import ReactMarkdown from 'react-markdown';
+import { useForm } from 'react-hook-form';
+import Link from 'next/link';
+import toast from 'react-hot-toast';
+import AuthCheck from '../../../../components/AuthCheck';
+import Navbar from '../../../../components/Navbar';
 
 import {
   getDoc,
@@ -16,8 +16,8 @@ import {
   updateDoc,
   deleteDoc,
   serverTimestamp,
-} from "firebase/firestore";
-import { db } from "../../../../lib/firebaseConfig";
+} from 'firebase/firestore';
+import { db } from '../../../../lib/firebaseConfig';
 
 const AdminPostEdit = () => {
   const { user } = useContext(UserContext);
@@ -31,7 +31,7 @@ const AdminPostEdit = () => {
 
 function PostManager({ uid }) {
   const [preview, setPreview] = useState(false);
-  const [post, setPost] = useState("");
+  const [post, setPost] = useState('');
   const router = useRouter();
   const { company, id, slug } = router.query;
 
@@ -40,12 +40,12 @@ function PostManager({ uid }) {
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
-      if (post === "") {
+      if (post === '') {
         setPost(docSnap.data());
       }
     } else {
       // doc.data() will be undefined in this case
-      console.log("No such document!");
+      console.log('No such document!');
     }
   }
   getPost();
@@ -94,11 +94,13 @@ function PostManager({ uid }) {
                   className="button "
                   onClick={() => setPreview(!preview)}
                 >
-                  {preview ? "Szerkesztés" : "Előnézet"}
+                  {preview ? 'Szerkesztés' : 'Előnézet'}
                 </button>
               </div>
               <div className="level-item has-text-centered">
-                <Link href={`/${post.username}/${company}/${post.slug}`}>
+                <Link
+                  href={`/${post.username}/${company}/${post.id}/${post.slug}`}
+                >
                   <button className="button is-link">Valós nézet</button>
                 </Link>
               </div>
@@ -124,7 +126,7 @@ function PostManager({ uid }) {
 function PostForm({ postRef, defaultValues, preview }) {
   const { register, errors, handleSubmit, formState, reset, watch } = useForm({
     defaultValues,
-    mode: "onChange",
+    mode: 'onChange',
   });
 
   const { isValid, isDirty } = formState;
@@ -138,7 +140,7 @@ function PostForm({ postRef, defaultValues, preview }) {
 
     reset({ content, published });
 
-    toast.success("Post updated successfully!");
+    toast.success('Post updated successfully!');
   };
 
   return (
@@ -147,7 +149,7 @@ function PostForm({ postRef, defaultValues, preview }) {
         <div className="card">
           <div className="card-content">
             <div className="content">
-              <ReactMarkdown>{watch("content")}</ReactMarkdown>
+              <ReactMarkdown>{watch('content')}</ReactMarkdown>
             </div>
           </div>
         </div>
@@ -159,10 +161,10 @@ function PostForm({ postRef, defaultValues, preview }) {
             rows={15}
             className="textarea is-large is-primary"
             name="content"
-            {...register("content", {
-              maxLength: { value: 20000, message: "content is too long" },
-              minLength: { value: 10, message: "content is too short" },
-              required: { value: true, message: "content is required" },
+            {...register('content', {
+              maxLength: { value: 20000, message: 'content is too long' },
+              minLength: { value: 10, message: 'content is too short' },
+              required: { value: true, message: 'content is required' },
             })}
           ></textarea>
 
@@ -175,7 +177,7 @@ function PostForm({ postRef, defaultValues, preview }) {
               className="checkbox mt-2"
               name="published"
               type="checkbox"
-              {...register("published")}
+              {...register('published')}
             />
             <label>Publikálva</label>
           </fieldset>
@@ -197,11 +199,11 @@ function DeletePostButton({ postRef }) {
   const router = useRouter();
 
   const deletePost = async () => {
-    const doIt = confirm("are you sure!");
+    const doIt = confirm('are you sure!');
     if (doIt) {
       await deleteDoc(postRef);
-      router.push("/admin");
-      toast("post annihilated ", { icon: "🗑️" });
+      router.push('/admin');
+      toast('post annihilated ', { icon: '🗑️' });
     }
   };
 
