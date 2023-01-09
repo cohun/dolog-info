@@ -6,7 +6,7 @@ import {
   onSnapshot,
   limit,
 } from "firebase/firestore";
-import { db } from "../lib/firebaseConfig";
+import { db, getUsersRole } from "../lib/firebaseConfig";
 import toast from "react-hot-toast";
 
 const WhichCompany = ({ username, setChosen, setCompany }) => {
@@ -35,6 +35,17 @@ const WhichCompany = ({ username, setChosen, setCompany }) => {
     });
   }, []);
 
+  async function handleCompanyChoice(company) {
+    const role = await getUsersRole(company, username);
+    if (role === "elbírálás alatt") {
+      toast.error("Jelenleg még nincs hozzáférésed ehhez!");
+      console.log("elbírálás alatt");
+    } else {
+      setCompany(company);
+      setChecked(true);
+    }
+  }
+
   function companyList() {
     let addr = "";
     let company = "";
@@ -56,8 +67,7 @@ const WhichCompany = ({ username, setChosen, setCompany }) => {
                 value={company}
                 type="radio"
                 onChange={(e) => {
-                  setCompany(e.target.value);
-                  setChecked(true);
+                  handleCompanyChoice(e.target.value);
                 }}
               />
             </label>
@@ -69,16 +79,14 @@ const WhichCompany = ({ username, setChosen, setCompany }) => {
     return (
       <div className="table-container">
         <table className="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
-          <table className="table">
-            <thead>
-              <tr>
-                <th>Tulajdonos neve</th>
-                <th>Címe</th>
-                <th>Választ</th>
-              </tr>
-            </thead>
-            <tbody>{companiesArray}</tbody>
-          </table>
+          <thead>
+            <tr>
+              <th>Tulajdonos neve</th>
+              <th>Címe</th>
+              <th>Választ</th>
+            </tr>
+          </thead>
+          <tbody>{companiesArray}</tbody>
         </table>
       </div>
     );

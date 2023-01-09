@@ -4,6 +4,7 @@ import CompanyAdmin from "./CompanyAdmin";
 import HashingForm from "./hashing";
 import Image from "next/image";
 import toast from "react-hot-toast";
+import { getUsersRole } from "../lib/firebaseConfig";
 import { query, where } from "firebase/firestore";
 
 const UserProfile = ({ username, companies, address }) => {
@@ -11,6 +12,24 @@ const UserProfile = ({ username, companies, address }) => {
   const [adminHash, setAdminHash] = useState([]);
   const [target, setTarget] = useState("");
   const [hash, setHash] = useState("");
+  // const [admitted, setAdmitted] = useState(true);
+  let admitted = false;
+
+  async function handleCompanyChoice(compa, allowed) {
+    console.log("compa", compa);
+    const role = await getUsersRole(compa, username);
+    console.log("ROLE:", role);
+    console.log("allowed", allowed);
+    if (role === "elbírálás alatt") {
+      toast.error("Jelenleg még nincs hozzáférésed ehhez!");
+      console.log("elbírálás alatt");
+      admitted = false;
+      console.log(admitted);
+    } else {
+      admitted = true;
+      console.log(admitted);
+    }
+  }
 
   const getCompany = (comp, addr) => {
     let compa = "";
@@ -20,7 +39,7 @@ const UserProfile = ({ username, companies, address }) => {
       compa = comp[i];
       addre = addr[i];
       let hash = "";
-      let allowed = true;
+      let allowed = false;
 
       if (adminHash.length >= 1) {
         adminHash.forEach((element) => {
@@ -40,18 +59,24 @@ const UserProfile = ({ username, companies, address }) => {
                 : "columns button is-large is-responsive is-one-fifth is-primary has-text-warning is-outlined mt-5"
             }
             onClick={(i) => {
+              handleCompanyChoice(i.target.innerHTML, allowed);
               if (allowed) {
                 setTarget(i.target.innerHTML);
                 setHash(hash);
               } else {
-                toast.error("Engedélyezés még folyamatban...");
-                setTimeout(
-                  () =>
-                    toast.error(
-                      "Használati megállapodás aláírása után kerül a cég regisztrálásra!"
-                    ),
-                  3000
-                );
+                if (admitted) {
+                  setTarget(i.target.innerHTML);
+                  setHash(hash);
+                } else {
+                  toast.error("Engedélyezés még folyamatban...");
+                  setTimeout(
+                    () =>
+                      toast.error(
+                        "Használati megállapodás aláírása után kerül a cég regisztrálásra!"
+                      ),
+                    3000
+                  );
+                }
               }
             }}
           >

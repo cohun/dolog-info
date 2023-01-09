@@ -1,15 +1,12 @@
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
-import { useContext } from 'react';
-import { UserContext } from '../../../../lib/context';
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { useContext } from "react";
+import { UserContext } from "../../../../lib/context";
 
-import ReactMarkdown from 'react-markdown';
-import { useForm } from 'react-hook-form';
-import Link from 'next/link';
-import toast from 'react-hot-toast';
-import AuthCheck from '../../../../components/AuthCheck';
-import PostContent from '../../../../components/PostContent';
-import Navbar from '../../../../components/Navbar';
+import Link from "next/link";
+import AuthCheck from "../../../../components/AuthCheck";
+import PostContent from "../../../../components/PostContent";
+import Navbar from "../../../../components/Navbar";
 
 import {
   getDoc,
@@ -18,20 +15,17 @@ import {
   collection,
   where,
   query,
-  onSnapshot,
-} from 'firebase/firestore';
-import { db } from '../../../../lib/firebaseConfig';
+} from "firebase/firestore";
+import { db } from "../../../../lib/firebaseConfig";
 
 const PostPage = () => {
-  const [username1, setUsername1] = useState(null);
+  const { username } = useContext(UserContext);
 
-  const { user, username } = useContext(UserContext);
-
-  const [uid, setUid] = useState('');
+  const [uid, setUid] = useState("");
   const [post, setPost] = useState([]);
   const router = useRouter();
   const { username: un, company, id, slug } = router.query;
-  console.log('UN', un);
+  console.log("UN", un);
 
   async function getPost(uid, company, id, slug) {
     console.log(uid);
@@ -41,34 +35,34 @@ const PostPage = () => {
     if (docSnap.exists()) {
       const po = docSnap.data();
 
-      const date = po.createdAt.toDate().toLocaleString('hu-HU');
-      const upDate = po.updatedAt.toDate().toLocaleString('hu-HU');
+      const date = po.createdAt.toDate().toLocaleString("hu-HU");
+      const upDate = po.updatedAt.toDate().toLocaleString("hu-HU");
       po.createdAt = date;
       po.updatedAt = upDate;
       return po;
     } else {
       // doc.data() will be undefined in this case
-      console.log('No such document!');
+      console.log("No such document!");
     }
   }
 
   const getPos = async () => {
-    const q = query(collection(db, 'users'), where('username', '==', un));
+    const q = query(collection(db, "users"), where("username", "==", un));
 
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
       // doc.data() is never undefined for query doc snapshots
-      console.log(doc.id, ' => ', doc.data());
+      console.log(doc.id, " => ", doc.data());
       setUid(doc.id);
     });
     if (uid) {
       const pos = await getPost(uid, company, id, slug);
       if (pos) {
         setPost(pos);
-        console.log('usernamePost:', post.username);
-        console.log('username', username);
+        console.log("usernamePost:", post.username);
+        console.log("username", username);
       } else {
-        console.log('Nincs poszt');
+        console.log("Nincs poszt");
       }
     }
   };
