@@ -9,6 +9,7 @@ import Link from 'next/link';
 import toast from 'react-hot-toast';
 import AuthCheck from '../../../../components/AuthCheck';
 import Navbar from '../../../../components/Navbar';
+import ImageUploader from '../../../../components/ImageUploader';
 
 import {
   getDoc,
