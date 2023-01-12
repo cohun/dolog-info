@@ -156,7 +156,10 @@ function PostForm({ postRef, defaultValues, preview }) {
         </div>
       ) : (
         <div className="block">
-          {/* <ImageUploader /> */}
+          <ImageUploader
+            company={defaultValues.company}
+            id={defaultValues.id}
+          />
 
           <textarea
             rows={15}
