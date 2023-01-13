@@ -17,32 +17,16 @@ export default function ImageUploader({ company, id }) {
     const extension = file.type.split('/')[1];
 
     // Makes reference to the storage bucket location
-    // const ref = storage.ref(`uploads/${auth.currentUser.uid}/${Date.now()}.${extension}`);
 
     const storageRef = ref(
       storage,
-      `uploads/${
-        auth.currentUser.uid
-      }/${company}/${id}/${Date.now()}.${extension}`
+      `uploads/${auth.currentUser.uid}/${Date.now()}.${extension}`
     );
     setUploading(true);
-
     // Starts the upload
-    // const task = ref.put(file);
     const uploadTask = uploadBytesResumable(storageRef, file);
 
     // Listen to updates to upload task
-    /* task.on(STATE_CHANGED, (snapshot) => {
-      const pct = ((snapshot.bytesTransferred / snapshot.totalBytes) * 100).toFixed(0);
-      setProgress(pct);
-    });
-    // Get downloadURL AFTER task resolves (Note: this is not a native Promise)
-    task
-      .then((d) => ref.getDownloadURL())
-      .then((url) => {
-        setDownloadURL(url);
-        setUploading(false);
-      }); */
 
     // Listen for state changes, errors, and completion of the upload.
     uploadTask.on(
@@ -98,19 +82,34 @@ export default function ImageUploader({ company, id }) {
 
       {!uploading && (
         <>
-          <label className="btn">
-            📸 Upload Img
-            <input
-              type="file"
-              onChange={uploadFile}
-              accept="image/x-png,image/gif,image/jpeg"
-            />
-          </label>
+          <div className="file is-info">
+            <label className="file-label">
+              <input
+                className="file-input"
+                type="file"
+                name="resume"
+                onChange={uploadFile}
+                accept="image/x-png,image/gif,image/jpeg, .pdf"
+              />
+              <span className="file-cta">
+                <span className="file-icon">
+                  <i className="fas fa-upload"></i>
+                </span>
+                <span className="file-label">📸 Válassz egy képet…</span>
+              </span>
+
+              <span className="mx-3">{'   '}</span>
+              <span className="is-italic mt-2">
+                a megjelenő letöltési linket másold be a szövegbe, ahol
+                szeretnéd, hogy megjelenjen.
+              </span>
+            </label>
+          </div>
         </>
       )}
 
       {downloadURL && (
-        <code className="upload-snippet">{`![alt](${downloadURL})`}</code>
+        <code className="is-family-code">{`![alt](${downloadURL})`}</code>
       )}
     </div>
   );
