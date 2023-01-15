@@ -4,7 +4,7 @@ import toast from 'react-hot-toast';
 import Image from 'next/image';
 import { getId, setThing } from '../lib/firebaseConfig';
 
-const NewThing = ({ target, setIsNew }) => {
+const NewThing = ({ username, target, setIsNew }) => {
   const [name, setName] = useState('');
   const [id, setId] = useState('');
   const [site, setSite] = useState('');
@@ -42,7 +42,7 @@ const NewThing = ({ target, setIsNew }) => {
       toast.error('Azonosító nem lehet üres!');
       return;
     }
-    setQRText(`${target} - ${id}`);
+    setQRText(`https://www.dolog.info/${username}/${target}/${id}`);
     setIsDisabled(false);
   };
 

@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
-import Image from "next/image";
-import { getAllThingsForACompany, getThingsId } from "../lib/firebaseConfig";
-import toast from "react-hot-toast";
+import React, { useEffect, useState } from 'react';
+import Image from 'next/image';
+import { getAllThingsForACompany, getThingsId } from '../lib/firebaseConfig';
+import Link from 'next/link';
 
 const CompanyThings = ({ target, setIsNew, hash, username }) => {
   const [allThings, setAllThings] = useState([]);
@@ -17,41 +17,44 @@ const CompanyThings = ({ target, setIsNew, hash, username }) => {
     if (ids) {
       setThingsId(ids.thingsId);
     } else {
-      console.log("Adminisztrátor minden dologhoz hozzáfér");
+      console.log('Adminisztrátor minden dologhoz hozzáfér');
     }
   };
 
   useEffect(() => {
     getThings();
-    if (username != "") {
+    if (username != '') {
       getIds();
     }
   }, [allThings.length]);
 
   function things() {
-    let thingsArray = [""];
+    let thingsArray = [''];
     for (let index = 0; index < allThings.length; index++) {
       // if hash === "" if (thingsId?.includes(allThings[index].id))
-      if (hash === "" && !thingsId?.includes(allThings[index].id)) {
+      if (hash === '' && !thingsId?.includes(allThings[index].id)) {
         continue;
       }
       thingsArray.push(
         <div key={index}>
           <div className="box has-background-warning py-1"></div>
-          <div className="panel-block">
+          <Link
+            href={`/${username}/${target}/${allThings[index].id}`}
+            className="panel-block"
+          >
             <div className="tile is-ancestor">
               <div className="tile is-vertical is-10">
                 <div className="tile">
                   <div className="tile is-parent is-vertical is-3">
-                    <article className="tile is-child box has-background-warning">
+                    <article className="tile is-child box has-background-info-light">
                       <p className="has-text-weight-bold">Azonosító:</p>
                       <p className="subtitle has-text-danger-dark">
                         {allThings[index].id}
                       </p>
                     </article>
-                    <article className="tile is-child box">
+                    <article className="tile is-child box has-background-info-light">
                       <p className="has-text-weight-bold">Megnevezés:</p>
-                      <p className="subtitle has-text-link-dark">
+                      <p className="is-size-4 is-underlined has-text-link-dark">
                         {allThings[index].description}
                       </p>
                     </article>
@@ -81,7 +84,7 @@ const CompanyThings = ({ target, setIsNew, hash, username }) => {
                 </article>
               </div>
             </div>
-          </div>
+          </Link>
           <div className="box has-background-warning py-1"></div>
         </div>
       );
@@ -94,7 +97,7 @@ const CompanyThings = ({ target, setIsNew, hash, username }) => {
       <div className="section is-info">
         <div className="columns is-centered ">
           <div className="button is-medium has-background-warning has-text-dark has-text-weight-bold">
-            {target}{" "}
+            {target}{' '}
           </div>
           <h3 className="card pr-3 pt-2 is-size-4 has-text-centered has-background-black has-text-warning">
             <div className="ml-3 has-text-danger-light"> dolgai:</div>
@@ -106,7 +109,7 @@ const CompanyThings = ({ target, setIsNew, hash, username }) => {
         <div className="card ">
           <article className="panel is-warning">
             <p className="panel-heading">Dolgok listája</p>
-            {hash !== "" ? (
+            {hash !== '' ? (
               <div className="panel-tabs">
                 {delView ? (
                   <a className="is-active">
@@ -114,9 +117,9 @@ const CompanyThings = ({ target, setIsNew, hash, username }) => {
                       onClick={() => {
                         setDelView(false);
                       }}
-                      className="button is-focused is-medium is-primary "
+                      className="button is-focused is-medium is-danger "
                     >
-                      Vissza a listához
+                      Kattints a törlendő dologra!
                     </button>
                   </a>
                 ) : (
