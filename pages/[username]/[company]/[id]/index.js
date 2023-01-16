@@ -57,13 +57,13 @@ const ComingFromQRCode = () => {
     if (user) {
       nameAdmin(company, username);
     }
-  }, [filteredPosts]);
+  }, [filteredPosts, username]);
 
   useEffect(() => {
     if (isAdmitted) {
       thingsIdincluded(company, username);
     }
-  }, [isAdmitted]);
+  }, [isAdmitted, username]);
 
   const thingsIdincluded = async function (target, who) {
     const docRef = doc(db, `companies/${target}/${who}`, 'what');
