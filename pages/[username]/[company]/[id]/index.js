@@ -55,7 +55,9 @@ const ComingFromQRCode = () => {
   useEffect(() => {
     if (user) {
       nameAdmin(company, username);
-      thingsIdincluded(company, username);
+      if (isAdmitted) {
+        thingsIdincluded(company, username);
+      }
     }
   }, [filteredPosts]);
 
