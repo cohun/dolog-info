@@ -37,6 +37,7 @@ const ComingFromQRCode = () => {
   const [postsEnd, setPostsEnd] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [isAdmitted, setIsAdmitted] = useState(false);
+  const [isAdmitted2, setIsAdmitted2] = useState(false);
   const [filteredPosts, setFilteredPosts] = useState([]);
   const [users, setUsers] = useState([]);
   const [things, setThings] = useState([]);
@@ -55,11 +56,14 @@ const ComingFromQRCode = () => {
   useEffect(() => {
     if (user) {
       nameAdmin(company, username);
-      if (isAdmitted) {
-        thingsIdincluded(company, username);
-      }
     }
   }, [filteredPosts]);
+
+  useEffect(() => {
+    if (isAdmitted) {
+      thingsIdincluded(company, username);
+    }
+  }, [isAdmitted]);
 
   const thingsIdincluded = async function (target, who) {
     const docRef = doc(db, `companies/${target}/${who}`, 'what');
@@ -67,12 +71,12 @@ const ComingFromQRCode = () => {
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
+      console.log('things', docSnap.data().thingsId, id);
       setThings(docSnap.data().thingsId);
       if (things.includes(id)) {
-        setIsAdmitted(true);
-      } else {
-        setIsAdmitted(false);
+        setIsAdmitted2(true);
       }
+      console.log('isAdmitted2:', isAdmitted);
     } else {
       // doc.data() will be undefined in this case
       console.log('No such document!');
@@ -178,7 +182,7 @@ const ComingFromQRCode = () => {
       <Navbar></Navbar>
       <div className="">
         <div className="hero is-fullheight has-background-grey-darker ">
-          {!isAdmitted ? (
+          {!isAdmitted && !isAdmitted2 ? (
             <div className="section">
               <Link href="/login">
                 <div className="columns">
