@@ -43,7 +43,7 @@ const ComingFromQRCode = () => {
   const [things, setThings] = useState([]);
   const { user, username } = useContext(UserContext);
   const router = useRouter();
-  const { company, id } = router.query;
+  const { username: un, company, id } = router.query;
 
   useEffect(() => {
     if (user) {
@@ -245,7 +245,7 @@ const ComingFromQRCode = () => {
 
                 <PostFeed
                   posts={filteredPosts}
-                  username={username}
+                  un={username}
                   company={company}
                 ></PostFeed>
 
