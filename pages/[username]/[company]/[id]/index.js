@@ -43,11 +43,11 @@ const ComingFromQRCode = () => {
   const [things, setThings] = useState([]);
   const { user, username } = useContext(UserContext);
   const router = useRouter();
-  const { username: un, company, id } = router.query;
+  const { company, id } = router.query;
 
   useEffect(() => {
     if (user) {
-      nameAdmin(company, un);
+      nameAdmin(company, username);
       getPosts(company);
       setPostsEnd(false);
       user.photoURL && setImageURL(user.photoURL);
@@ -55,7 +55,7 @@ const ComingFromQRCode = () => {
   }, [company, id]);
   useEffect(() => {
     if (user) {
-      nameAdmin(company, un);
+      nameAdmin(company, username);
     }
   }, [filteredPosts]);
 
@@ -245,7 +245,7 @@ const ComingFromQRCode = () => {
 
                 <PostFeed
                   posts={filteredPosts}
-                  un={un}
+                  username={username}
                   company={company}
                 ></PostFeed>
 
@@ -281,7 +281,7 @@ const ComingFromQRCode = () => {
                     <div className="content">
                       <div className="">
                         <strong className="has-text-primary is-capitalized mr-2">
-                          {un}{' '}
+                          {username}{' '}
                         </strong>
                         <span className="">
                           <Link href="/admin">
