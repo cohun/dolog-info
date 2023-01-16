@@ -1,6 +1,6 @@
-import Link from 'next/link';
-import Image from 'next/image';
-import { useRouter } from 'next/router';
+import Link from "next/link";
+import Image from "next/image";
+import { useRouter } from "next/router";
 import {
   collectionGroup,
   query,
@@ -13,28 +13,30 @@ import {
   startAfter,
   collection,
   deleteDoc,
-} from 'firebase/firestore';
-import { useEffect, useState } from 'react';
-import Navbar from '../../../../components/Navbar';
-import { useContext } from 'react';
-import { UserContext } from '../../../../lib/context';
-import PostFeed from '../../../../components/PostFeed';
+} from "firebase/firestore";
+import { useEffect, useState } from "react";
+import Navbar from "../../../../components/Navbar";
+import { useContext } from "react";
+import { UserContext } from "../../../../lib/context";
+import PostFeed from "../../../../components/PostFeed";
 import {
   postToJson,
   fromMillis,
   db,
   delThing,
-} from '../../../../lib/firebaseConfig';
+} from "../../../../lib/firebaseConfig";
+import AuthCheck from "../../../../components/AuthCheck";
 
 const LIMIT = 5;
 
 const ComingFromQRCode = () => {
   const [imageURL, setImageURL] = useState(
-    'https://bulma.io/images/placeholders/128x128.png'
+    "https://bulma.io/images/placeholders/128x128.png"
   );
   const [loading, setLoading] = useState(false);
   const [postsEnd, setPostsEnd] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isAdmitted, setIsAdmitted] = useState(false);
   const [filteredPosts, setFilteredPosts] = useState([]);
   const [users, setUsers] = useState([]);
   const { user } = useContext(UserContext);
@@ -49,6 +51,11 @@ const ComingFromQRCode = () => {
       user.photoURL && setImageURL(user.photoURL);
     }
   }, [company, id]);
+  useEffect(() => {
+    if (user) {
+      nameAdmin(company, username);
+    }
+  }, [filteredPosts]);
 
   const nameAdmin = async function (target, who) {
     const docRef = doc(db, `companies`, target);
@@ -61,9 +68,15 @@ const ComingFromQRCode = () => {
       if (admin === who) {
         setIsAdmin(true);
       }
+      if (docSnap.data().users.includes(who)) {
+        setIsAdmitted(true);
+      }
+      console.log(who);
+      console.log(users);
+      console.log("isAdmitted:", isAdmitted);
     } else {
       // doc.data() will be undefined in this case
-      console.log('No such document!');
+      console.log("No such document!");
     }
   };
 
@@ -79,34 +92,34 @@ const ComingFromQRCode = () => {
   }
 
   const getUID = async function (user) {
-    const docRef = doc(db, 'usernames', user);
+    const docRef = doc(db, "usernames", user);
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
-      console.log('Document data:', docSnap.data());
+      console.log("Document data:", docSnap.data());
       const uid = docSnap.data().uid;
       const querySnapshot = await getDocs(
         collection(db, `users/${uid}/${company}/${id}/posts`)
       );
       querySnapshot.forEach((doc) => {
         // doc.data() is never undefined for query doc snapshots
-        console.log(doc.id, ' => ', doc.data());
+        console.log(doc.id, " => ", doc.data());
         delPost(uid, doc.id);
       });
-      router.push('/');
+      router.push("/");
     } else {
       // doc.data() will be undefined in this case
-      console.log('No such document!');
+      console.log("No such document!");
     }
   };
 
   const getPosts = async function (company) {
     const postsQuery = query(
-      collectionGroup(db, 'posts'),
-      where('published', '==', true),
-      where('company', '==', company),
-      where('id', '==', id),
-      orderBy('createdAt', 'desc'),
+      collectionGroup(db, "posts"),
+      where("published", "==", true),
+      where("company", "==", company),
+      where("id", "==", id),
+      orderBy("createdAt", "desc"),
       limit(LIMIT)
     );
     const posts = (await getDocs(postsQuery)).docs.map(postToJson);
@@ -117,15 +130,15 @@ const ComingFromQRCode = () => {
     setLoading(true);
     const last = filteredPosts[filteredPosts.length - 1];
     const cursor =
-      typeof last.createdAt === 'number'
+      typeof last.createdAt === "number"
         ? fromMillis(last.createdAt)
         : last.createdAt;
     const postsQuery = query(
-      collectionGroup(db, 'posts'),
-      where('published', '==', true),
-      where('company', '==', company),
-      where('id', '==', id),
-      orderBy('createdAt', 'desc'),
+      collectionGroup(db, "posts"),
+      where("published", "==", true),
+      where("company", "==", company),
+      where("id", "==", id),
+      orderBy("createdAt", "desc"),
       startAfter(cursor),
       limit(LIMIT)
     );
@@ -143,105 +156,120 @@ const ComingFromQRCode = () => {
       <Navbar></Navbar>
       <div className="">
         <div className="hero is-fullheight has-background-grey-darker ">
-          <div className="section">
-            <div className="notification is-warning is-light">
-              <nav className="level">
-                <div className="level-item has-text-centered">
-                  <div>
-                    <p className="heading">Tulajdonos</p>
-                    <div className="title">
-                      <strong className="has-text-warning-dark is-capitalized is-size-3-desktop is-size-4-tablet">
-                        {company}
-                      </strong>
-                    </div>
-                  </div>
+          {!isAdmitted ? (
+            <div className="section">
+              <Link href="/login">
+                <div className="columns">
+                  <button className="button mr-2">
+                    Ehhez előbb be kell jelnetkezned!
+                  </button>
+                  <button className="button is-primary">Bejelentkezés</button>
                 </div>
-                <div className="level-item has-text-centered">
-                  <div>
-                    <p className="heading">dolog azonosító</p>
-                    <div className="">
-                      <strong className="has-text-warning-dark is-capitalized is-size-3-desktop is-size-4-tablet">
-                        {id}
-                      </strong>
+              </Link>
+            </div>
+          ) : (
+            <AuthCheck>
+              <div className="section">
+                <div className="notification is-warning is-light">
+                  <nav className="level">
+                    <div className="level-item has-text-centered">
+                      <div>
+                        <p className="heading">Tulajdonos</p>
+                        <div className="title">
+                          <strong className="has-text-warning-dark is-capitalized is-size-3-desktop is-size-4-tablet">
+                            {company}
+                          </strong>
+                        </div>
+                      </div>
                     </div>
-                  </div>
+                    <div className="level-item has-text-centered">
+                      <div>
+                        <p className="heading">dolog azonosító</p>
+                        <div className="">
+                          <strong className="has-text-warning-dark is-capitalized is-size-3-desktop is-size-4-tablet">
+                            {id}
+                          </strong>
+                        </div>
+                      </div>
+                    </div>
+
+                    {isAdmin && (
+                      <div className="level-item has-text-centered">
+                        <div>
+                          <p className="heading">
+                            dolog és valamennyi hozzátartozó poszt törlése
+                          </p>
+                          <div className="">
+                            <button
+                              className="button is-danger is-light"
+                              onClick={(event) => {
+                                delPosts();
+                              }}
+                            >
+                              Törlés
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </nav>
                 </div>
 
-                {isAdmin && (
-                  <div className="level-item has-text-centered">
-                    <div>
-                      <p className="heading">
-                        dolog és valamennyi hozzátartozó poszt törlése
-                      </p>
-                      <div className="">
+                <PostFeed
+                  posts={filteredPosts}
+                  username={username}
+                  company={company}
+                ></PostFeed>
+
+                <hr />
+                {!loading && !postsEnd && (
+                  <div className=" columns is-mobile">
+                    <div className="column is-half is-offset-5">
+                      {filteredPosts.length >= 1 && (
                         <button
-                          className="button is-danger is-light"
-                          onClick={(event) => {
-                            delPosts();
-                          }}
+                          className="button has-background-warning-light"
+                          onClick={getMorePosts}
                         >
-                          Törlés
+                          További posztok
                         </button>
-                      </div>
+                      )}
                     </div>
                   </div>
                 )}
-              </nav>
-            </div>
-
-            <PostFeed
-              posts={filteredPosts}
-              username={username}
-              company={company}
-            ></PostFeed>
-
-            <hr />
-            {!loading && !postsEnd && (
-              <div className=" columns is-mobile">
-                <div className="column is-half is-offset-5">
-                  {filteredPosts.length >= 1 && (
-                    <button
-                      className="button has-background-warning-light"
-                      onClick={getMorePosts}
-                    >
-                      További posztok
-                    </button>
-                  )}
-                </div>
-              </div>
-            )}
-            {postsEnd && (
-              <div className=" columns is-mobile">
-                <div className="column is-half is-offset-5">
-                  Nincs további poszt
-                </div>
-              </div>
-            )}
-            <article className="media">
-              <figure className="media-left">
-                <div className="image is-64x64">
-                  <Image src={imageURL} alt="4" width={48} height={48} />
-                </div>
-              </figure>
-              <div className="media-content">
-                <div className="content">
-                  <div className="">
-                    <strong className="has-text-primary is-capitalized mr-2">
-                      {username}{' '}
-                    </strong>
-                    <span className="">
-                      <Link href="/admin">
-                        <a className="button is-primary is-outlined">
-                          <strong>Új poszt írás</strong>
-                        </a>
-                      </Link>
-                    </span>
+                {postsEnd && (
+                  <div className=" columns is-mobile">
+                    <div className="column is-half is-offset-5">
+                      Nincs további poszt
+                    </div>
                   </div>
-                </div>
-                <div className="field"></div>
+                )}
+                <article className="media">
+                  <figure className="media-left">
+                    <div className="image is-64x64">
+                      <Image src={imageURL} alt="4" width={48} height={48} />
+                    </div>
+                  </figure>
+                  <div className="media-content">
+                    <div className="content">
+                      <div className="">
+                        <strong className="has-text-primary is-capitalized mr-2">
+                          {username}{" "}
+                        </strong>
+                        <span className="">
+                          <Link href="/admin">
+                            <a className="button is-primary is-outlined">
+                              <strong>Új poszt írás</strong>
+                            </a>
+                          </Link>
+                        </span>
+                      </div>
+                    </div>
+                    <div className="field"></div>
+                  </div>
+                </article>
               </div>
-            </article>
-          </div>
+            </AuthCheck>
+          )}
         </div>
       </div>
     </div>
