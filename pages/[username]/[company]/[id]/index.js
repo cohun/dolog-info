@@ -161,7 +161,7 @@ const ComingFromQRCode = () => {
               <Link href="/login">
                 <div className="columns">
                   <button className="button mr-2">
-                    Ehhez előbb be kell jelnetkezned!
+                    Ehhez előbb hozzáférést kell kapnod az adminisztrátortól!
                   </button>
                   <button className="button is-primary">Bejelentkezés</button>
                 </div>
