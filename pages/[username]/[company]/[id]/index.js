@@ -1,6 +1,6 @@
-import Link from 'next/link';
-import Image from 'next/image';
-import { useRouter } from 'next/router';
+import Link from "next/link";
+import Image from "next/image";
+import { useRouter } from "next/router";
 import {
   collectionGroup,
   query,
@@ -13,25 +13,25 @@ import {
   startAfter,
   collection,
   deleteDoc,
-} from 'firebase/firestore';
-import { useEffect, useState } from 'react';
-import Navbar from '../../../../components/Navbar';
-import { useContext } from 'react';
-import { UserContext } from '../../../../lib/context';
-import PostFeed from '../../../../components/PostFeed';
+} from "firebase/firestore";
+import { useEffect, useState } from "react";
+import Navbar from "../../../../components/Navbar";
+import { useContext } from "react";
+import { UserContext } from "../../../../lib/context";
+import PostFeed from "../../../../components/PostFeed";
 import {
   postToJson,
   fromMillis,
   db,
   delThing,
-} from '../../../../lib/firebaseConfig';
-import AuthCheck from '../../../../components/AuthCheck';
+} from "../../../../lib/firebaseConfig";
+import AuthCheck from "../../../../components/AuthCheck";
 
 const LIMIT = 5;
 
 const ComingFromQRCode = () => {
   const [imageURL, setImageURL] = useState(
-    'https://bulma.io/images/placeholders/128x128.png'
+    "https://bulma.io/images/placeholders/128x128.png"
   );
   const [loading, setLoading] = useState(false);
   const [postsEnd, setPostsEnd] = useState(false);
@@ -47,39 +47,49 @@ const ComingFromQRCode = () => {
 
   useEffect(() => {
     if (user) {
-      nameAdmin(company, username);
       getPosts(company);
       setPostsEnd(false);
       user.photoURL && setImageURL(user.photoURL);
     }
-  }, [company, id]);
+  }, [company, id, isAdmitted2]);
+
   useEffect(() => {
     if (user) {
       nameAdmin(company, username);
     }
-  }, [filteredPosts, username]);
+  }, [filteredPosts, username, users.length]);
 
   useEffect(() => {
     if (isAdmitted) {
       thingsIdincluded(company, username);
     }
-  }, [isAdmitted, username]);
+    if (things.includes(id)) {
+      console.log("here");
+      setIsAdmitted(true);
+    } else {
+      if (isAdmin) {
+        setIsAdmitted(true);
+      } else {
+        setIsAdmitted(false);
+      }
+    }
+  }, [isAdmitted, things.length, username, company, isAdmitted2]);
 
   const thingsIdincluded = async function (target, who) {
-    const docRef = doc(db, `companies/${target}/${who}`, 'what');
+    const docRef = doc(db, `companies/${target}/${who}`, "what");
 
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
-      console.log('things', docSnap.data().thingsId, id);
+      console.log("things", docSnap.data().thingsId, id);
       setThings(docSnap.data().thingsId);
-      if (things.includes(id)) {
-        setIsAdmitted2(true);
-      }
-      console.log('isAdmitted2:', isAdmitted);
+      console.log("th", things, "+", id);
+
+      console.log("isAdmitted2:", isAdmitted);
+      setIsAdmitted2(isAdmitted);
     } else {
       // doc.data() will be undefined in this case
-      console.log('No such document!');
+      console.log("No such document!");
     }
   };
 
@@ -99,10 +109,11 @@ const ComingFromQRCode = () => {
       }
       console.log(who);
       console.log(users);
-      console.log('isAdmitted:', isAdmitted);
+      console.log("un.", un);
+      console.log("isAdmitted:", isAdmitted);
     } else {
       // doc.data() will be undefined in this case
-      console.log('No such document!');
+      console.log("No such document!");
     }
   };
 
@@ -118,34 +129,34 @@ const ComingFromQRCode = () => {
   }
 
   const getUID = async function (user) {
-    const docRef = doc(db, 'usernames', user);
+    const docRef = doc(db, "usernames", user);
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
-      console.log('Document data:', docSnap.data());
+      console.log("Document data:", docSnap.data());
       const uid = docSnap.data().uid;
       const querySnapshot = await getDocs(
         collection(db, `users/${uid}/${company}/${id}/posts`)
       );
       querySnapshot.forEach((doc) => {
         // doc.data() is never undefined for query doc snapshots
-        console.log(doc.id, ' => ', doc.data());
+        console.log(doc.id, " => ", doc.data());
         delPost(uid, doc.id);
       });
-      router.push('/');
+      router.push("/");
     } else {
       // doc.data() will be undefined in this case
-      console.log('No such document!');
+      console.log("No such document!");
     }
   };
 
   const getPosts = async function (company) {
     const postsQuery = query(
-      collectionGroup(db, 'posts'),
-      where('published', '==', true),
-      where('company', '==', company),
-      where('id', '==', id),
-      orderBy('createdAt', 'desc'),
+      collectionGroup(db, "posts"),
+      where("published", "==", true),
+      where("company", "==", company),
+      where("id", "==", id),
+      orderBy("createdAt", "desc"),
       limit(LIMIT)
     );
     const posts = (await getDocs(postsQuery)).docs.map(postToJson);
@@ -156,15 +167,15 @@ const ComingFromQRCode = () => {
     setLoading(true);
     const last = filteredPosts[filteredPosts.length - 1];
     const cursor =
-      typeof last.createdAt === 'number'
+      typeof last.createdAt === "number"
         ? fromMillis(last.createdAt)
         : last.createdAt;
     const postsQuery = query(
-      collectionGroup(db, 'posts'),
-      where('published', '==', true),
-      where('company', '==', company),
-      where('id', '==', id),
-      orderBy('createdAt', 'desc'),
+      collectionGroup(db, "posts"),
+      where("published", "==", true),
+      where("company", "==", company),
+      where("id", "==", id),
+      orderBy("createdAt", "desc"),
       startAfter(cursor),
       limit(LIMIT)
     );
@@ -182,7 +193,7 @@ const ComingFromQRCode = () => {
       <Navbar></Navbar>
       <div className="">
         <div className="hero is-fullheight has-background-grey-darker ">
-          {!isAdmitted && !isAdmitted2 ? (
+          {!isAdmitted ? (
             <div className="section">
               <Link href="/login">
                 <div className="columns">
@@ -245,7 +256,7 @@ const ComingFromQRCode = () => {
 
                 <PostFeed
                   posts={filteredPosts}
-                  un={username}
+                  username={username}
                   company={company}
                 ></PostFeed>
 
@@ -281,7 +292,7 @@ const ComingFromQRCode = () => {
                     <div className="content">
                       <div className="">
                         <strong className="has-text-primary is-capitalized mr-2">
-                          {username}{' '}
+                          {username}{" "}
                         </strong>
                         <span className="">
                           <Link href="/admin">
