@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import Image from 'next/image';
-import { getAllThingsForACompany, getThingsId } from '../lib/firebaseConfig';
-import Link from 'next/link';
+import React, { useEffect, useState } from "react";
+import Image from "next/image";
+import { getAllThingsForACompany, getThingsId } from "../lib/firebaseConfig";
+import Link from "next/link";
 
 const CompanyThings = ({ target, setIsNew, hash, username }) => {
   const [allThings, setAllThings] = useState([]);
@@ -17,22 +17,22 @@ const CompanyThings = ({ target, setIsNew, hash, username }) => {
     if (ids) {
       setThingsId(ids.thingsId);
     } else {
-      console.log('Adminisztrátor minden dologhoz hozzáfér');
+      console.log("Adminisztrátor minden dologhoz hozzáfér");
     }
   };
 
   useEffect(() => {
     getThings();
-    if (username != '') {
+    if (username != "") {
       getIds();
     }
   }, [allThings.length]);
 
   function things() {
-    let thingsArray = [''];
+    let thingsArray = [""];
     for (let index = 0; index < allThings.length; index++) {
       // if hash === "" if (thingsId?.includes(allThings[index].id))
-      if (hash === '' && !thingsId?.includes(allThings[index].id)) {
+      if (hash === "" && !thingsId?.includes(allThings[index].id)) {
         continue;
       }
       thingsArray.push(
@@ -97,7 +97,7 @@ const CompanyThings = ({ target, setIsNew, hash, username }) => {
       <div className="section is-info">
         <div className="columns is-centered ">
           <div className="button is-medium has-background-warning has-text-dark has-text-weight-bold">
-            {target}{' '}
+            {target}{" "}
           </div>
           <h3 className="card pr-3 pt-2 is-size-4 has-text-centered has-background-black has-text-warning">
             <div className="ml-3 has-text-danger-light"> dolgai:</div>
@@ -109,7 +109,7 @@ const CompanyThings = ({ target, setIsNew, hash, username }) => {
         <div className="card ">
           <article className="panel is-warning">
             <p className="panel-heading">Dolgok listája</p>
-            {hash !== '' ? (
+            {hash !== "" ? (
               <div className="panel-tabs">
                 {delView ? (
                   <a className="is-active">
