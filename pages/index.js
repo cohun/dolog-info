@@ -112,7 +112,7 @@ export default function Home() {
                                 informácókat tud kapni a dolog állapotáról,
                               </li>
                               <li>
-                                az <strong>üzemeltetők</strong> a biztonságos és
+                                a <strong>felhasználók</strong> a biztonságos és
                                 hatékony használathoz nélkülözhetetlen
                                 információkat kapnak folyamatosan
                               </li>

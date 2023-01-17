@@ -76,7 +76,7 @@ const Register = () => {
               </div>
               <div className="message-body has-background-dark has-text-light">
                 Amennyiben még nem regisztráltál, hozz létre egy új fiókot email
-                címmelel és jelszóval, majd adj meg egy
+                címmel és jelszóval, majd adj meg egy
                 <strong className="has-text-warning">
                   {' '}
                   felhasználó nevet{' '}

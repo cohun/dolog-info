@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from "react";
-import CompanyThings from "./CompanyThings";
-import Image from "next/image";
-import NewThing from "./NewThing";
-import toast from "react-hot-toast";
+import React, { useEffect, useState } from 'react';
+import CompanyThings from './CompanyThings';
+import Image from 'next/image';
+import NewThing from './NewThing';
+import toast from 'react-hot-toast';
 
-import AllUsersInCompany from "./AllUsersInCompany";
-import RoleList from "./RoleList";
-import { deleteUserFromCompany, updateRole } from "../lib/firebaseConfig";
-import AddThingsToUser from "./AddThingsToUser";
+import AllUsersInCompany from './AllUsersInCompany';
+import RoleList from './RoleList';
+import { deleteUserFromCompany, updateRole } from '../lib/firebaseConfig';
+import AddThingsToUser from './AddThingsToUser';
 
 const CompanyAdmin = ({ username, target, hash, setTarget }) => {
   const [users, setUsers] = useState([]);
-  const [roleChange, setRoleChange] = useState("");
-  const [who, setWho] = useState("");
+  const [roleChange, setRoleChange] = useState('');
+  const [who, setWho] = useState('');
   const [isActive, setIsActive] = useState(false);
   const [isNew, setIsNew] = useState(false);
   const [del, setDel] = useState(false);
@@ -131,13 +131,13 @@ const CompanyAdmin = ({ username, target, hash, setTarget }) => {
           <div className="section is-info">
             <div className="columns is-vertical is-multiline is-centered">
               <div className="button is-medium has-background-warning has-text-dark has-text-weight-bold mb-3">
-                {target}{" "}
+                {target}{' '}
               </div>
             </div>
             <div className="columns is-vertical is-centered">
               <div className="card column is-narrow is-2 has-text-centered has-background-black has-text-warning">
                 <div className="ml-3 has-text-info-light">
-                  {" "}
+                  {' '}
                   jogosultak és beosztásuk:
                 </div>
               </div>
@@ -192,10 +192,10 @@ const CompanyAdmin = ({ username, target, hash, setTarget }) => {
           <div className="section is-info mb-4">
             <div className="columns is-centered ">
               <button
-                className="button is-large is-outlined is-danger"
-                onClick={() => setTarget("")}
+                className="button  is-outlined  is-primary is-fullwidth"
+                onClick={() => setTarget('')}
               >
-                Vissza
+                Vissza a hozzáféréseimhez
               </button>
             </div>
           </div>
