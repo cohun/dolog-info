@@ -1,6 +1,6 @@
-import Head from 'next/head';
-import Link from 'next/link';
-import Image from 'next/image';
+import Head from "next/head";
+import Link from "next/link";
+import Image from "next/image";
 import {
   collectionGroup,
   query,
@@ -11,45 +11,46 @@ import {
   limit,
   orderBy,
   startAfter,
-} from 'firebase/firestore';
-import { useEffect, useState } from 'react';
-import Navbar from '../../components/Navbar';
-import { useContext } from 'react';
-import { UserContext } from '../../lib/context';
-import UserProfile from '../../components/UserProfile';
-import PostFeed from '../../components/PostFeed';
+} from "firebase/firestore";
+import { useEffect, useState } from "react";
+import Navbar from "../../components/Navbar";
+import { useContext } from "react";
+import { UserContext } from "../../lib/context";
+import UserProfile from "../../components/UserProfile";
+import PostFeed from "../../components/PostFeed";
 import {
   postToJson,
   fromMillis,
   getAllThingsForACompany,
-} from '../../lib/firebaseConfig';
-import { db } from '../../lib/firebaseConfig';
-import WhichCompany from '../../components/WhichCompany';
-import AdminPostsPage from '../admin';
-import toast from 'react-hot-toast';
+} from "../../lib/firebaseConfig";
+import { db } from "../../lib/firebaseConfig";
+import WhichCompany from "../../components/WhichCompany";
+import AdminPostsPage from "../admin";
+import toast from "react-hot-toast";
 
 const LIMIT = 5;
 
 const UserProfilePage = () => {
   const [imageURL, setImageURL] = useState(
-    'https://bulma.io/images/placeholders/128x128.png'
+    "https://bulma.io/images/placeholders/128x128.png"
   );
   const [loading, setLoading] = useState(false);
   const [postsEnd, setPostsEnd] = useState(false);
   const [chosen, setChosen] = useState(false);
   const [admin, setAdmin] = useState(false);
-  const [company, setCompany] = useState('');
+  const [admi, setAdmi] = useState(false);
+  const [company, setCompany] = useState("");
   const [filteredPosts, setFilteredPosts] = useState([]);
   const { user, username } = useContext(UserContext);
 
-  const [isActive2, setIsActive2] = useState('');
+  const [isActive2, setIsActive2] = useState("");
   const [things, setThings] = useState([]);
   const [id, setId] = useState([]);
-  const [chosen2, setChosen2] = useState('');
-  const [desc, setDesc] = useState('');
+  const [chosen2, setChosen2] = useState("");
+  const [desc, setDesc] = useState("");
 
   async function getAllThings() {
-    if (company !== '') {
+    if (company !== "") {
       const thin = await getAllThingsForACompany(company);
       setThings(thin);
     }
@@ -59,33 +60,39 @@ const UserProfilePage = () => {
   }, [isActive2]);
 
   const thingsIdincluded = async function (target, who) {
-    const docRef = doc(db, `companies/${target}/${who}`, 'what');
+    const docRef = doc(db, `companies/${target}/${who}`, "what");
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
       const thId = docSnap.data().thingsId;
       setId(thId);
     } else {
       // doc.data() will be undefined in this case
-      console.log('No such document!');
+      console.log("No such document!");
     }
   };
   useEffect(() => {
-    if (chosen2 !== '' && company !== '') {
+    if (chosen2 !== "" && company !== "") {
       ifAdmin();
-      thingsIdincluded(company, username);
-      console.log('here', id);
-      if (id !== []) {
-        if (id.includes(chosen2)) {
-          console.log(chosen2, '---', id);
-          setAdmin(true);
-        } else {
+      if (admi && !admin) {
+        console.log("here", id, chosen2);
+        if (id !== []) {
+          console.log("there", id.includes(chosen2));
+
+          console.log(chosen2, "---", id);
+          setAdmin(id.includes(chosen2));
+          console.log("ad1", admin);
+
+          console.log("ad", admin);
+        }
+      } else {
+        if (admi) {
           setAdmin(false);
-          toast.error('Ehhez nincs hozzáférésed. Fordulj az adminisztrátorhoz');
+          toast.error("Ehhez nincs hozzáférésed. Fordulj az adminisztrátorhoz");
         }
       }
-      console.log('Admin', admin);
+      console.log("Admin", admin);
     }
-  }, [chosen2, admin, id.length]);
+  }, [chosen2, id.length, admi]);
 
   const ifAdmin = async function () {
     const docRef = doc(db, `companies`, company);
@@ -93,17 +100,23 @@ const UserProfilePage = () => {
     if (docSnap.exists()) {
       const admi = docSnap.data().admin;
       if (admi === username) {
-        console.log('admi', admi);
+        console.log("admi", admi);
+        setAdmi(true);
+        setAdmin(true);
+      } else {
+        console.log("admi2", admi);
+        setAdmi(true);
+        setAdmin(false);
+        thingsIdincluded(company, username);
       }
-      console.log('admi2', admi);
     } else {
       // doc.data() will be undefined in this case
-      console.log('No such document!');
+      console.log("No such document!");
     }
   };
 
   useEffect(() => {
-    if (company !== '' && chosen2 !== '') {
+    if (company !== "" && chosen2 !== "") {
       getPosts(company);
       setPostsEnd(false);
       user.photoURL && setImageURL(user.photoURL);
@@ -112,11 +125,11 @@ const UserProfilePage = () => {
 
   const getPosts = async function (company) {
     const postsQuery = query(
-      collectionGroup(db, 'posts'),
-      where('published', '==', true),
-      where('company', '==', company),
-      where('id', '==', chosen2),
-      orderBy('createdAt', 'desc'),
+      collectionGroup(db, "posts"),
+      where("published", "==", true),
+      where("company", "==", company),
+      where("id", "==", chosen2),
+      orderBy("createdAt", "desc"),
       limit(LIMIT)
     );
     const posts = (await getDocs(postsQuery)).docs.map(postToJson);
@@ -127,15 +140,15 @@ const UserProfilePage = () => {
     setLoading(true);
     const last = filteredPosts[filteredPosts.length - 1];
     const cursor =
-      typeof last.createdAt === 'number'
+      typeof last.createdAt === "number"
         ? fromMillis(last.createdAt)
         : last.createdAt;
     const postsQuery = query(
-      collectionGroup(db, 'posts'),
-      where('published', '==', true),
-      where('company', '==', company),
-      where('id', '==', chosen2),
-      orderBy('createdAt', 'desc'),
+      collectionGroup(db, "posts"),
+      where("published", "==", true),
+      where("company", "==", company),
+      where("id", "==", chosen2),
+      orderBy("createdAt", "desc"),
       startAfter(cursor),
       limit(LIMIT)
     );
@@ -181,7 +194,7 @@ const UserProfilePage = () => {
               setChosen={setChosen}
               setCompany={setCompany}
             >
-              {' '}
+              {" "}
             </WhichCompany>
           ) : (
             <div className="section">
@@ -192,7 +205,7 @@ const UserProfilePage = () => {
                       <div className="subtitle is-size-7-tablet is-size-5-desktop mr-2">
                         <strong className="has-text-warning-dark is-capitalized is-underlined is-size-5 is-size-3-tablet">
                           {company}
-                        </strong>{' '}
+                        </strong>{" "}
                       </div>
                     </div>
                     <div className="level-item">
@@ -200,24 +213,24 @@ const UserProfilePage = () => {
                         className={`dropdown ${isActive2}`}
                         onClick={(e) => {
                           e.preventDefault();
-                          isActive2 === ''
-                            ? setIsActive2('is-active')
-                            : setIsActive2('');
+                          isActive2 === ""
+                            ? setIsActive2("is-active")
+                            : setIsActive2("");
                         }}
                       >
                         <div className="dropdown-trigger">
                           <button
                             className={
-                              chosen2 === ''
-                                ? 'button has-background-warning-light has-text-warning-dark'
-                                : 'button is-warning-dark is-outlined'
+                              chosen2 === ""
+                                ? "button has-background-warning-light has-text-warning-dark"
+                                : "button is-warning-dark is-outlined"
                             }
                             aria-haspopup="true"
                             aria-controls="dropdown-menu"
                           >
                             <span className="has-text-warning-dark has-text-weight-semibold">
-                              {chosen2 === ''
-                                ? 'Dolog kiválasztása'
+                              {chosen2 === ""
+                                ? "Dolog kiválasztása"
                                 : `${chosen2} - ${desc}`}
                             </span>
                             <span className="icon is-small">
@@ -243,7 +256,7 @@ const UserProfilePage = () => {
                     <div
                       className="mt-1"
                       onClick={() => {
-                        setChosen2('');
+                        setChosen2("");
                         setChosen(false);
                       }}
                     >
@@ -257,7 +270,7 @@ const UserProfilePage = () => {
                 </nav>
               </div>
               <br />
-              {chosen2 !== '' ? (
+              {chosen2 !== "" && admin ? (
                 <PostFeed
                   posts={filteredPosts}
                   username={username}
@@ -297,7 +310,7 @@ const UserProfilePage = () => {
                   <div className="content">
                     <div className="">
                       <strong className="has-text-primary is-capitalized mr-2">
-                        {username}{' '}
+                        {username}{" "}
                       </strong>
                       <span className="">
                         <Link href="/admin">
