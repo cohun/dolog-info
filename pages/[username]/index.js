@@ -37,15 +37,14 @@ const UserProfilePage = () => {
   const [loading, setLoading] = useState(false);
   const [postsEnd, setPostsEnd] = useState(false);
   const [chosen, setChosen] = useState(false);
-  const [admin, setAdmin] = useState(false);
-  const [admi, setAdmi] = useState(false);
-  const [admi2, setAdmi2] = useState(false);
+  const [admin, setAdmin] = useState(true);
   const [company, setCompany] = useState('');
   const [filteredPosts, setFilteredPosts] = useState([]);
   const { user, username } = useContext(UserContext);
 
   const [isActive2, setIsActive2] = useState('');
   const [things, setThings] = useState([]);
+  const [admName, setAdmName] = useState(true);
   const [id, setId] = useState([]);
   const [chosen2, setChosen2] = useState('');
   const [desc, setDesc] = useState('');
@@ -59,17 +58,13 @@ const UserProfilePage = () => {
   useEffect(() => {
     getAllThings();
   }, [isActive2]);
-  let Admi = true;
-  let Admi2 = true;
 
   const thingsIdincluded = async function (target, who) {
     const docRef = doc(db, `companies/${target}/${who}`, 'what');
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
       const thId = docSnap.data().thingsId;
-      thId.includes(chosen2) ? (Admi2 = true) : (Admi2 = false);
-      console.log('Admi2', Admi2);
-      setAdmi2(Admi2);
+      thId.includes(chosen2) ? setAdmin(true) : setAdmin(false);
     } else {
       // doc.data() will be undefined in this case
       console.log('No such document!');
@@ -79,45 +74,21 @@ const UserProfilePage = () => {
     if (chosen2 !== '' && company !== '') {
       thingsIdincluded(company, username);
       ifAdmin();
-      console.log(Admi, Admi2, admin);
-      if (admi) {
-        setAdmin(true);
-      }
-      if (admi2) {
-        setAdmin(true);
-      }
+    }
+  }, [chosen2]);
 
-      if (!Admi2 && !Admi) {
-        setAdmin(false);
-        toast.error('Ehhez nincs engedélyed, fordulj az adminisztrátorhoz!');
-      }
-
-      console.log('Addd', admin);
+  useEffect(() => {
+    if (!admName && !admin) {
+      toast.error('Ehhez nincs hozzáférésed, fordulj az adminisztrátorhoz!');
     }
-  }, [admi, admi2, chosen2, admin]);
-
-  /* useEffect(() => {
-    if (admi) {
-      setAdmin(true);
-    }
-    if (admi2) {
-      setAdmin(true);
-    }
-    if (!admi && !admi2) {
-      setAdmin(false);
-      toast.error('Ehhez nincs engedélyed, fordulj az adminisztrátorhoz!');
-    }
-    console.log('Addd', admin);
-  }, [admi, admi2]); */
+  }, [admin]);
 
   const ifAdmin = async function () {
     const docRef = doc(db, `companies`, company);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
       const admin = docSnap.data().admin;
-      admin === username ? (Admi = true) : (Admi = false);
-      setAdmi(Admi);
-      console.log('Admi', Admi);
+      admin === username ? setAdmName(true) : setAdmName(false);
     } else {
       // doc.data() will be undefined in this case
       console.log('No such document!');
@@ -180,6 +151,7 @@ const UserProfilePage = () => {
             className="dropdown-item"
             onClick={() => {
               setChosen2(thing.id);
+              setAdmin(true);
               setDesc(thing.description);
             }}
           >
@@ -279,7 +251,7 @@ const UserProfilePage = () => {
                 </nav>
               </div>
               <br />
-              {chosen2 !== '' && admin ? (
+              {chosen2 !== '' && (admin || admName) ? (
                 <PostFeed
                   posts={filteredPosts}
                   username={username}
