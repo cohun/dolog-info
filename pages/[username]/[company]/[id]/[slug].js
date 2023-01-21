@@ -24,6 +24,7 @@ const PostPage = () => {
 
   const [uid, setUid] = useState('');
   const [post, setPost] = useState([]);
+  const [hearted, setHearted] = useState(false);
   const router = useRouter();
   const { username: un, company, id, slug } = router.query;
   console.log('UN', un);
@@ -72,7 +73,7 @@ const PostPage = () => {
     if (username) {
       getPos();
     }
-  }, [uid, username, post.username]);
+  }, [uid, username, post.username, hearted]);
 
   return (
     <main className="">
@@ -113,7 +114,14 @@ const PostPage = () => {
           }
         >
           {uid !== '' && (
-            <HeartButton uid={uid} company={company} id={id} slug={slug} />
+            <HeartButton
+              uid={uid}
+              company={company}
+              id={id}
+              slug={slug}
+              hearted={hearted}
+              setHearted={setHearted}
+            />
           )}
         </AuthCheck>
         <PostContent post={post} />
