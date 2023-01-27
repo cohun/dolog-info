@@ -129,6 +129,24 @@ const ComingFromQRCode = () => {
     await deleteDoc(doc(db, `users/${uid}/${company}/${id}/posts`, title));
   }
 
+  async function delHeart(uid, title, docId) {
+    await deleteDoc(
+      doc(db, `users/${uid}/${company}/${id}/posts/${title}/hearts`, docId)
+    );
+  }
+
+  async function delHearts(uid, title) {
+    const querySnapshot = await getDocs(
+      collection(db, `users/${uid}/${company}/${id}/posts/${title}/hearts`)
+    );
+    querySnapshot.forEach((doc) => {
+      // doc.data() is never undefined for query doc snapshots
+      console.log(doc.id, ' => ', doc.data());
+      delHeart(uid, title, doc.id);
+    });
+    delPost(uid, title);
+  }
+
   const getUID = async function (user) {
     const docRef = doc(db, 'usernames', user);
     const docSnap = await getDoc(docRef);
@@ -142,7 +160,7 @@ const ComingFromQRCode = () => {
       querySnapshot.forEach((doc) => {
         // doc.data() is never undefined for query doc snapshots
         console.log(doc.id, ' => ', doc.data());
-        delPost(uid, doc.id);
+        delHearts(uid, doc.id);
       });
       router.push('/');
     } else {
@@ -252,18 +270,18 @@ const ComingFromQRCode = () => {
                                   ></button>
                                 </header>
                                 <section className="modal-card-body">
-                                  Biztos vagy benne?
+                                  <p className="title">Biztos vagy benne?</p>
                                 </section>
                                 <footer className="modal-card-foot">
                                   <button
                                     onClick={() => delPosts()}
-                                    className="button is-success"
+                                    className="button is-danger"
                                   >
                                     Igen, töröld
                                   </button>
                                   <button
                                     onClick={() => setDel(false)}
-                                    className="button"
+                                    className="button is-primary"
                                   >
                                     Vissza
                                   </button>
