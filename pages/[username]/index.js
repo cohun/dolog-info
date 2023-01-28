@@ -16,7 +16,6 @@ import { useEffect, useState } from 'react';
 import Navbar from '../../components/Navbar';
 import { useContext } from 'react';
 import { UserContext } from '../../lib/context';
-import UserProfile from '../../components/UserProfile';
 import PostFeed from '../../components/PostFeed';
 import {
   postToJson,
@@ -25,8 +24,6 @@ import {
 } from '../../lib/firebaseConfig';
 import { db } from '../../lib/firebaseConfig';
 import WhichCompany from '../../components/WhichCompany';
-import AdminPostsPage from '../admin';
-import toast from 'react-hot-toast';
 
 const LIMIT = 5;
 
@@ -44,8 +41,8 @@ const UserProfilePage = () => {
 
   const [isActive2, setIsActive2] = useState('');
   const [things, setThings] = useState([]);
-  const [admName, setAdmName] = useState(true);
-  const [id, setId] = useState([]);
+  const [allowedThings, setAllowedThings] = useState([]);
+  const [admName, setAdmName] = useState(false);
   const [chosen2, setChosen2] = useState('');
   const [desc, setDesc] = useState('');
 
@@ -56,32 +53,37 @@ const UserProfilePage = () => {
     }
   }
   useEffect(() => {
+    console.log('admName:', admName);
     getAllThings();
-  }, [isActive2]);
+    if (admName) {
+    } else {
+      if (company !== '') {
+        thingsIdincluded(company, username);
+      }
+    }
+    console.log('things:', things);
+  }, [isActive2, company]);
+
+  useEffect(() => {
+    if (company !== '') {
+      ifAdmin();
+    }
+  }, [chosen, company, things]);
 
   const thingsIdincluded = async function (target, who) {
     const docRef = doc(db, `companies/${target}/${who}`, 'what');
     const docSnap = await getDoc(docRef);
+    let thin = [];
     if (docSnap.exists()) {
       const thId = docSnap.data().thingsId;
-      thId.includes(chosen2) ? setAdmin(true) : setAdmin(false);
+
+      thin = thId;
     } else {
       // doc.data() will be undefined in this case
       console.log('No such document!');
     }
+    setAllowedThings(thin);
   };
-  useEffect(() => {
-    if (chosen2 !== '' && company !== '') {
-      thingsIdincluded(company, username);
-      ifAdmin();
-    }
-  }, [chosen2]);
-
-  useEffect(() => {
-    if (!admName && !admin) {
-      toast.error('Ehhez nincs hozzáférésed, fordulj az adminisztrátorhoz!');
-    }
-  }, [admin]);
 
   const ifAdmin = async function () {
     const docRef = doc(db, `companies`, company);
@@ -143,24 +145,52 @@ const UserProfilePage = () => {
 
   function DropDown2() {
     const list2 = [];
-    things.forEach((thing) => {
-      list2.push(
-        <div key={thing.id}>
-          <a
-            href="#"
-            className="dropdown-item"
-            onClick={() => {
-              setChosen2(thing.id);
-              setAdmin(true);
-              setDesc(thing.description);
-            }}
-          >
-            {thing.description} - {thing.id}
-          </a>
-          <hr className="dropdown-divider" />
-        </div>
-      );
-    });
+    {
+      things !== []
+        ? things.forEach((thing) => {
+            {
+              if (admName) {
+                list2.push(
+                  <div key={thing.id}>
+                    <a
+                      href="#"
+                      className="dropdown-item"
+                      onClick={() => {
+                        setChosen2(thing.id);
+                        setAdmin(true);
+                        setDesc(thing.description);
+                      }}
+                    >
+                      {thing.description} - {thing.id}
+                    </a>
+                    <hr className="dropdown-divider" />
+                  </div>
+                );
+              } else {
+                allowedThings.includes(thing.id)
+                  ? list2.push(
+                      <div key={thing.id}>
+                        <a
+                          href="#"
+                          className="dropdown-item"
+                          onClick={() => {
+                            setChosen2(thing.id);
+                            setAdmin(true);
+                            setDesc(thing.description);
+                          }}
+                        >
+                          {thing.description} - {thing.id}
+                        </a>
+                        <hr className="dropdown-divider" />
+                      </div>
+                    )
+                  : console.log('nothing');
+              }
+            }
+          })
+        : nill;
+    }
+
     return list2;
   }
 
@@ -251,7 +281,7 @@ const UserProfilePage = () => {
                 </nav>
               </div>
               <br />
-              {chosen2 !== '' && (admin || admName) ? (
+              {chosen2 !== '' ? (
                 <PostFeed
                   posts={filteredPosts}
                   username={username}
