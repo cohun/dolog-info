@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import CompanyThings from './CompanyThings';
 import Image from 'next/image';
 import NewThing from './NewThing';
-import toast from 'react-hot-toast';
 
 import AllUsersInCompany from './AllUsersInCompany';
 import RoleList from './RoleList';

@@ -27,10 +27,8 @@ const PostPage = () => {
   const [hearted, setHearted] = useState(false);
   const router = useRouter();
   const { username: un, company, id, slug } = router.query;
-  console.log('UN', un);
 
   async function getPost(uid, company, id, slug) {
-    console.log(uid);
     const docRef = doc(db, `users/${uid}/${company}/${id}/posts`, slug);
     const docSnap = await getDoc(docRef);
 
@@ -54,15 +52,13 @@ const PostPage = () => {
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
       // doc.data() is never undefined for query doc snapshots
-      console.log(doc.id, ' => ', doc.data());
+
       setUid(doc.id);
     });
     if (uid) {
       const pos = await getPost(uid, company, id, slug);
       if (pos) {
         setPost(pos);
-        console.log('usernamePost:', post.username);
-        console.log('username', username);
       } else {
         console.log('Nincs poszt');
       }

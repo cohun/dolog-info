@@ -53,7 +53,6 @@ const UserProfilePage = () => {
     }
   }
   useEffect(() => {
-    console.log('admName:', admName);
     getAllThings();
     if (admName) {
     } else {
@@ -61,7 +60,6 @@ const UserProfilePage = () => {
         thingsIdincluded(company, username);
       }
     }
-    console.log('things:', things);
   }, [isActive2, company]);
 
   useEffect(() => {

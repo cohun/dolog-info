@@ -7,10 +7,8 @@ import {
   setDoc,
   updateDoc,
   deleteDoc,
-  getDocs,
   collection,
   getCountFromServer,
-  query,
 } from 'firebase/firestore';
 import { db } from '../lib/firebaseConfig';
 
@@ -25,7 +23,6 @@ export default function Heart({ uid, company, id, slug, hearted, setHearted }) {
       `users/${uid}/${company}/${id}/posts/${slug}/hearts`
     );
     const snapshot = await getCountFromServer(coll);
-    console.log('count: ', snapshot.data().count);
     setCount(snapshot.data().count);
   }
   async function UpdateHeartCount() {
@@ -55,7 +52,6 @@ export default function Heart({ uid, company, id, slug, hearted, setHearted }) {
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
-      console.log('Document data:', docSnap.data());
       setExists(true);
     } else {
       setExists(false);
@@ -65,7 +61,6 @@ export default function Heart({ uid, company, id, slug, hearted, setHearted }) {
   };
 
   const addHeart = async () => {
-    console.log('add');
     const uidCurrent = auth.currentUser.uid;
     // Add a new document in collection "cities"
     await setDoc(
@@ -79,7 +74,6 @@ export default function Heart({ uid, company, id, slug, hearted, setHearted }) {
 
   // Remove a user-to-post relationship
   const removeHeart = async () => {
-    console.log('remove');
     const uidCurrent = auth.currentUser.uid;
     // Add a new document in collection "cities"
     await deleteDoc(

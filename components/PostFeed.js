@@ -24,7 +24,6 @@ function PostItem({ post, username, company }) {
   const minutesToRead = (wordCount / 100 + 1).toFixed(0);
 
   function gotoSlug() {
-    console.log('gotoSlug');
     router.push({
       pathname: `/${post.username}/${company}/${post.id}/${post.slug}`,
     });

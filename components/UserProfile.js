@@ -5,7 +5,6 @@ import HashingForm from './hashing';
 import Image from 'next/image';
 import toast from 'react-hot-toast';
 import { getUsersRole } from '../lib/firebaseConfig';
-import { query, where } from 'firebase/firestore';
 
 const UserProfile = ({ username, companies, address }) => {
   const [isActive, setIsactive] = useState(false);
@@ -15,10 +14,7 @@ const UserProfile = ({ username, companies, address }) => {
   const [admitted, setAdmitted] = useState(false);
 
   async function handleCompanyChoice(compa, allowed, hash) {
-    console.log('compa', compa);
     const role = await getUsersRole(compa, username);
-    console.log('ROLE:', role);
-    console.log('allowed', allowed);
     if (allowed) {
       setAdmitted(true);
       setTarget(compa);
@@ -29,7 +25,7 @@ const UserProfile = ({ username, companies, address }) => {
       toast.error('Jelenleg még nincs hozzáférésed ehhez!');
       console.log('elbírálás alatt');
       setAdmitted(false);
-      console.log(admitted);
+
       return;
     }
     if (role === 'adminisztrátor' && !allowed) {
@@ -48,7 +44,6 @@ const UserProfile = ({ username, companies, address }) => {
       setAdmitted(true);
       setTarget(compa);
       setHash(hash);
-      console.log(admitted);
     } else {
       setAdmitted(false);
       toast.error('Engedélyezés még folyamatban...');

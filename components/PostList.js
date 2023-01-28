@@ -1,11 +1,8 @@
-import toast from "react-hot-toast";
-import AuthCheck from "./AuthCheck";
-import kebabCase from "lodash.kebabcase";
-import { auth, db } from "../lib/firebaseConfig";
-import { collection, query, where, getDocs, orderBy } from "firebase/firestore";
-import { postToJson, fromMillis } from "../lib/firebaseConfig";
-import PostFeed from "./PostFeed";
-import { useEffect, useState } from "react";
+import { auth, db } from '../lib/firebaseConfig';
+import { collection, getDocs, orderBy } from 'firebase/firestore';
+import { postToJson } from '../lib/firebaseConfig';
+import PostFeed from './PostFeed';
+import { useEffect, useState } from 'react';
 
 const PostList = ({ username, company, id }) => {
   const uid = auth.currentUser?.uid;
@@ -13,7 +10,7 @@ const PostList = ({ username, company, id }) => {
   async function GetList(uid) {
     const querySnapshot = await getDocs(
       collection(db, `users/${uid}/${company}/${id}/posts`),
-      orderBy("createdAt")
+      orderBy('createdAt')
     );
     querySnapshot.forEach((doc) => {
       // doc.data() is never undefined for query doc snapshots
